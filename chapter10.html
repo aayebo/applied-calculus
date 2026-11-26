@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Parametric Equations and Polar Coordinates | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a aria-current="page" class="active" href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="parametric-equations-and-polar-coordinates">Parametric Equations
+and Polar Coordinates</h1>
+<p><strong>Guiding question.</strong> How can we describe a path that
+loops, doubles back, or traces a trajectory without forcing it to be the
+graph of a single function <span class="math inline">\(y=f(x)\)</span>?
+Parametric equations and polar coordinates answer this question in
+complementary ways.</p>
+<p><strong>Learning outcomes.</strong> Students will parametrize and
+interpret plane curves; determine tangent slopes, concavity, area, and
+arc length parametrically; convert between Cartesian and polar
+coordinates; sketch and analyze polar graphs; compute polar area and
+length; derive polar equations of conics; and use R and Python to verify
+and communicate mathematical results.</p>
+<p><strong>Prerequisites.</strong> Trigonometric functions, the chain
+rule, definite integrals, substitution, and elementary conic
+sections.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="a-curve-can-have-many-descriptions">A curve
+can have many descriptions</h3>
+<p>Parametric and polar equations describe geometric points through
+auxiliary variables. Different parameterizations may trace the same
+curve at different speeds or in different directions. A polar graph must
+be interpreted using the signed radius convention rather than as an
+ordinary Cartesian function.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 10." src="figures/chapter_10_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 10.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> Explain how <span class="math inline">\(x=\cos t\)</span>, <span class="math inline">\(y=\sin t\)</span> and <span class="math inline">\(x=\cos(2t)\)</span>, <span class="math inline">\(y=\sin(2t)\)</span> trace the same unit circle
+with different traversal behavior.</p>
+<h2 id="interactive-investigation">Interactive investigation: Polar curves</h2><div class="calc-widget" data-calc="10"><p>Explore r = a cos(kθ). Compare the number of petals for odd and even k.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="parametrizations-of-plane-curves">Parametrizations of Plane
+Curves</h2>
+<p><strong>Definition — Parametrized plane curve.</strong> A
+parametrization of a plane curve is a pair of functions <span class="math inline">\(x=f(t)\)</span> and <span class="math inline">\(y=g(t)\)</span> defined on an interval <span class="math inline">\(I\)</span>. The vector <span class="math inline">\(\mathbf r(t)=(f(t),g(t))\)</span> gives a position
+for each parameter value. The <em>image</em> of <span class="math inline">\(\mathbf r\)</span> is the set of traced points;
+its <em>orientation</em> records the direction as <span class="math inline">\(t\)</span> increases.</p>
+<p>A parameter is often time, but it can be an angle, distance, or a
+convenient mathematical variable. Unlike <span class="math inline">\(y=f(x)\)</span>, a parametrization can represent a
+vertical tangent, a closed loop, or a path traversed multiple times. The
+interval matters: identical formulas with different intervals may
+describe different parts of a curve.</p>
+<p><strong>Example — A restricted parabola.</strong> Let <span class="math inline">\(x=t^2\)</span>, <span class="math inline">\(y=2t-1\)</span>, <span class="math inline">\(0\le
+t\le3\)</span>. Describe the path and direction.</p>
+<p><strong>Solution.</strong> From <span class="math inline">\(t=(y+1)/2\)</span>, we obtain <span class="math inline">\(x=(y+1)^2/4\)</span>. Yet only the branch <span class="math inline">\(y\ge-1\)</span> with <span class="math inline">\(x\le9\)</span> is traced. The motion begins at
+<span class="math inline">\((0,-1)\)</span> and ends at <span class="math inline">\((9,5)\)</span>, moving upward and to the right.
+Eliminating <span class="math inline">\(t\)</span> without the interval
+would incorrectly suggest the entire parabola.</p>
+<p><strong>Example — One ellipse, two motions.</strong> Consider <span class="math inline">\(x=4\cos t\)</span>, <span class="math inline">\(y=2\sin t\)</span>.</p>
+<p><strong>Solution.</strong> The image satisfies <span class="math inline">\(x^2/16+y^2/4=1\)</span>. On <span class="math inline">\(0\le t\le2\pi\)</span>, it is traversed once
+counterclockwise from <span class="math inline">\((4,0)\)</span>.
+Replacing <span class="math inline">\(t\)</span> by <span class="math inline">\(-t\)</span> reverses orientation, while <span class="math inline">\(0\le t\le4\pi\)</span> traverses the same ellipse
+twice. Thus an equation for the image does not encode all features of
+the motion.</p>
+<p><strong>Theorem — Line-segment parametrization.</strong> For points
+<span class="math inline">\(A=(a_1,a_2)\)</span> and <span class="math inline">\(B=(b_1,b_2)\)</span>, the segment from <span class="math inline">\(A\)</span> to <span class="math inline">\(B\)</span> is <span class="math inline">\(\mathbf
+r(t)=A+t(B-A)\)</span>, <span class="math inline">\(0\le
+t\le1\)</span>.</p>
+<p><strong>Proof.</strong> At <span class="math inline">\(t=0\)</span>
+the position is <span class="math inline">\(A\)</span>, and at <span class="math inline">\(t=1\)</span> it is <span class="math inline">\(B\)</span>. For <span class="math inline">\(0\le
+t\le1\)</span>, <span class="math inline">\(\mathbf
+r(t)=(1-t)A+tB\)</span> is a convex combination of the endpoints, giving
+precisely the segment.</p>
+<p><strong>Example — A rolling-wheel trace.</strong> A wheel of radius
+<span class="math inline">\(a\)</span> rolls without slipping along the
+horizontal axis. A marked point on the rim traces <span class="math inline">\(x=a(t-\sin t)\)</span>, <span class="math inline">\(y=a(1-\cos t)\)</span> for <span class="math inline">\(0\le t\le2\pi\)</span>.</p>
+<p><strong>Solution.</strong> The wheel center is <span class="math inline">\((at,a)\)</span>; relative to the center the marked
+point is <span class="math inline">\((-a\sin t,-a\cos t)\)</span>.
+Adding gives the displayed cycloid. Its endpoints <span class="math inline">\((0,0)\)</span> and <span class="math inline">\((2\pi a,0)\)</span> are cusps: both coordinate
+derivatives vanish there. The geometry explains why a simple Cartesian
+function is not the natural first description.</p>
+<figure>
+<img alt="A newly constructed cycloid: the cusps occur when the marked point contacts the ground." src="figures/chapter10-diagram-01.svg"/>
+<figcaption>
+A newly constructed cycloid: the cusps occur when the marked point
+contacts the ground.
+</figcaption>
+</figure>
+<p><strong>Remark.</strong> A plot that samples <span class="math inline">\(t\)</span> uniformly does not necessarily place
+points uniformly along the curve. When speed varies, equally spaced
+times correspond to unequal traveled distances.</p>
+<h3 class="unnumbered" id="pause-and-reason">Pause and reason</h3>
+<p>Can two parametrizations have the same image but different speed?
+Give an example using a circle.</p>
+<h2 id="calculus-with-parametric-curves">Calculus with Parametric
+Curves</h2>
+<p>Let <span class="math inline">\(x=f(t)\)</span> and <span class="math inline">\(y=g(t)\)</span> be differentiable. The chain rule
+converts time rates into geometric slope, provided the horizontal rate
+is nonzero.</p>
+<p><strong>Theorem — Parametric tangent slope.</strong> If <span class="math inline">\(f'(t_0)\ne0\)</span>, then the slope of the
+tangent at <span class="math inline">\(t_0\)</span> is <span class="math inline">\(\displaystyle\frac{dy}{dx}=\frac{g'(t_0)}{f'(t_0)}\)</span>.</p>
+<p><strong>Proof.</strong> Locally, <span class="math inline">\(x\)</span> can serve as an independent variable
+when <span class="math inline">\(f'(t_0)\ne0\)</span>. The chain
+rule gives <span class="math inline">\(dy/dt=(dy/dx)(dx/dt)\)</span>, so
+division by <span class="math inline">\(dx/dt\)</span> yields the
+result.</p>
+<p><strong>Example — A tangent to an ellipse.</strong> For <span class="math inline">\(x=3\cos t\)</span>, <span class="math inline">\(y=2\sin t\)</span>, find the tangent line at <span class="math inline">\(t=\pi/3\)</span>.</p>
+<p><strong>Solution.</strong> We have <span class="math inline">\(dx/dt=-3\sin t\)</span> and <span class="math inline">\(dy/dt=2\cos t\)</span>. Hence <span class="math inline">\(dy/dx=-2\cos t/(3\sin t)=-2/(3\sqrt3)\)</span> at
+<span class="math inline">\(t=\pi/3\)</span>. The point is <span class="math inline">\((3/2,\sqrt3)\)</span>, so the tangent is <span class="math inline">\(y-\sqrt3=-\frac{2}{3\sqrt3}(x-\frac32)\)</span>.</p>
+<p><strong>Theorem — Second derivative of a parametric curve.</strong>
+Where <span class="math inline">\(dx/dt\ne0\)</span>, <span class="math inline">\(\displaystyle\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(dy/dx)}{dx/dt}\)</span>.</p>
+<p><strong>Example — Concavity of a trajectory.</strong> For <span class="math inline">\(x=t^2+1\)</span>, <span class="math inline">\(y=t^3-t\)</span>, determine the slope and
+concavity at <span class="math inline">\(t=1\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(dy/dx=(3t^2-1)/(2t)\)</span> for <span class="math inline">\(t\ne0\)</span>. Differentiating gives <span class="math inline">\(\frac{d}{dt}(dy/dx)=\frac32+\frac{1}{2t^2}\)</span>,
+and therefore <span class="math inline">\(d^2y/dx^2=(3t^2+1)/(4t^3)\)</span>. At <span class="math inline">\(t=1\)</span> the slope is <span class="math inline">\(1\)</span> and the second derivative is <span class="math inline">\(1\)</span>, so the curve is locally concave
+upward.</p>
+<p><strong>Theorem — Speed and arc length.</strong> For a continuously
+differentiable curve <span class="math inline">\(\mathbf
+r(t)=(x(t),y(t))\)</span>, <span class="math inline">\(a\le t\le
+b\)</span>, its speed is <span class="math inline">\(v(t)=\sqrt{(x'(t))^2+(y'(t))^2}\)</span>
+and its arc length is <span class="math inline">\(L=\int_a^b
+v(t)\,dt\)</span>.</p>
+<p><strong>Proof — Derivation.</strong> A short displacement has length
+<span class="math inline">\(\sqrt{(\Delta x)^2+(\Delta y)^2}\)</span>.
+On a sufficiently small time interval, <span class="math inline">\(\Delta x\approx x'(t)\Delta t\)</span> and
+<span class="math inline">\(\Delta y\approx y'(t)\Delta t\)</span>.
+Summing the resulting short distances and taking a limit produces the
+integral.</p>
+<p><strong>Example — Length of one cycloid arch.</strong> Find the
+length of <span class="math inline">\(x=a(t-\sin t)\)</span>, <span class="math inline">\(y=a(1-\cos t)\)</span>, <span class="math inline">\(0\le t\le2\pi\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(x'=a(1-\cos t)\)</span> and <span class="math inline">\(y'=a\sin t\)</span>. Thus <span class="math inline">\(v=a\sqrt{2-2\cos t}=2a\sin(t/2)\)</span> on <span class="math inline">\([0,2\pi]\)</span>. Integrating gives <span class="math inline">\(L=\int_0^{2\pi}2a\sin(t/2)\,dt=8a\)</span>. Notice
+that the straight-line displacement is only <span class="math inline">\(2\pi a\)</span>.</p>
+<p><strong>Theorem — Signed area under a parametric curve.</strong> If a
+parametrized arc runs from <span class="math inline">\(x(a)\)</span> to
+<span class="math inline">\(x(b)\)</span> and is representable as a
+graph over that interval, its signed area relative to the <span class="math inline">\(x\)</span>-axis is <span class="math inline">\(\displaystyle\int_a^b
+y(t)x'(t)\,dt\)</span>.</p>
+<p><strong>Remark.</strong> The sign depends on orientation and whether
+the curve lies above or below the axis. For a loop, the integral <span class="math inline">\(\oint y\,dx\)</span> is related to oriented
+enclosed area; do not automatically interpret a signed integral as an
+unsigned physical area.</p>
+<p><strong>Example — Area under a parametric arch.</strong> Let <span class="math inline">\(x=t^2\)</span>, <span class="math inline">\(y=3t-t^2\)</span>, <span class="math inline">\(0\le t\le3\)</span>. Compute the area above the
+axis.</p>
+<p><strong>Solution.</strong> On this interval <span class="math inline">\(x'=2t\ge0\)</span> and <span class="math inline">\(y=t(3-t)\ge0\)</span>. The area is <span class="math inline">\(\int_0^3(3t-t^2)(2t)\,dt=\int_0^3(6t^2-2t^3)\,dt=[2t^3-\frac12t^4]_0^3=27/2\)</span>.</p>
+<h3 class="unnumbered" id="concept-check">Concept check</h3>
+<p>Why can <span class="math inline">\(dx/dt=0\)</span> suggest a
+vertical tangent without guaranteeing one? What additional information
+would you examine at a cusp?</p>
+<h2 id="polar-coordinates">Polar Coordinates</h2>
+<p>In Cartesian coordinates, a point is described by horizontal and
+vertical displacements. In polar coordinates, we describe its distance
+and direction relative to an origin and reference ray.</p>
+<p><strong>Definition — Polar coordinates.</strong> A polar
+representation <span class="math inline">\((r,\theta)\)</span> satisfies
+<span class="math inline">\(x=r\cos\theta\)</span> and <span class="math inline">\(y=r\sin\theta\)</span>. Here <span class="math inline">\(r\)</span> is a signed radial coordinate and <span class="math inline">\(\theta\)</span> is an angle measured in
+radians.</p>
+<p><strong>Theorem — Coordinate conversion.</strong> The relations <span class="math inline">\(x=r\cos\theta\)</span>, <span class="math inline">\(y=r\sin\theta\)</span>, and <span class="math inline">\(r^2=x^2+y^2\)</span> connect polar and Cartesian
+coordinates. For <span class="math inline">\(r&gt;0\)</span>, <span class="math inline">\(\theta\)</span> may be selected using the
+quadrant-aware angle of <span class="math inline">\((x,y)\)</span>.</p>
+<p><strong>Remark.</strong> Polar coordinates are not unique: <span class="math inline">\((r,\theta)\)</span> and <span class="math inline">\((r,\theta+2\pi k)\)</span> represent the same
+point. Also <span class="math inline">\((-r,\theta)\)</span> and <span class="math inline">\((r,\theta+\pi)\)</span> represent the same point.
+The origin has no unique direction.</p>
+<p><strong>Example — Convert a point.</strong> Convert <span class="math inline">\((-\sqrt3,1)\)</span> to polar coordinates with
+<span class="math inline">\(r\ge0\)</span> and <span class="math inline">\(0\le\theta&lt;2\pi\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(r=\sqrt{3+1}=2\)</span>. The point lies in
+Quadrant II with reference angle <span class="math inline">\(\pi/6\)</span>, hence <span class="math inline">\(\theta=5\pi/6\)</span>. The pair is <span class="math inline">\((2,5\pi/6)\)</span>.</p>
+<p><strong>Example — Convert a curve.</strong> Convert <span class="math inline">\(r=4\cos\theta\)</span> to a Cartesian equation and
+identify its graph.</p>
+<p><strong>Solution.</strong> Multiply by <span class="math inline">\(r\)</span>: <span class="math inline">\(r^2=4r\cos\theta\)</span>, giving <span class="math inline">\(x^2+y^2=4x\)</span>, or <span class="math inline">\((x-2)^2+y^2=4\)</span>. The curve is a circle
+centered at <span class="math inline">\((2,0)\)</span> with radius <span class="math inline">\(2\)</span>.</p>
+<figure>
+<img alt="The polar equation r = 4cos θ is a Cartesian circle, not a spiral." src="figures/chapter10-diagram-02.svg"/>
+<figcaption>
+The polar equation <span class="math inline"><em>r</em> = 4cos <em>θ</em></span> is a Cartesian
+circle, not a spiral.
+</figcaption>
+</figure>
+<h3 class="unnumbered" id="pause-and-reason-1">Pause and reason</h3>
+<p>Why is using <span class="math inline">\(\arctan(y/x)\)</span> alone
+unreliable for determining the angle of a point in Quadrant II or
+III?</p>
+<h2 id="graphing-in-polar-coordinates">Graphing in Polar
+Coordinates</h2>
+<p>A polar graph <span class="math inline">\(r=f(\theta)\)</span> is
+traced by the Cartesian parametrization <span class="math inline">\(x=f(\theta)\cos\theta\)</span>, <span class="math inline">\(y=f(\theta)\sin\theta\)</span>. This provides a
+systematic bridge between polar graphs and the parametric calculus of
+Section 10.2.</p>
+<p><strong>Example — A cardioid.</strong> Sketch <span class="math inline">\(r=2(1+\cos\theta)\)</span>, <span class="math inline">\(0\le\theta\le2\pi\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(r\ge0\)</span>
+and is largest (<span class="math inline">\(r=4\)</span>) at <span class="math inline">\(\theta=0\)</span>. At <span class="math inline">\(\theta=\pi\)</span>, <span class="math inline">\(r=0\)</span>, producing a cusp at the pole.
+Because <span class="math inline">\(\cos(-\theta)=\cos\theta\)</span>,
+the curve is symmetric about the horizontal axis. Plotting the radial
+values at <span class="math inline">\(0,\pi/2,\pi,3\pi/2\)</span> gives
+a useful skeleton; sampling intermediate angles fills in the shape.</p>
+<figure>
+<img alt="Original Cartesian rendering of the polar cardioid r = 2(1 + cos θ)." src="figures/chapter10-diagram-03.svg"/>
+<figcaption>
+Original Cartesian rendering of the polar cardioid <span class="math inline"><em>r</em> = 2(1 + cos <em>θ</em>)</span>.
+</figcaption>
+</figure>
+<p><strong>Example — A rose curve.</strong> Analyze <span class="math inline">\(r=3\cos(2\theta)\)</span> for <span class="math inline">\(0\le\theta\le2\pi\)</span>.</p>
+<p><strong>Solution.</strong> The signed radius changes sign, so a
+negative value plots in the opposite direction from the ray <span class="math inline">\(\theta\)</span>. The graph has four petals, each
+of maximal radial extent <span class="math inline">\(3\)</span>. Zero
+crossings occur where <span class="math inline">\(\cos(2\theta)=0\)</span>, that is, <span class="math inline">\(\theta=\pi/4+k\pi/2\)</span>. A Cartesian
+parametric plot avoids mistakes caused by negative <span class="math inline">\(r\)</span>.</p>
+<p><strong>Theorem — A sufficient symmetry test.</strong> If <span class="math inline">\(f(-\theta)=f(\theta)\)</span>, the polar graph
+<span class="math inline">\(r=f(\theta)\)</span> is symmetric about the
+polar axis. If <span class="math inline">\(f(\pi-\theta)=f(\theta)\)</span>, it is symmetric
+about the vertical axis.</p>
+<p><strong>Proof.</strong> Reflecting the point <span class="math inline">\((f(\theta)\cos\theta,f(\theta)\sin\theta)\)</span>
+across the horizontal axis yields <span class="math inline">\((f(\theta)\cos\theta,-f(\theta)\sin\theta)\)</span>,
+which equals the point traced at <span class="math inline">\(-\theta\)</span> under the first condition. The
+second follows analogously by replacing <span class="math inline">\(\theta\)</span> with <span class="math inline">\(\pi-\theta\)</span>.</p>
+<p><strong>Remark.</strong> These tests are sufficient, not necessary.
+Because polar representations are nonunique, a graph may have symmetry
+even if the simplest algebraic test fails.</p>
+<h3 class="unnumbered" id="graphing-workflow">Graphing workflow</h3>
+<p>Identify the interval; evaluate representative angles; check zeros
+and sign changes of <span class="math inline">\(r\)</span>; test
+symmetry; determine whether the curve retraces; then plot using <span class="math inline">\(x=r\cos\theta\)</span> and <span class="math inline">\(y=r\sin\theta\)</span>.</p>
+<h2 id="areas-and-lengths-in-polar-coordinates">Areas and Lengths in
+Polar Coordinates</h2>
+<p><strong>Theorem — Polar area formula.</strong> For a polar curve
+<span class="math inline">\(r=f(\theta)\)</span> traced once on <span class="math inline">\(\alpha\le\theta\le\beta\)</span> without
+overlapping radial sectors, the enclosed sector area is <span class="math inline">\(\displaystyle A=\frac12\int_\alpha^\beta
+[f(\theta)]^2\,d\theta\)</span>.</p>
+<p><strong>Proof — Derivation.</strong> A thin circular sector of radius
+<span class="math inline">\(r\)</span> and angle <span class="math inline">\(\Delta\theta\)</span> has area approximately <span class="math inline">\(\frac12r^2\Delta\theta\)</span>. Sum these
+contributions and take a limit. The formula assumes the chosen parameter
+interval counts the desired region once.</p>
+<p><strong>Example — Area of a cardioid.</strong> Find the area enclosed
+by <span class="math inline">\(r=2(1+\cos\theta)\)</span>.</p>
+<p><strong>Solution.</strong> The curve is traced once over <span class="math inline">\(0\le\theta\le2\pi\)</span>, so <span class="math display">\[A=\frac12\int_0^{2\pi}4(1+2\cos\theta+\cos^2\theta)\,d\theta=2(2\pi+0+\pi)=6\pi.\]</span>
+The result has square units, as expected.</p>
+<p><strong>Example — One petal, not four.</strong> Find the area of one
+petal of <span class="math inline">\(r=3\cos(2\theta)\)</span>.</p>
+<p><strong>Solution.</strong> The right petal is traced over <span class="math inline">\(-\pi/4\le\theta\le\pi/4\)</span>. Hence <span class="math display">\[A=\frac92\int_{-\pi/4}^{\pi/4}\cos^2(2\theta)\,d\theta=\frac92\cdot\frac\pi4=\frac{9\pi}{8}.\]</span>
+Integrating over <span class="math inline">\(0\)</span> to <span class="math inline">\(2\pi\)</span> would count all four petals, not
+just one.</p>
+<p><strong>Theorem — Polar arc length.</strong> If <span class="math inline">\(r=f(\theta)\)</span> is continuously
+differentiable on <span class="math inline">\([\alpha,\beta]\)</span>,
+the length of its parametrized trace is <span class="math inline">\(\displaystyle
+L=\int_\alpha^\beta\sqrt{f(\theta)^2+[f'(\theta)]^2}\,d\theta\)</span>.</p>
+<p><strong>Proof.</strong> Set <span class="math inline">\(x=r\cos\theta\)</span>, <span class="math inline">\(y=r\sin\theta\)</span>. Then <span class="math inline">\(x'=r'\cos\theta-r\sin\theta\)</span> and
+<span class="math inline">\(y'=r'\sin\theta+r\cos\theta\)</span>.
+Expanding and adding gives <span class="math inline">\((x')^2+(y')^2=(r')^2+r^2\)</span>.
+Apply the parametric arc-length formula.</p>
+<p><strong>Example — Length of a cardioid.</strong> Find the length of
+<span class="math inline">\(r=2(1+\cos\theta)\)</span>, <span class="math inline">\(0\le\theta\le2\pi\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(r'=-2\sin\theta\)</span>, the integrand
+becomes <span class="math inline">\(\sqrt{4(1+\cos\theta)^2+4\sin^2\theta}=4|\cos(\theta/2)|\)</span>.
+Splitting at <span class="math inline">\(\theta=\pi\)</span> yields
+<span class="math inline">\(L=4\int_0^{2\pi}|\cos(\theta/2)|\,d\theta=16\)</span>.</p>
+<p><strong>Remark.</strong> An integral of <span class="math inline">\(r^2\)</span> computes area; an integral of <span class="math inline">\(\sqrt{r^2+(r')^2}\)</span> computes length.
+They represent different geometric accumulations and have different
+units.</p>
+<h2 id="conics-in-polar-coordinates">Conics in Polar Coordinates</h2>
+<p>A conic can be described by the ratio of distance to a fixed point
+(the focus) and distance to a fixed line (the directrix). The constant
+ratio is its eccentricity.</p>
+<p><strong>Definition — Focus–directrix conic.</strong> A conic with
+eccentricity <span class="math inline">\(e&gt;0\)</span> is the set of
+points <span class="math inline">\(P\)</span> satisfying <span class="math inline">\(\operatorname{dist}(P,F)=e\,\operatorname{dist}(P,\ell)\)</span>,
+where <span class="math inline">\(F\)</span> is a focus and <span class="math inline">\(\ell\)</span> a directrix. Ellipses have <span class="math inline">\(0&lt;e&lt;1\)</span>, parabolas have <span class="math inline">\(e=1\)</span>, and hyperbolas have <span class="math inline">\(e&gt;1\)</span>.</p>
+<p><strong>Theorem — Polar conic with a vertical directrix.</strong> If
+the focus is the pole and the directrix is <span class="math inline">\(x=d&gt;0\)</span>, then points lying to the left
+of the directrix satisfy <span class="math inline">\(\displaystyle
+r=\frac{ed}{1+e\cos\theta}\)</span>.</p>
+<p><strong>Proof.</strong> The distance to the focus is <span class="math inline">\(r\)</span> (taking <span class="math inline">\(r\ge0\)</span>). For a point to the left of <span class="math inline">\(x=d\)</span>, the distance to the line is <span class="math inline">\(d-r\cos\theta\)</span>. The focus–directrix
+condition <span class="math inline">\(r=e(d-r\cos\theta)\)</span> gives
+<span class="math inline">\(r(1+e\cos\theta)=ed\)</span>.</p>
+<p><strong>Example — Recognizing a conic.</strong> Classify <span class="math inline">\(r=6/(2+\cos\theta)\)</span> and find its
+eccentricity.</p>
+<p><strong>Solution.</strong> Divide numerator and denominator by <span class="math inline">\(2\)</span>: <span class="math inline">\(r=3/(1+\frac12\cos\theta)\)</span>. Comparing with
+<span class="math inline">\(ed/(1+e\cos\theta)\)</span> gives <span class="math inline">\(e=1/2\)</span>, so the conic is an ellipse. The
+corresponding directrix is <span class="math inline">\(d=3/e=6\)</span>.</p>
+<p><strong>Example — Periapsis and apoapsis.</strong> A focus-centered
+orbit has <span class="math inline">\(r(\theta)=12/(1+0.4\cos\theta)\)</span>. Find its
+minimum and maximum radial distances.</p>
+<p><strong>Solution.</strong> The denominator is largest at <span class="math inline">\(\cos\theta=1\)</span> and smallest at <span class="math inline">\(\cos\theta=-1\)</span>. Thus <span class="math inline">\(r_{\min}=12/1.4=60/7\)</span> and <span class="math inline">\(r_{\max}=12/0.6=20\)</span>. The eccentricity
+<span class="math inline">\(0.4&lt;1\)</span> confirms a closed
+elliptical orbit in this idealized model.</p>
+<p><strong>Remark.</strong> The conic formula describes geometry, not by
+itself the timing of motion. To infer speed or period, a separate
+dynamical model is required.</p>
+<h2 id="a-mathematical-problem-solving-toolkit">A Mathematical
+Problem-Solving Toolkit</h2>
+<ol type="1">
+<li><p><strong>Choose a representation.</strong> Use Cartesian form for
+a single-valued graph, parametric form for trajectories, and polar form
+for radial symmetry or focus-centered geometry.</p></li>
+<li><p><strong>Specify the interval.</strong> A curve’s equation alone
+may not identify the traced portion or the number of
+traversals.</p></li>
+<li><p><strong>Differentiate carefully.</strong> Parametric slope is a
+ratio of derivatives, not <span class="math inline">\(dy/dt\)</span>
+alone; polar arc length uses both <span class="math inline">\(r\)</span>
+and <span class="math inline">\(r'\)</span>.</p></li>
+<li><p><strong>Interpret signed quantities.</strong> Negative radius
+changes plotting direction; signed area changes with
+orientation.</p></li>
+<li><p><strong>Check units and plausibility.</strong> Length, area,
+speed, and curvature have different physical meanings.</p></li>
+<li><p><strong>Use computation as verification.</strong> A plot or
+quadrature result can expose a mistake, but it does not replace a
+mathematical derivation.</p></li>
+</ol>
+<h2 id="computational-laboratories-r-first">Computational Laboratories:
+R First</h2>
+<p>The code below uses base R and runs in a standard R installation.
+Each laboratory includes a specific mathematical question to
+investigate. Students should explain what the graph or numerical result
+does and does not establish.</p>
+<h2 class="unnumbered" id="r-laboratory-1-parametric-curves-and-orientation">R Laboratory 1:
+Parametric curves and orientation</h2>
+<p>Plot a cycloid and mark equally spaced parameter values. Compare
+equal parameter steps with distances between plotted points.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0, 2*pi, length.out=600)
+a &lt;- 1
+x &lt;- a*(t-sin(t)); y &lt;- a*(1-cos(t))
+plot(x,y,type="l",asp=1,xlab="x",ylab="y",main="Cycloid")
+idx &lt;- seq(1,length(t),length.out=15)
+points(x[round(idx)],y[round(idx)],pch=19,col="red")</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 class="unnumbered" id="r-laboratory-2-parametric-tangent-and-speed">R Laboratory 2:
+Parametric tangent and speed</h2>
+<p>Plot an ellipse with tangent vectors and compare geometric slope with
+a finite-difference estimate.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0,2*pi,length.out=400)
+x &lt;- 3*cos(t); y &lt;- 2*sin(t)
+plot(x,y,type="l",asp=1,xlab="x",ylab="y")
+t0 &lt;- pi/3; slope &lt;- -2*cos(t0)/(3*sin(t0))
+x0 &lt;- 3*cos(t0); y0 &lt;- 2*sin(t0)
+xx &lt;- seq(x0-.8,x0+.8,length.out=100)
+lines(xx,y0+slope*(xx-x0),col="red",lwd=2)
+cat("Tangent slope:",slope,"\n")</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 class="unnumbered" id="r-laboratory-3-parametric-arc-length">R
+Laboratory 3: Parametric arc length</h2>
+<p>Compute one cycloid arch length numerically and compare with the
+exact value <span class="math inline">\(8a\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>a &lt;- 1
+speed &lt;- function(t) sqrt((a*(1-cos(t)))^2+(a*sin(t))^2)
+L &lt;- integrate(speed,0,2*pi)$value
+cat("Numerical length:",L," Exact length:",8*a,"\n")</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 class="unnumbered" id="r-laboratory-4-polar-graph-gallery">R
+Laboratory 4: Polar graph gallery</h2>
+<p>Plot a cardioid and a four-petal rose using Cartesian coordinates
+generated from polar data.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>theta &lt;- seq(0,2*pi,length.out=1200)
+par(mfrow=c(1,2))
+r &lt;- 2*(1+cos(theta))
+plot(r*cos(theta),r*sin(theta),type="l",asp=1,
+     xlab="x",ylab="y",main="Cardioid")
+r &lt;- 3*cos(2*theta)
+plot(r*cos(theta),r*sin(theta),type="l",asp=1,
+     xlab="x",ylab="y",main="Four-petal rose")
+par(mfrow=c(1,1))</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 class="unnumbered" id="r-laboratory-5-polar-area-and-length">R
+Laboratory 5: Polar area and length</h2>
+<p>Numerically integrate the cardioid area and length and compare with
+<span class="math inline">\(6\pi\)</span> and <span class="math inline">\(16\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>r &lt;- function(theta) 2*(1+cos(theta))
+dr &lt;- function(theta) -2*sin(theta)
+A &lt;- integrate(function(t) 0.5*r(t)^2,0,2*pi)$value
+L &lt;- integrate(function(t) sqrt(r(t)^2+dr(t)^2),0,2*pi)$value
+cat("Area:",A," vs ",6*pi,"\n")
+cat("Length:",L," vs ",16,"\n")</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 class="unnumbered" id="r-laboratory-6-focus-centered-conics">R
+Laboratory 6: Focus-centered conics</h2>
+<p>Plot three conics with eccentricities below, equal to, and above one;
+interpret how their shapes differ.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter10-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>theta &lt;- seq(-2.2,2.2,length.out=1000)
+par(mfrow=c(1,3))
+for(e in c(0.5,1,1.4)) {
+  den &lt;- 1+e*cos(theta)
+  keep &lt;- den &gt; 0.08
+  r &lt;- 3/den
+  x &lt;- r*cos(theta); y &lt;- r*sin(theta)
+  x[!keep] &lt;- NA; y[!keep] &lt;- NA
+  plot(x,y,type="l",asp=1,xlab="x",ylab="y",
+       main=paste("eccentricity =",e))
+}
+par(mfrow=c(1,1))</code></pre></div>
+<p><strong>Reflect.</strong> Explain the mathematical result being
+tested, and identify a numerical or graphical limitation.</p>
+<h2 id="computational-laboratories-python">Computational Laboratories:
+Python</h2>
+<p>The following laboratories reproduce the six investigations
+independently using NumPy, Matplotlib, and SciPy. Install the packages
+in a suitable Python environment before running the scripts.</p>
+<h2 class="unnumbered" id="python-laboratory-1-parametric-curves-and-orientation">Python
+Laboratory 1: Parametric curves and orientation</h2>
+<p>Plot a cycloid and mark equally spaced parameter values. Compare
+equal parameter steps with distances between plotted points.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+t = np.linspace(0, 2*np.pi, 600)
+a = 1
+x, y = a*(t-np.sin(t)), a*(1-np.cos(t))
+plt.plot(x,y)
+idx = np.linspace(0,len(t)-1,15,dtype=int)
+plt.scatter(x[idx],y[idx],color="red")
+plt.axis("equal"); plt.xlabel("x"); plt.ylabel("y")
+plt.title("Cycloid"); plt.show()</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 class="unnumbered" id="python-laboratory-2-parametric-tangent-and-speed">Python Laboratory
+2: Parametric tangent and speed</h2>
+<p>Plot an ellipse with tangent vectors and compare geometric slope with
+a finite-difference estimate.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+t = np.linspace(0,2*np.pi,400)
+x,y = 3*np.cos(t),2*np.sin(t)
+t0 = np.pi/3
+slope = -2*np.cos(t0)/(3*np.sin(t0))
+x0,y0 = 3*np.cos(t0),2*np.sin(t0)
+xx = np.linspace(x0-.8,x0+.8,100)
+plt.plot(x,y); plt.plot(xx,y0+slope*(xx-x0),color="red")
+plt.axis("equal"); plt.show()
+print("Tangent slope:",slope)</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 class="unnumbered" id="python-laboratory-3-parametric-arc-length">Python Laboratory 3:
+Parametric arc length</h2>
+<p>Compute one cycloid arch length numerically and compare with the
+exact value <span class="math inline">\(8a\)</span>.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+a = 1
+speed = lambda t: np.sqrt((a*(1-np.cos(t)))**2
+                          +(a*np.sin(t))**2)
+L,err = quad(speed,0,2*np.pi)
+print("Numerical length:",L,"Exact length:",8*a)</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 class="unnumbered" id="python-laboratory-4-polar-graph-gallery">Python Laboratory 4: Polar
+graph gallery</h2>
+<p>Plot a cardioid and a four-petal rose using Cartesian coordinates
+generated from polar data.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+theta = np.linspace(0,2*np.pi,1200)
+fig,ax = plt.subplots(1,2,figsize=(10,4))
+for a,r,title in [(ax[0],2*(1+np.cos(theta)),"Cardioid"),
+                  (ax[1],3*np.cos(2*theta),"Four-petal rose")]:
+    a.plot(r*np.cos(theta),r*np.sin(theta))
+    a.set_aspect("equal"); a.set_title(title)
+plt.show()</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 class="unnumbered" id="python-laboratory-5-polar-area-and-length">Python Laboratory 5:
+Polar area and length</h2>
+<p>Numerically integrate the cardioid area and length and compare with
+<span class="math inline">\(6\pi\)</span> and <span class="math inline">\(16\)</span>.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+r = lambda t: 2*(1+np.cos(t))
+dr = lambda t: -2*np.sin(t)
+A = quad(lambda t: .5*r(t)**2,0,2*np.pi)[0]
+L = quad(lambda t: np.hypot(r(t),dr(t)),0,2*np.pi)[0]
+print("Area:",A,"Exact:",6*np.pi)
+print("Length:",L,"Exact:",16)</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 class="unnumbered" id="python-laboratory-6-focus-centered-conics">Python Laboratory 6:
+Focus-centered conics</h2>
+<p>Plot three conics with eccentricities below, equal to, and above one;
+interpret how their shapes differ.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter10-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+theta = np.linspace(-2.2,2.2,1000)
+fig,ax = plt.subplots(1,3,figsize=(12,4))
+for a,e in zip(ax,[.5,1,1.4]):
+    den = 1+e*np.cos(theta)
+    r = np.where(den&gt;.08,3/den,np.nan)
+    a.plot(r*np.cos(theta),r*np.sin(theta))
+    a.set_aspect("equal"); a.set_title(f"e = {e}")
+plt.show()</code></pre></div>
+<p><strong>Reflect.</strong> Compare your numerical findings with the
+analytical results and with the corresponding R laboratory.</p>
+<h2 id="exercises-and-conceptual-review">Exercises and Conceptual
+Review</h2>
+<p><strong>Instructions.</strong> Unless otherwise indicated, show
+analytical reasoning before using software. State parameter intervals,
+units, and the meaning of any signed quantity. Exercises are organized
+by section; the final problems integrate several ideas.</p>
+<h2 class="unnumbered" id="parametrizations">Parametrizations</h2>
+<ol type="1">
+<li><p>Eliminate the parameter in <span class="math inline">\(x=2t+1\)</span>, <span class="math inline">\(y=t^2-3\)</span>, <span class="math inline">\(-1\le t\le2\)</span>; specify the traced
+portion.</p></li>
+<li><p>Parametrize the segment from <span class="math inline">\((-2,5)\)</span> to <span class="math inline">\((4,-1)\)</span>, including its
+orientation.</p></li>
+<li><p>Give two parametrizations of the unit circle with opposite
+orientations.</p></li>
+<li><p>Find the Cartesian equation and traced portion for <span class="math inline">\(x=e^t\)</span>, <span class="math inline">\(y=e^{-t}\)</span>, <span class="math inline">\(0\le t\le\ln4\)</span>.</p></li>
+<li><p>For <span class="math inline">\(x=\cos(3t)\)</span>, <span class="math inline">\(y=\sin(3t)\)</span> on <span class="math inline">\([0,2\pi]\)</span>, how many times is the circle
+traversed?</p></li>
+<li><p>Explain why eliminating a parameter can lose information about
+speed and orientation.</p></li>
+<li><p>Derive a parametrization of an ellipse with semiaxes <span class="math inline">\(5\)</span> and <span class="math inline">\(2\)</span>, traversed clockwise.</p></li>
+<li><p>For a cycloid with radius <span class="math inline">\(2\)</span>,
+locate the cusps of its first arch and find its horizontal
+span.</p></li>
+</ol>
+<h2 class="unnumbered" id="parametric-calculus">Parametric calculus</h2>
+<ol type="1">
+<li><p>Find the tangent line to <span class="math inline">\(x=t^2+2\)</span>, <span class="math inline">\(y=t^3-3t\)</span> at <span class="math inline">\(t=2\)</span>.</p></li>
+<li><p>Find <span class="math inline">\(dy/dx\)</span> and <span class="math inline">\(d^2y/dx^2\)</span> for <span class="math inline">\(x=t+1\)</span>, <span class="math inline">\(y=t^3\)</span>.</p></li>
+<li><p>For <span class="math inline">\(x=2\cos t\)</span>, <span class="math inline">\(y=3\sin t\)</span>, identify parameter values with
+horizontal tangents.</p></li>
+<li><p>For the same ellipse, identify parameter values with vertical
+tangents.</p></li>
+<li><p>Find the speed of <span class="math inline">\(\mathbf
+r(t)=(3t,4t^2)\)</span> and interpret its units if <span class="math inline">\(t\)</span> is seconds.</p></li>
+<li><p>Compute the length of <span class="math inline">\(x=3\cos
+t\)</span>, <span class="math inline">\(y=3\sin t\)</span>, <span class="math inline">\(0\le t\le\pi\)</span>.</p></li>
+<li><p>Find the length of the curve <span class="math inline">\(x=t^2\)</span>, <span class="math inline">\(y=t^3\)</span> on <span class="math inline">\(0\le
+t\le1\)</span> as a definite integral; approximate it
+numerically.</p></li>
+<li><p>Compute the area under <span class="math inline">\(x=t\)</span>,
+<span class="math inline">\(y=4-t^2\)</span>, <span class="math inline">\(0\le t\le2\)</span>.</p></li>
+<li><p>Explain why a point with <span class="math inline">\(x\prime(t)=y\prime(t)=0\)</span> requires special
+attention when finding a tangent.</p></li>
+<li><p>Compare displacement and distance traveled for <span class="math inline">\(x=\cos t\)</span>, <span class="math inline">\(y=\sin t\)</span> over one complete
+revolution.</p></li>
+</ol>
+<h2 class="unnumbered" id="polar-coordinates-and-graphing">Polar
+coordinates and graphing</h2>
+<ol type="1">
+<li><p>Convert <span class="math inline">\((3,3\sqrt3)\)</span> to polar
+coordinates with <span class="math inline">\(r&gt;0\)</span>, <span class="math inline">\(0\le\theta&lt;2\pi\)</span>.</p></li>
+<li><p>Convert <span class="math inline">\((-4,0)\)</span> to two
+distinct polar representations.</p></li>
+<li><p>Convert <span class="math inline">\(r=5\sin\theta\)</span> to
+Cartesian form and identify the curve.</p></li>
+<li><p>Convert <span class="math inline">\(x^2+y^2=8y\)</span> to polar
+form.</p></li>
+<li><p>Sketch <span class="math inline">\(r=1+\cos\theta\)</span> and
+explain its symmetry.</p></li>
+<li><p>Sketch <span class="math inline">\(r=2\sin(3\theta)\)</span> and
+determine its number of petals.</p></li>
+<li><p>Explain how negative values of <span class="math inline">\(r\)</span> affect the plot of <span class="math inline">\(r=\cos(2\theta)\)</span>.</p></li>
+<li><p>Compare <span class="math inline">\(r=2+\cos\theta\)</span> and
+<span class="math inline">\(r=1+\cos\theta\)</span> near <span class="math inline">\(\theta=\pi\)</span>.</p></li>
+<li><p>Find the Cartesian parametrization of <span class="math inline">\(r=3\theta\)</span>, <span class="math inline">\(0\le\theta\le2\pi\)</span>.</p></li>
+<li><p>Explain why a uniformly spaced grid of angles may produce a
+visually uneven polar plot.</p></li>
+</ol>
+<h2 class="unnumbered" id="polar-area-and-length">Polar area and
+length</h2>
+<ol type="1">
+<li><p>Find the area enclosed by <span class="math inline">\(r=3\)</span>, <span class="math inline">\(0\le\theta\le2\pi\)</span>, using the polar area
+formula.</p></li>
+<li><p>Find the area of one petal of <span class="math inline">\(r=2\cos(3\theta)\)</span>.</p></li>
+<li><p>Find the area enclosed by <span class="math inline">\(r=1+\sin\theta\)</span>.</p></li>
+<li><p>Set up an integral for the area between <span class="math inline">\(r=3\)</span> and <span class="math inline">\(r=1+\cos\theta\)</span>.</p></li>
+<li><p>Find the length of the polar circle <span class="math inline">\(r=4\)</span>, <span class="math inline">\(0\le\theta\le2\pi\)</span>.</p></li>
+<li><p>Set up the arc-length integral for <span class="math inline">\(r=e^\theta\)</span>, <span class="math inline">\(0\le\theta\le1\)</span>.</p></li>
+<li><p>Derive the polar arc-length formula directly from Cartesian
+derivatives.</p></li>
+<li><p>Explain how retracing a curve affects the interpretation of the
+area and length integrals.</p></li>
+</ol>
+<h2 class="unnumbered" id="conics-and-synthesis">Conics and
+synthesis</h2>
+<ol type="1">
+<li><p>Classify <span class="math inline">\(r=5/(1+0.2\cos\theta)\)</span> and state its
+eccentricity.</p></li>
+<li><p>Classify <span class="math inline">\(r=8/(1+\cos\theta)\)</span>
+and state its eccentricity.</p></li>
+<li><p>Classify <span class="math inline">\(r=3/(1+1.5\cos\theta)\)</span> and state its
+eccentricity.</p></li>
+<li><p>For <span class="math inline">\(r=10/(1+0.25\cos\theta)\)</span>,
+find minimum and maximum radial distances.</p></li>
+<li><p>Derive the polar conic equation for a directrix <span class="math inline">\(x=d\)</span> and focus at the origin.</p></li>
+<li><p>Compare two polar orbits with the same numerator and
+eccentricities <span class="math inline">\(0.3\)</span> and <span class="math inline">\(0.7\)</span>.</p></li>
+<li><p>Create an original parametrized trajectory with a turning point;
+analyze slope and speed.</p></li>
+<li><p>Write a short explanation distinguishing a geometric conic from a
+dynamical orbital model.</p></li>
+</ol>
+<h2 class="unnumbered" id="conceptual-synthesis">Conceptual
+synthesis</h2>
+<ol type="1">
+<li><p>Explain the difference between the image of a curve and the
+motion described by its parametrization.</p></li>
+<li><p>Give an example of a graph that is easy to describe
+parametrically but not as a single function <span class="math inline">\(y=f(x)\)</span>.</p></li>
+<li><p>Describe how you would verify a symbolic arc-length result
+computationally without treating the numerical output as proof.</p></li>
+<li><p>Explain why a polar curve can cross the pole several times during
+one traversal.</p></li>
+<li><p>Explain why the parameter interval is essential when calculating
+a petal’s area.</p></li>
+<li><p>Describe a situation where the polar representation is more
+natural than the Cartesian representation.</p></li>
+</ol>
+<h2 id="chapter-project-designing-a-focus-centered-survey-route">Chapter
+Project: Designing a Focus-Centered Survey Route</h2>
+<p><strong>Scenario.</strong> An environmental monitoring team plans a
+two-dimensional survey around a fixed observation station. Its proposed
+route, measured in kilometers from the station, is <span class="math display">\[r(\theta)=\frac{9}{1+0.35\cos\theta},\qquad
+0\le\theta\le2\pi.\]</span> The route is an idealized ellipse with one
+focus at the station. The team must understand the geometry, approximate
+the distance to travel, and compare the route with a circular
+alternative. No physical speed law is assumed: <span class="math inline">\(\theta\)</span> is a geometric parameter rather
+than elapsed time.</p>
+<h2 class="unnumbered" id="part-a-mathematical-analysis">Part A:
+Mathematical analysis</h2>
+<ol type="1">
+<li><p>Classify the conic and justify the classification using its
+eccentricity.</p></li>
+<li><p>Find the minimum and maximum station-to-route distances and the
+angles at which they occur.</p></li>
+<li><p>Convert the polar route to Cartesian parametric equations <span class="math inline">\(x(\theta),y(\theta)\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(r'(\theta)\)</span> and
+set up the exact polar arc-length integral for one traversal.</p></li>
+<li><p>Set up the polar area integral and explain why it measures the
+enclosed region once.</p></li>
+<li><p>Determine the radius of a circle with the same enclosed area
+(express it in terms of your computed area).</p></li>
+</ol>
+<h2 class="unnumbered" id="part-b-r-investigation">Part B: R
+investigation</h2>
+<ol type="1">
+<li><p>Plot the proposed route, the focus, and the same-area comparison
+circle on equal-aspect axes.</p></li>
+<li><p>Use numerical integration to estimate the route length and
+enclosed area. State tolerances or numerical accuracy checks.</p></li>
+<li><p>Investigate how the route changes when eccentricity takes values
+<span class="math inline">\(0.15\)</span>, <span class="math inline">\(0.35\)</span>, and <span class="math inline">\(0.65\)</span> while the numerator remains <span class="math inline">\(9\)</span>.</p></li>
+</ol>
+<h2 class="unnumbered" id="part-c-python-replication">Part C: Python
+replication</h2>
+<ol type="1">
+<li><p>Independently reproduce the route plot and numerical integrals in
+Python.</p></li>
+<li><p>Compare the R and Python results, reporting discrepancies and
+explaining plausible numerical causes.</p></li>
+<li><p>Produce a clear figure with axis labels, units, a caption, and an
+indication of the focus.</p></li>
+</ol>
+<h2 class="unnumbered" id="part-d-interpretation-and-communication">Part
+D: Interpretation and communication</h2>
+<ol type="1">
+<li><p>Write a 500–700 word report recommending whether the route is
+suitable for a survey that prioritizes nearly uniform distance from the
+station. Explain the trade-off between eccentricity, minimum distance,
+maximum distance, and travel length.</p></li>
+<li><p>State at least three model limitations, including the absence of
+terrain constraints and the difference between geometric route length
+and travel time.</p></li>
+</ol>
+<h2 class="unnumbered" id="suggested-100-point-rubric">Suggested
+100-point rubric</h2>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Criterion</th>
+<th style="text-align: right;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Correct geometric derivations and interval
+reasoning</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Appropriate integral setup and numerical
+validation</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Reproducible, clearly explained R
+work</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Independent Python replication and
+comparison</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Visual communication, units, and
+captions</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Interpretation and critical discussion of
+limitations</td>
+<td style="text-align: right;">10</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="chapter-summary">Chapter Summary</h2>
+<p>Parametric equations represent motion or geometric tracing through a
+shared parameter. The ratio <span class="math inline">\((dy/dt)/(dx/dt)\)</span> gives tangent slope when
+the denominator is nonzero; speed and arc length follow from the
+Euclidean norm of the velocity vector. Polar coordinates describe points
+by radius and angle, with nonunique representations and signed radial
+values. Polar area accumulates thin sectors, while polar arc length
+measures distances along the curve. Focus–directrix geometry produces
+polar equations for ellipses, parabolas, and hyperbolas. In every
+setting, the parameter interval and interpretation of the model are as
+important as the formula.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_10_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter09.html">← Infinite Sequences and Series</a><a href="appendix-a.html">Introduction to R and RStudio →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Polar curves</a></li><li><a href="#parametrizations-of-plane-curves">Parametrizations of Plane
+Curves</a></li><li><a href="#calculus-with-parametric-curves">Calculus with Parametric
+Curves</a></li><li><a href="#polar-coordinates">Polar Coordinates</a></li><li><a href="#graphing-in-polar-coordinates">Graphing in Polar
+Coordinates</a></li><li><a href="#areas-and-lengths-in-polar-coordinates">Areas and Lengths in
+Polar Coordinates</a></li><li><a href="#conics-in-polar-coordinates">Conics in Polar Coordinates</a></li><li><a href="#a-mathematical-problem-solving-toolkit">A Mathematical
+Problem-Solving Toolkit</a></li><li><a href="#computational-laboratories-r-first">Computational Laboratories:
+R First</a></li><li><a href="#r-laboratory-1-parametric-curves-and-orientation">R Laboratory 1:
+Parametric curves and orientation</a></li><li><a href="#r-laboratory-2-parametric-tangent-and-speed">R Laboratory 2:
+Parametric tangent and speed</a></li><li><a href="#r-laboratory-3-parametric-arc-length">R
+Laboratory 3: Parametric arc length</a></li><li><a href="#r-laboratory-4-polar-graph-gallery">R
+Laboratory 4: Polar graph gallery</a></li><li><a href="#r-laboratory-5-polar-area-and-length">R
+Laboratory 5: Polar area and length</a></li><li><a href="#r-laboratory-6-focus-centered-conics">R
+Laboratory 6: Focus-centered conics</a></li><li><a href="#computational-laboratories-python">Computational Laboratories:
+Python</a></li><li><a href="#python-laboratory-1-parametric-curves-and-orientation">Python
+Laboratory 1: Parametric curves and orientation</a></li><li><a href="#python-laboratory-2-parametric-tangent-and-speed">Python Laboratory
+2: Parametric tangent and speed</a></li><li><a href="#python-laboratory-3-parametric-arc-length">Python Laboratory 3:
+Parametric arc length</a></li><li><a href="#python-laboratory-4-polar-graph-gallery">Python Laboratory 4: Polar
+graph gallery</a></li><li><a href="#python-laboratory-5-polar-area-and-length">Python Laboratory 5:
+Polar area and length</a></li><li><a href="#python-laboratory-6-focus-centered-conics">Python Laboratory 6:
+Focus-centered conics</a></li><li><a href="#exercises-and-conceptual-review">Exercises and Conceptual
+Review</a></li><li><a href="#parametrizations">Parametrizations</a></li><li><a href="#parametric-calculus">Parametric calculus</a></li><li><a href="#polar-coordinates-and-graphing">Polar
+coordinates and graphing</a></li><li><a href="#polar-area-and-length">Polar area and
+length</a></li><li><a href="#conics-and-synthesis">Conics and
+synthesis</a></li><li><a href="#conceptual-synthesis">Conceptual
+synthesis</a></li><li><a href="#chapter-project-designing-a-focus-centered-survey-route">Chapter
+Project: Designing a Focus-Centered Survey Route</a></li><li><a href="#part-a-mathematical-analysis">Part A:
+Mathematical analysis</a></li><li><a href="#part-b-r-investigation">Part B: R
+investigation</a></li><li><a href="#part-c-python-replication">Part C: Python
+replication</a></li><li><a href="#part-d-interpretation-and-communication">Part
+D: Interpretation and communication</a></li><li><a href="#suggested-100-point-rubric">Suggested
+100-point rubric</a></li><li><a href="#chapter-summary">Chapter Summary</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

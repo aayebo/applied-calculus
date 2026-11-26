@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Infinite Sequences and Series | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a aria-current="page" class="active" href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="infinite-sequences-and-series">Infinite Sequences and
+Series</h1>
+<p><strong>Guiding question.</strong> Can an infinite process produce a
+finite answer? The answer depends on the behavior of the terms and, for
+series, on the behavior of their <em>partial sums</em>. This chapter
+builds a careful distinction between numerical evidence and mathematical
+proof, then uses power and Taylor series to approximate functions with
+controlled error.</p>
+<p><strong>Learning outcomes.</strong> By the end of this chapter,
+students should be able to determine limits of sequences; distinguish a
+series from its terms; apply geometric, telescoping, integral,
+comparison, ratio, root, and alternating-series tests; classify absolute
+versus conditional convergence; find radii and intervals of convergence;
+construct Taylor polynomials and bound their remainders; and communicate
+the limitations of numerical approximation.</p>
+<p><strong>Prerequisites.</strong> Limits, continuity, differentiation,
+integration, the Fundamental Theorem of Calculus, and elementary
+algebraic inequalities.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="convergence-before-computation">Convergence
+before computation</h3>
+<p>Partial sums can appear stable for many terms even when a series
+diverges or converges slowly. First identify the mathematical
+convergence criterion; only then interpret a numerical approximation. A
+Taylor polynomial is local: its accuracy depends on both degree and
+distance from the expansion point.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 9." src="figures/chapter_09_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 9.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> Compare second- and
+sixth-degree Maclaurin approximations to <span class="math inline">\(e^x\)</span> near <span class="math inline">\(x=0\)</span> and at <span class="math inline">\(x=2\)</span>. What changes, and why?</p>
+<h2 id="interactive-investigation">Interactive investigation: Taylor polynomials</h2><div class="calc-widget" data-calc="9"><p>Compare sin(x) with its Maclaurin polynomial. Where does the approximation improve first?</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="sequences">Sequences</h2>
+<p>A sequence is a function whose input is a positive integer. In
+applications, the index might count days, experimental trials,
+algorithmic iterations, or progressively refined approximations.</p>
+<p><strong>Definition — Sequence and convergence.</strong> A real
+sequence <span class="math inline">\(\{a_n\}_{n=1}^\infty\)</span>
+converges to <span class="math inline">\(L\)</span> if, for every <span class="math inline">\(\varepsilon&gt;0\)</span>, there is an integer
+<span class="math inline">\(N\)</span> such that <span class="math inline">\(n\ge N\)</span> implies <span class="math inline">\(|a_n-L|&lt;\varepsilon\)</span>. We write <span class="math inline">\(a_n\to L\)</span> as <span class="math inline">\(n\to\infty\)</span>. If no finite <span class="math inline">\(L\)</span> satisfies this condition, the sequence
+diverges.</p>
+<p><strong>Remark.</strong> A sequence is not a continuous curve: its
+domain contains integers only. Joining plotted points with line segments
+may help the eye, but the connecting segments are not part of the
+sequence.</p>
+<p><strong>Example — A direct convergence proof.</strong> Show that
+<span class="math inline">\(a_n=(3n+2)/(n+4)\)</span> converges to <span class="math inline">\(3\)</span>.</p>
+<p><strong>Solution.</strong> Subtract the proposed limit: <span class="math display">\[\left|\frac{3n+2}{n+4}-3\right|=\frac{10}{n+4}.\]</span>
+Given <span class="math inline">\(\varepsilon&gt;0\)</span>, choose an
+integer <span class="math inline">\(N&gt;10/\varepsilon\)</span>. Then
+<span class="math inline">\(n\ge N\)</span> implies <span class="math inline">\(10/(n+4)&lt;\varepsilon\)</span>, proving the
+claim. Dividing numerator and denominator by <span class="math inline">\(n\)</span> predicts the limit; the inequality
+supplies the proof.</p>
+<p><strong>Theorem — Limit laws for sequences.</strong> If <span class="math inline">\(a_n\to A\)</span> and <span class="math inline">\(b_n\to B\)</span>, then <span class="math inline">\(a_n\pm b_n\to A\pm B\)</span>, <span class="math inline">\(a_nb_n\to AB\)</span>, and <span class="math inline">\(a_n/b_n\to A/B\)</span> when <span class="math inline">\(B\ne0\)</span> and the quotients are eventually
+defined.</p>
+<p><strong>Theorem — Squeeze theorem for sequences.</strong> If <span class="math inline">\(a_n\le b_n\le c_n\)</span> eventually and <span class="math inline">\(a_n,c_n\to L\)</span>, then <span class="math inline">\(b_n\to L\)</span>.</p>
+<p><strong>Example — Oscillation with shrinking amplitude.</strong>
+Determine <span class="math inline">\(\lim_{n\to\infty}(-1)^n/n\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(-1/n\le(-1)^n/n\le1/n\)</span> and both bounds
+tend to zero, the squeeze theorem gives zero. By contrast, <span class="math inline">\((-1)^n\)</span> diverges because its even and odd
+subsequences approach different values.</p>
+<p><strong>Theorem — Monotone convergence theorem.</strong> Every
+increasing sequence that is bounded above converges. Every decreasing
+sequence that is bounded below converges.</p>
+<p><strong>Proof — Proof idea.</strong> For an increasing bounded
+sequence, let <span class="math inline">\(L\)</span> be the least upper
+bound of its values. For any <span class="math inline">\(\varepsilon&gt;0\)</span>, <span class="math inline">\(L-\varepsilon\)</span> cannot be an upper bound,
+so some <span class="math inline">\(a_N&gt;L-\varepsilon\)</span>.
+Monotonicity gives <span class="math inline">\(L-\varepsilon&lt;a_n\le
+L\)</span> for all <span class="math inline">\(n\ge N\)</span>. The
+decreasing case is analogous.</p>
+<p><strong>Example — A recurrence that settles.</strong> Let <span class="math inline">\(a_1=1\)</span> and <span class="math inline">\(a_{n+1}=\sqrt{2+a_n}\)</span>. Show that <span class="math inline">\(a_n\to2\)</span>.</p>
+<p><strong>Solution.</strong> By induction, <span class="math inline">\(1\le a_n&lt;2\)</span>: if <span class="math inline">\(a_n&lt;2\)</span>, then <span class="math inline">\(a_{n+1}&lt;2\)</span>. Also <span class="math inline">\(a_{n+1}\ge a_n\)</span> on <span class="math inline">\([1,2]\)</span>, because <span class="math inline">\(\sqrt{2+x}\ge x\)</span> there. Monotone
+convergence gives a limit <span class="math inline">\(L\in[1,2]\)</span>. Passing to the limit in the
+recurrence yields <span class="math inline">\(L=\sqrt{2+L}\)</span>, so
+<span class="math inline">\(L^2-L-2=0\)</span>. The admissible root is
+<span class="math inline">\(L=2\)</span>.</p>
+<figure>
+<img alt="Original discrete-point visualization of a convergent recurrence." src="figures/chapter09-diagram-01.svg"/>
+<figcaption>
+Original discrete-point visualization of a convergent recurrence.
+</figcaption>
+</figure>
+<h3 class="unnumbered" id="pause-and-reason">Pause and reason</h3>
+<p>Why does seeing the first 100 terms close to <span class="math inline">\(2\)</span> not prove that a sequence converges?
+Can a sequence appear stable for many terms and later move away?</p>
+<h2 id="infinite-series">Infinite series</h2>
+<p>A sequence records individual values; a series asks whether adding
+its values indefinitely yields a finite total.</p>
+<p><strong>Definition — Series and partial sums.</strong> For a sequence
+<span class="math inline">\(a_n\)</span>, define <span class="math inline">\(S_N=\sum_{n=1}^{N}a_n\)</span>. The series <span class="math inline">\(\sum_{n=1}^\infty a_n\)</span> converges to <span class="math inline">\(S\)</span> when <span class="math inline">\(S_N\to
+S\)</span>; otherwise it diverges.</p>
+<p><strong>Theorem — Necessary condition for series
+convergence.</strong> If <span class="math inline">\(\sum_{n=1}^\infty
+a_n\)</span> converges, then <span class="math inline">\(a_n\to0\)</span>.</p>
+<p><strong>Proof.</strong> Write <span class="math inline">\(a_n=S_n-S_{n-1}\)</span>. If both partial sums
+tend to <span class="math inline">\(S\)</span>, their difference tends
+to zero.</p>
+<p><strong>Remark — A frequent logical error.</strong> The converse is
+false. Terms approaching zero are necessary, not sufficient. The
+harmonic series <span class="math inline">\(\sum1/n\)</span> diverges
+even though <span class="math inline">\(1/n\to0\)</span>.</p>
+<p><strong>Theorem — Geometric series.</strong> For real <span class="math inline">\(r\)</span> with <span class="math inline">\(|r|&lt;1\)</span>, <span class="math inline">\(\sum_{n=0}^\infty ar^n=a/(1-r)\)</span>. For <span class="math inline">\(a\ne0\)</span> and <span class="math inline">\(|r|\ge1\)</span>, the series diverges.</p>
+<p><strong>Proof.</strong> The <span class="math inline">\(N\)</span>th
+partial sum is <span class="math inline">\(a(1-r^{N+1})/(1-r)\)</span>
+for <span class="math inline">\(r\ne1\)</span>. The power <span class="math inline">\(r^{N+1}\)</span> tends to zero exactly when <span class="math inline">\(|r|&lt;1\)</span>. For <span class="math inline">\(r=1\)</span> the partial sums are <span class="math inline">\((N+1)a\)</span>.</p>
+<p><strong>Example — Repeated filtration.</strong> A filter removes 30%
+of the pollutant remaining after each pass. Starting with 80 units, what
+is the total amount removed over indefinitely many passes?</p>
+<p><strong>Solution.</strong> The first removal is <span class="math inline">\(24\)</span>, then <span class="math inline">\(24(0.7)\)</span>, then <span class="math inline">\(24(0.7)^2\)</span>, and so on. The geometric sum
+is <span class="math inline">\(24/(1-0.7)=80\)</span> units. The model
+predicts that the remaining pollutant approaches zero, although no
+finite number of passes removes literally all of it.</p>
+<p><strong>Example — Telescoping series.</strong> Evaluate <span class="math inline">\(\sum_{n=1}^\infty\frac{1}{n(n+1)}\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(1/[n(n+1)]=1/n-1/(n+1)\)</span>, the partial sum
+is <span class="math inline">\(S_N=1-1/(N+1)\)</span>. Therefore the
+series converges to <span class="math inline">\(1\)</span>.</p>
+<figure>
+<img alt="Partial sums can approach a finite value even though infinitely many positive terms are added." src="figures/chapter09-diagram-02.svg"/>
+<figcaption>
+Partial sums can approach a finite value even though infinitely many
+positive terms are added.
+</figcaption>
+</figure>
+<h2 id="the-integral-test">The integral test</h2>
+<p><strong>Theorem — Integral test.</strong> Suppose <span class="math inline">\(f\)</span> is continuous, positive, and decreasing
+on <span class="math inline">\([1,\infty)\)</span> and <span class="math inline">\(a_n=f(n)\)</span>. Then <span class="math inline">\(\sum_{n=1}^\infty a_n\)</span> and <span class="math inline">\(\int_1^\infty f(x)\,dx\)</span> either both
+converge or both diverge.</p>
+<p><strong>Proof — Geometric reasoning.</strong> On each interval <span class="math inline">\([n,n+1]\)</span>, decreasingness gives <span class="math inline">\(f(n+1)\le\int_n^{n+1}f(x)\,dx\le f(n)\)</span>.
+Summing these inequalities relates the integral to the partial sums.
+Because all terms are nonnegative, boundedness of one sequence of
+accumulated totals is equivalent to boundedness of the other.</p>
+<p><strong>Theorem — <span class="math inline">\(p\)</span>-series
+criterion.</strong> The series <span class="math inline">\(\sum_{n=1}^\infty1/n^p\)</span> converges if <span class="math inline">\(p&gt;1\)</span> and diverges if <span class="math inline">\(p\le1\)</span>.</p>
+<p><strong>Proof.</strong> For <span class="math inline">\(p&gt;0\)</span>, apply the integral test to <span class="math inline">\(x^{-p}\)</span>. The improper integral converges
+exactly for <span class="math inline">\(p&gt;1\)</span>. For <span class="math inline">\(p\le0\)</span>, the terms do not tend to zero.</p>
+<p><strong>Example — A borderline logarithmic series.</strong> Test
+<span class="math inline">\(\sum_{n=2}^\infty 1/[n(\ln
+n)^2]\)</span>.</p>
+<p><strong>Solution.</strong> The integrand <span class="math inline">\(f(x)=1/[x(\ln x)^2]\)</span> is positive and
+decreasing for <span class="math inline">\(x\ge2\)</span>. Substitute
+<span class="math inline">\(u=\ln x\)</span>: <span class="math display">\[\int_2^\infty\frac{dx}{x(\ln
+x)^2}=\int_{\ln2}^\infty u^{-2}\,du=\frac1{\ln2}&lt;\infty.\]</span> The
+series converges. Replacing <span class="math inline">\((\ln
+n)^2\)</span> with <span class="math inline">\(\ln n\)</span> makes the
+corresponding integral diverge; the logarithmic exponent matters.</p>
+<p><strong>Theorem — Integral-test remainder bound.</strong> Under the
+integral-test hypotheses, if <span class="math inline">\(S=\sum_{n=1}^\infty a_n\)</span> and <span class="math inline">\(S_N=\sum_{n=1}^N a_n\)</span>, then <span class="math display">\[\int_{N+1}^\infty f(x)\,dx\le
+S-S_N\le\int_N^\infty f(x)\,dx.\]</span></p>
+<p><strong>Example — How many terms suffice?.</strong> Estimate the
+number of terms needed to approximate <span class="math inline">\(\sum_{n=1}^\infty1/n^3\)</span> with error below
+<span class="math inline">\(0.001\)</span>.</p>
+<p><strong>Solution.</strong> The upper bound is <span class="math inline">\(\int_N^\infty x^{-3}\,dx=1/(2N^2)\)</span>.
+Requiring <span class="math inline">\(1/(2N^2)&lt;0.001\)</span> gives
+<span class="math inline">\(N&gt;\sqrt{500}\approx22.36\)</span>. Thus
+<span class="math inline">\(N=23\)</span> terms guarantee the desired
+accuracy.</p>
+<h2 id="comparison-tests">Comparison tests</h2>
+<p><strong>Theorem — Direct comparison test.</strong> Suppose <span class="math inline">\(0\le a_n\le b_n\)</span> eventually. If <span class="math inline">\(\sum b_n\)</span> converges, then <span class="math inline">\(\sum a_n\)</span> converges. If <span class="math inline">\(\sum a_n\)</span> diverges, then <span class="math inline">\(\sum b_n\)</span> diverges.</p>
+<p><strong>Proof.</strong> The partial sums of nonnegative terms
+increase. An upper bound from the convergent larger series forces
+convergence of the smaller one. The second assertion is the
+contrapositive.</p>
+<p><strong>Theorem — Limit comparison test.</strong> For eventually
+positive terms <span class="math inline">\(a_n,b_n\)</span>, if <span class="math inline">\(\lim_{n\to\infty}a_n/b_n=c\)</span> with <span class="math inline">\(0&lt;c&lt;\infty\)</span>, then <span class="math inline">\(\sum a_n\)</span> and <span class="math inline">\(\sum b_n\)</span> have the same convergence
+behavior.</p>
+<p><strong>Proof.</strong> For sufficiently large <span class="math inline">\(n\)</span>, <span class="math inline">\(c/2&lt;a_n/b_n&lt;2c\)</span>. Direct comparison
+in both directions completes the argument.</p>
+<p><strong>Example — Recognizing dominant powers.</strong> Determine
+whether <span class="math inline">\(\sum_{n=1}^\infty
+(4n+1)/(n^3+7)\)</span> converges.</p>
+<p><strong>Solution.</strong> Compare with <span class="math inline">\(b_n=1/n^2\)</span>. Then <span class="math display">\[\frac{(4n+1)/(n^3+7)}{1/n^2}=\frac{4n^3+n^2}{n^3+7}\longrightarrow4.\]</span>
+Since <span class="math inline">\(\sum1/n^2\)</span> converges, the
+original series converges.</p>
+<p><strong>Example — A misleading numerator.</strong> Determine whether
+<span class="math inline">\(\sum_{n=1}^\infty n/(n^2+5)\)</span>
+converges.</p>
+<p><strong>Solution.</strong> The summand behaves like <span class="math inline">\(1/n\)</span>, not <span class="math inline">\(1/n^2\)</span>. Indeed <span class="math inline">\([n/(n^2+5)]/(1/n)=n^2/(n^2+5)\to1\)</span>. The
+harmonic series diverges, so the given series diverges.</p>
+<p><strong>Remark.</strong> Comparison tests require attention to sign.
+When terms change sign, first test absolute convergence by considering
+<span class="math inline">\(|a_n|\)</span>, or use a suitable
+alternating-series test.</p>
+<h2 id="the-ratio-and-root-tests">The ratio and root tests</h2>
+<p><strong>Theorem — Ratio test.</strong> For a series with nonzero
+terms, suppose <span class="math inline">\(L=\lim_{n\to\infty}|a_{n+1}/a_n|\)</span> exists
+(possibly <span class="math inline">\(\infty\)</span>). If <span class="math inline">\(L&lt;1\)</span>, the series converges absolutely;
+if <span class="math inline">\(L&gt;1\)</span>, it diverges; if <span class="math inline">\(L=1\)</span>, the test is inconclusive.</p>
+<p><strong>Theorem — Root test.</strong> Suppose <span class="math inline">\(L=\lim_{n\to\infty}\sqrt[n]{|a_n|}\)</span> exists
+(possibly <span class="math inline">\(\infty\)</span>). If <span class="math inline">\(L&lt;1\)</span>, the series converges absolutely;
+if <span class="math inline">\(L&gt;1\)</span>, it diverges; if <span class="math inline">\(L=1\)</span>, the test is inconclusive.</p>
+<p><strong>Example — Factorials suggest a ratio.</strong> Test <span class="math inline">\(\sum_{n=1}^\infty 3^n/n!\)</span>.</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(a_n=3^n/n!\)</span>, <span class="math inline">\(|a_{n+1}/a_n|=3/(n+1)\to0\)</span>. The ratio test
+proves absolute convergence.</p>
+<p><strong>Example — Powers suggest a root.</strong> Test <span class="math inline">\(\sum_{n=1}^\infty[(2n+1)/(5n+2)]^n\)</span>.</p>
+<p><strong>Solution.</strong> The <span class="math inline">\(n\)</span>th root is <span class="math inline">\((2n+1)/(5n+2)\to2/5&lt;1\)</span>. The root test
+proves convergence.</p>
+<p><strong>Example — When a test says nothing.</strong> Apply the ratio
+test to <span class="math inline">\(\sum1/n\)</span> and <span class="math inline">\(\sum1/n^2\)</span>.</p>
+<p><strong>Solution.</strong> In both cases <span class="math inline">\(|a_{n+1}/a_n|\to1\)</span>. One series diverges
+and the other converges, so <span class="math inline">\(L=1\)</span>
+genuinely provides no conclusion. Use the <span class="math inline">\(p\)</span>-series criterion instead.</p>
+<h2 id="alternating-series-absolute-and-conditional-convergence">Alternating
+series, absolute and conditional convergence</h2>
+<p><strong>Theorem — Alternating-series test.</strong> If <span class="math inline">\(b_n\ge0\)</span>, <span class="math inline">\(b_{n+1}\le b_n\)</span> eventually, and <span class="math inline">\(b_n\to0\)</span>, then <span class="math inline">\(\sum_{n=1}^\infty(-1)^{n-1}b_n\)</span>
+converges.</p>
+<p><strong>Theorem — Alternating-series error bound.</strong> Under the
+alternating-series test hypotheses, the error after <span class="math inline">\(N\)</span> terms satisfies <span class="math inline">\(|S-S_N|\le b_{N+1}\)</span>; the error has the
+sign of the first omitted term.</p>
+<p><strong>Definition — Absolute and conditional convergence.</strong> A
+series converges absolutely if <span class="math inline">\(\sum|a_n|\)</span> converges. It converges
+conditionally if <span class="math inline">\(\sum a_n\)</span> converges
+but <span class="math inline">\(\sum|a_n|\)</span> diverges.</p>
+<p><strong>Theorem — Absolute convergence implies convergence.</strong>
+If <span class="math inline">\(\sum|a_n|\)</span> converges, then <span class="math inline">\(\sum a_n\)</span> converges.</p>
+<p><strong>Example — Conditional convergence.</strong> Classify <span class="math inline">\(\sum_{n=1}^\infty(-1)^{n-1}/n\)</span>.</p>
+<p><strong>Solution.</strong> The magnitudes <span class="math inline">\(1/n\)</span> decrease to zero, so the
+alternating-series test proves convergence. But <span class="math inline">\(\sum1/n\)</span> diverges. Thus the original
+series is conditionally convergent.</p>
+<p><strong>Example — An accuracy guarantee.</strong> How many terms of
+<span class="math inline">\(\sum_{n=1}^\infty(-1)^{n-1}/n^2\)</span>
+ensure error at most <span class="math inline">\(10^{-4}\)</span>?</p>
+<p><strong>Solution.</strong> We need <span class="math inline">\(1/(N+1)^2\le10^{-4}\)</span>, hence <span class="math inline">\(N+1\ge100\)</span>. Taking <span class="math inline">\(N=99\)</span> terms is sufficient. This bound is
+rigorous; computing a few partial sums alone would not establish it.</p>
+<figure>
+<img alt="Even and odd partial sums bracket the alternating harmonic limit." src="figures/chapter09-diagram-03.svg"/>
+<figcaption>
+Even and odd partial sums bracket the alternating harmonic limit.
+</figcaption>
+</figure>
+<h2 id="power-series">Power series</h2>
+<p><strong>Definition — Power series.</strong> A power series centered
+at <span class="math inline">\(c\)</span> is an expression <span class="math inline">\(\sum_{n=0}^\infty a_n(x-c)^n\)</span>. Its radius
+of convergence <span class="math inline">\(R\)</span> is the number such
+that the series converges absolutely for <span class="math inline">\(|x-c|&lt;R\)</span> and diverges for <span class="math inline">\(|x-c|&gt;R\)</span>. Endpoints must be tested
+separately.</p>
+<p><strong>Theorem — Differentiation and integration within the
+radius.</strong> If <span class="math inline">\(\sum_{n=0}^\infty
+a_n(x-c)^n\)</span> has radius <span class="math inline">\(R&gt;0\)</span>, then for <span class="math inline">\(|x-c|&lt;R\)</span> it may be differentiated and
+integrated term by term: <span class="math display">\[\frac{d}{dx}\sum_{n=0}^\infty
+a_n(x-c)^n=\sum_{n=1}^\infty n a_n(x-c)^{n-1},\]</span> <span class="math display">\[\int\sum_{n=0}^\infty
+a_n(x-c)^n\,dx=C+\sum_{n=0}^\infty\frac{a_n(x-c)^{n+1}}{n+1}.\]</span>
+Both derived series have the same radius <span class="math inline">\(R\)</span>, though their endpoint behavior can
+differ.</p>
+<p><strong>Example — Radius versus interval.</strong> Find the interval
+of convergence of <span class="math inline">\(\sum_{n=1}^\infty
+(x-2)^n/[n3^n]\)</span>.</p>
+<p><strong>Solution.</strong> The ratio of consecutive magnitudes tends
+to <span class="math inline">\(|x-2|/3\)</span>. Thus <span class="math inline">\(R=3\)</span>, and the open interval is <span class="math inline">\((-1,5)\)</span>. At <span class="math inline">\(x=5\)</span> the series becomes <span class="math inline">\(\sum1/n\)</span>, which diverges. At <span class="math inline">\(x=-1\)</span> it becomes <span class="math inline">\(\sum(-1)^n/n\)</span>, which converges
+conditionally. The interval is <span class="math inline">\([-1,5)\)</span>.</p>
+<p><strong>Example — Constructing a logarithmic series.</strong>
+Starting from <span class="math inline">\(1/(1+t)=\sum_{n=0}^\infty(-1)^nt^n\)</span> for
+<span class="math inline">\(|t|&lt;1\)</span>, integrate from <span class="math inline">\(0\)</span> to <span class="math inline">\(x\)</span>.</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(|x|&lt;1\)</span>, termwise integration yields
+<span class="math display">\[\ln(1+x)=\sum_{n=1}^\infty\frac{(-1)^{n-1}x^n}{n}=x-\frac{x^2}{2}+\frac{x^3}{3}-\cdots.\]</span>
+This derivation establishes the formula on the open interval; endpoint
+claims require additional reasoning.</p>
+<h2 id="taylor-and-maclaurin-series">Taylor and Maclaurin series</h2>
+<p><strong>Definition — Taylor polynomial.</strong> If <span class="math inline">\(f\)</span> has derivatives through order <span class="math inline">\(m\)</span> near <span class="math inline">\(c\)</span>, its degree-<span class="math inline">\(m\)</span> Taylor polynomial is <span class="math display">\[T_m(x)=\sum_{k=0}^{m}\frac{f^{(k)}(c)}{k!}(x-c)^k.\]</span>
+When <span class="math inline">\(c=0\)</span>, this is a Maclaurin
+polynomial.</p>
+<p><strong>Theorem — Taylor’s theorem with Lagrange remainder.</strong>
+If <span class="math inline">\(f\)</span> has <span class="math inline">\(m+1\)</span> continuous derivatives on an interval
+containing <span class="math inline">\(c\)</span> and <span class="math inline">\(x\)</span>, then for some <span class="math inline">\(\xi\)</span> between <span class="math inline">\(c\)</span> and <span class="math inline">\(x\)</span>, <span class="math display">\[f(x)=T_m(x)+R_m(x),\qquad
+R_m(x)=\frac{f^{(m+1)}(\xi)}{(m+1)!}(x-c)^{m+1}.\]</span> If <span class="math inline">\(|f^{(m+1)}(t)|\le M\)</span> on that interval,
+then <span class="math inline">\(|R_m(x)|\le
+M|x-c|^{m+1}/(m+1)!\)</span>.</p>
+<p><strong>Example — An exponential approximation with a bound.</strong>
+Approximate <span class="math inline">\(e^{0.4}\)</span> using <span class="math inline">\(T_3(x)=1+x+x^2/2+x^3/6\)</span>.</p>
+<p><strong>Solution.</strong> At <span class="math inline">\(x=0.4\)</span>, <span class="math inline">\(T_3(0.4)=1+0.4+0.08+0.0106667=1.4906667\)</span>.
+Since <span class="math inline">\(f^{(4)}(t)=e^t\le e^{0.4}\)</span> on
+<span class="math inline">\([0,0.4]\)</span>, the error is at most <span class="math inline">\(e^{0.4}(0.4)^4/24&lt;0.00160\)</span>. The actual
+value <span class="math inline">\(e^{0.4}\approx1.4918247\)</span> lies
+within this guaranteed interval.</p>
+<p><strong>Example — A trigonometric approximation.</strong> Use <span class="math inline">\(\sin x\approx x-x^3/6+x^5/120\)</span> to
+approximate <span class="math inline">\(\sin(0.5)\)</span>.</p>
+<p><strong>Solution.</strong> The polynomial gives <span class="math inline">\(0.5-0.125/6+0.03125/120\approx0.47942708\)</span>.
+The degree-six Taylor polynomial has the same expression because the
+sixth coefficient is zero. Applying Taylor’s theorem with <span class="math inline">\(m=6\)</span> and <span class="math inline">\(|f^{(7)}|\le1\)</span> gives an error no greater
+than <span class="math inline">\(0.5^7/7!&lt;1.56\times10^{-6}\)</span>.</p>
+<p><strong>Remark — Local approximation is not global accuracy.</strong>
+A Taylor polynomial is anchored at its center. Its error can grow as
+<span class="math inline">\(x\)</span> moves away from the center.
+Increasing the degree helps only under appropriate regularity and
+convergence conditions.</p>
+<figure>
+<img alt="Original comparison of sin x with its degree-three and degree-five Maclaurin polynomials." src="figures/chapter09-diagram-04.svg"/>
+<figcaption>
+Original comparison of <span class="math inline">sin <em>x</em></span>
+with its degree-three and degree-five Maclaurin polynomials.
+</figcaption>
+</figure>
+<h2 id="convergence-of-taylor-series">Convergence of Taylor series</h2>
+<p><strong>Theorem — Remainder criterion for Taylor-series
+equality.</strong> If <span class="math inline">\(R_m(x)=f(x)-T_m(x)\to0\)</span> as <span class="math inline">\(m\to\infty\)</span> for a fixed <span class="math inline">\(x\)</span>, then the Taylor series of <span class="math inline">\(f\)</span> converges to <span class="math inline">\(f(x)\)</span> at that point.</p>
+<p><strong>Example — Why the exponential series represents the
+function.</strong> Show that <span class="math inline">\(e^x=\sum_{n=0}^\infty x^n/n!\)</span> for every
+real <span class="math inline">\(x\)</span>.</p>
+<p><strong>Solution.</strong> Fix <span class="math inline">\(x\)</span>. On the interval joining <span class="math inline">\(0\)</span> to <span class="math inline">\(x\)</span>, <span class="math inline">\(e^t\)</span> is bounded above by <span class="math inline">\(M=e^{\max(0,x)}\)</span>. Taylor’s theorem gives
+<span class="math inline">\(|R_m(x)|\le M|x|^{m+1}/(m+1)!\to0\)</span>
+because factorial growth dominates any fixed power. Thus the series
+converges to <span class="math inline">\(e^x\)</span>.</p>
+<p><strong>Example — Smooth does not automatically mean equal to Taylor
+series.</strong> Consider <span class="math inline">\(f(x)=e^{-1/x^2}\)</span> for <span class="math inline">\(x\ne0\)</span> and <span class="math inline">\(f(0)=0\)</span>.</p>
+<p><strong>Solution.</strong> Every derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(0\)</span> is zero, so its Maclaurin series is
+identically zero. Yet <span class="math inline">\(f(x)&gt;0\)</span>
+whenever <span class="math inline">\(x\ne0\)</span>. The series
+converges everywhere, but it represents <span class="math inline">\(f\)</span> only at the center. This is a reminder
+to distinguish existence of derivatives from convergence of the
+remainder to zero.</p>
+<p><strong>Remark.</strong> A finite polynomial approximation is useful
+even when the infinite Taylor series does not represent the function
+globally. Always state the interval and the kind of error guarantee
+being claimed.</p>
+<h2 id="the-binomial-series-and-applications-of-taylor-series">The
+binomial series and applications of Taylor series</h2>
+<p><strong>Theorem — Generalized binomial series.</strong> For any real
+<span class="math inline">\(\alpha\)</span> and <span class="math inline">\(|x|&lt;1\)</span>, <span class="math display">\[(1+x)^\alpha=\sum_{n=0}^\infty\binom{\alpha}{n}x^n,\quad
+\binom{\alpha}{0}=1,\quad\binom{\alpha}{n}=\frac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}.\]</span>
+For nonnegative integer <span class="math inline">\(\alpha\)</span>, the
+expansion terminates. Endpoint behavior depends on <span class="math inline">\(\alpha\)</span>.</p>
+<p><strong>Example — Square-root sensitivity.</strong> Approximate <span class="math inline">\(\sqrt{1.08}\)</span> using three nonconstant
+binomial terms.</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(\alpha=1/2\)</span>, <span class="math display">\[(1+x)^{1/2}=1+\frac{x}{2}-\frac{x^2}{8}+\frac{x^3}{16}+\cdots.\]</span>
+At <span class="math inline">\(x=0.08\)</span>, the cubic approximation
+is <span class="math inline">\(1+0.04-0.0008+0.000032=1.039232\)</span>.
+The exact square root is approximately <span class="math inline">\(1.03923048\)</span>, so the cubic approximation is
+accurate to about two millionths.</p>
+<p><strong>Example — Integrating a function without an elementary
+antiderivative.</strong> Approximate <span class="math inline">\(\int_0^{0.5}e^{-x^2}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Insert <span class="math inline">\(-x^2\)</span> into the exponential series and
+integrate termwise on a bounded interval: <span class="math display">\[\int_0^{0.5}e^{-x^2}\,dx=\sum_{n=0}^\infty\frac{(-1)^n(0.5)^{2n+1}}{n!(2n+1)}.\]</span>
+The first four terms give <span class="math inline">\(0.5-0.5^3/3+0.5^5/10-0.5^7/42\approx0.4612810\)</span>.
+The alternating terms decrease in magnitude; the next term bounds the
+error.</p>
+<h3 class="unnumbered" id="strategy-guide-choosing-a-convergence-test">Strategy guide: choosing
+a convergence test</h3>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">What you notice</th>
+<th style="text-align: left;">First method to consider</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(a_n\not\to0\)</span></td>
+<td style="text-align: left;">Divergence test; stop immediately</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(ar^n\)</span>
+or telescoping cancellation</td>
+<td style="text-align: left;">Exact partial sums</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Positive, decreasing <span class="math inline">\(f(n)\)</span></td>
+<td style="text-align: left;">Integral test and remainder bounds</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rational powers of <span class="math inline">\(n\)</span></td>
+<td style="text-align: left;">Direct or limit comparison with a <span class="math inline">\(p\)</span>-series</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Factorials or exponential powers</td>
+<td style="text-align: left;">Ratio test</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A whole expression raised to <span class="math inline">\(n\)</span></td>
+<td style="text-align: left;">Root test</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alternating signs and shrinking
+magnitudes</td>
+<td style="text-align: left;">Alternating-series test; then check
+absolute convergence</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Powers of <span class="math inline">\((x-c)\)</span></td>
+<td style="text-align: left;">Ratio/root test, then test both
+endpoints</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Remark.</strong> This is a decision aid, not a mechanical
+algorithm. A test may be inconclusive; selecting a different test is
+part of mathematical reasoning.</p>
+<h2 class="unnumbered" id="computational-investigations-r-laboratories">Computational
+investigations: R laboratories</h2>
+<p>The laboratories deliberately follow the mathematical development. In
+each investigation, students should first predict the result
+analytically, then use computation to test the prediction. A numerical
+graph is evidence about finitely many terms, not a proof of convergence.
+All R examples use base R.</p>
+<h3 class="unnumbered" id="r-laboratory-1-sequences-and-partial-sums">R
+Laboratory 1: Sequences and partial sums</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>n &lt;- 1:100
+terms &lt;- (-1)^(n - 1) / n
+partial &lt;- cumsum(terms)
+plot(n, partial, pch=16, cex=0.45,
+     xlab="Number of terms", ylab="Partial sum")
+abline(h=log(2), lty=2)
+cat("100-term estimate:", tail(partial, 1), "\n")
+cat("Exact limit:", log(2), "\n")</code></pre></div>
+<p><strong>Investigate.</strong> Do even partial sums lie on the same
+side of <span class="math inline">\(\ln2\)</span> as odd partial sums?
+Explain using the alternating-series theorem.</p>
+<h3 class="unnumbered" id="r-laboratory-2-geometric-and-harmonic-growth">R Laboratory 2:
+Geometric and harmonic growth</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>n &lt;- 1:300
+geo &lt;- cumsum(0.7^(n-1))
+harmonic &lt;- cumsum(1/n)
+plot(n, harmonic, type="l", lwd=2,
+     xlab="Number of terms", ylab="Partial sum")
+lines(n, geo, lty=2, lwd=2)
+legend("topleft", c("Harmonic", "Geometric"),
+       lty=c(1,2), bty="n")
+cat("Geometric limit:", 1/(1-0.7), "\n")</code></pre></div>
+<p><strong>Investigate.</strong> The harmonic curve grows slowly. Why is
+slow growth not the same as convergence?</p>
+<h3 class="unnumbered" id="r-laboratory-3-integral-test-remainder-bounds">R Laboratory 3:
+Integral-test remainder bounds</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>N &lt;- c(5, 10, 20, 50, 100)
+upper &lt;- 1/(2*N^2)
+lower &lt;- 1/(2*(N+1)^2)
+print(data.frame(N, lower, upper))
+cat("Smallest N for upper error &lt; 0.001:",
+    which(1/(2*(1:100)^2) &lt; 0.001)[1], "\n")</code></pre></div>
+<p><strong>Investigate.</strong> State which assumptions of the integral
+test are needed to justify these bounds.</p>
+<h3 class="unnumbered" id="r-laboratory-4-taylor-approximation-and-error">R Laboratory 4:
+Taylor approximation and error</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x &lt;- seq(-2, 2, length.out=401)
+t3 &lt;- x - x^3/factorial(3)
+t5 &lt;- t3 + x^5/factorial(5)
+plot(x, sin(x), type="l", lwd=2,
+     xlab="x", ylab="Function value")
+lines(x, t3, lty=2)
+lines(x, t5, lty=3)
+legend("topleft", c("sin(x)", "Degree 3", "Degree 5"),
+       lty=1:3, bty="n")
+cat("Degree-5 error at 0.5:",
+    abs(sin(0.5) - (0.5-0.5^3/6+0.5^5/120)), "\n")</code></pre></div>
+<p><strong>Investigate.</strong> Explain why the fifth-degree
+approximation is generally more accurate near zero.</p>
+<h3 class="unnumbered" id="r-laboratory-5-power-series-interval">R
+Laboratory 5: Power-series interval</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>partial_power &lt;- function(x, N) {
+  n &lt;- 1:N
+  sum((x-2)^n/(n*3^n))
+}
+for (x in c(-1, 0, 2, 4, 5)) {
+  cat("x =", x, " S100 =", partial_power(x, 100), "\n")
+}</code></pre></div>
+<p><strong>Investigate.</strong> Explain analytically why the endpoint
+<span class="math inline">\(x=-1\)</span> behaves differently from <span class="math inline">\(x=5\)</span>.</p>
+<h3 class="unnumbered" id="r-laboratory-6-error-aware-series-computation">R Laboratory 6:
+Error-aware series computation</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter09-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code># Integral of exp(-x^2) from 0 to 0.5
+terms &lt;- function(n) (-1)^n*0.5^(2*n+1)/
+  (factorial(n)*(2*n+1))
+n &lt;- 0:8
+approx &lt;- cumsum(terms(n))
+exact &lt;- integrate(function(x) exp(-x^2), 0, 0.5)$value
+print(data.frame(n, approximation=approx,
+                 abs_error=abs(approx-exact)))</code></pre></div>
+<p><strong>Investigate.</strong> Compare the observed error with the
+magnitude of the first omitted term. Explain when that bound is
+valid.</p>
+<h2 class="unnumbered" id="computational-investigations-python-laboratories">Computational
+investigations: Python laboratories</h2>
+<p>The Python laboratories reproduce the mathematical investigations
+using NumPy and Matplotlib. They are placed after all R laboratories,
+not side by side. Python 3 with <code>numpy</code>,
+<code>matplotlib</code>, and the standard library is sufficient; the
+last laboratory uses a high-accuracy numerical comparison implemented
+with a fine trapezoidal grid.</p>
+<h3 class="unnumbered" id="python-laboratory-1-sequences-and-partial-sums">Python Laboratory 1:
+Sequences and partial sums</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+n = np.arange(1, 101)
+terms = (-1.0)**(n - 1) / n
+partial = np.cumsum(terms)
+plt.scatter(n, partial, s=10)
+plt.axhline(np.log(2), linestyle="--")
+plt.xlabel("Number of terms")
+plt.ylabel("Partial sum")
+plt.show()
+print("100-term estimate:", partial[-1])
+print("Exact limit:", np.log(2))</code></pre></div>
+<h3 class="unnumbered" id="python-laboratory-2-geometric-and-harmonic-growth">Python Laboratory
+2: Geometric and harmonic growth</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+n = np.arange(1, 301)
+geo = np.cumsum(0.7**(n - 1))
+harmonic = np.cumsum(1/n)
+plt.plot(n, harmonic, label="Harmonic")
+plt.plot(n, geo, "--", label="Geometric")
+plt.xlabel("Number of terms")
+plt.ylabel("Partial sum")
+plt.legend()
+plt.show()
+print("Geometric limit:", 1/(1-0.7))</code></pre></div>
+<h3 class="unnumbered" id="python-laboratory-3-integral-test-remainder-bounds">Python
+Laboratory 3: Integral-test remainder bounds</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+N = np.array([5, 10, 20, 50, 100])
+for n in N:
+    print(n, 1/(2*(n+1)**2), 1/(2*n**2))
+print("Smallest N:", next(n for n in range(1, 101)
+                          if 1/(2*n*n) &lt; 0.001))</code></pre></div>
+<h3 class="unnumbered" id="python-laboratory-4-taylor-approximation-and-error">Python
+Laboratory 4: Taylor approximation and error</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(-2, 2, 401)
+t3 = x - x**3/6
+t5 = t3 + x**5/120
+plt.plot(x, np.sin(x), label="sin(x)")
+plt.plot(x, t3, "--", label="Degree 3")
+plt.plot(x, t5, ":", label="Degree 5")
+plt.legend()
+plt.show()
+print(abs(np.sin(0.5) - (0.5-0.5**3/6+0.5**5/120)))</code></pre></div>
+<h3 class="unnumbered" id="python-laboratory-5-power-series-interval">Python Laboratory 5:
+Power-series interval</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+def partial_power(x, N):
+    n = np.arange(1, N+1)
+    return np.sum(((x-2)/3)**n/n)
+for x in [-1, 0, 2, 4, 5]:
+    print("x =", x, "S100 =", partial_power(x, 100))</code></pre></div>
+<h3 class="unnumbered" id="python-laboratory-6-error-aware-series-computation">Python
+Laboratory 6: Error-aware series computation</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter09-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+import numpy as np
+n = np.arange(0, 9)
+terms = np.array([(-1)**int(k)*0.5**(2*int(k)+1)/
+                  (math.factorial(int(k))*(2*int(k)+1))
+                  for k in n])
+approx = np.cumsum(terms)
+x = np.linspace(0, 0.5, 100001)
+reference = np.trapezoid(np.exp(-x*x), x)
+for k, estimate in zip(n, approx):
+    print(k, estimate, abs(estimate-reference))</code></pre></div>
+<p><strong>Computational caution.</strong> Floating-point summation,
+cancellation, overflow, and underflow can distort results for very large
+<span class="math inline">\(N\)</span>. A program that prints a stable
+decimal is not automatically a convergence proof.</p>
+<h2 class="unnumbered" id="chapter-exercises">Chapter exercises</h2>
+<p><strong>Instructions.</strong> For every convergence question, name
+the theorem or test used and verify its hypotheses. Do not report a
+calculator output as the sole justification. Exercises marked
+<strong>[C]</strong> call for a short R or Python investigation after an
+analytical argument.</p>
+<h3 class="unnumbered" id="a.-sequences-and-partial-sums">A. Sequences
+and partial sums</h3>
+<ol type="1">
+<li><p>Find <span class="math inline">\(\lim_{n\to\infty}(5n-1)/(2n+7)\)</span> and
+justify your result.</p></li>
+<li><p>Determine whether <span class="math inline">\(a_n=(-1)^n+1/n\)</span> converges.</p></li>
+<li><p>Prove from the <span class="math inline">\(\varepsilon\)</span>–<span class="math inline">\(N\)</span> definition that <span class="math inline">\(2/n\to0\)</span>.</p></li>
+<li><p>Use the squeeze theorem to evaluate <span class="math inline">\(\lim_{n\to\infty}\sin n/n\)</span>.</p></li>
+<li><p>Show that <span class="math inline">\(a_n=1-1/n\)</span> is
+increasing and bounded; find its limit.</p></li>
+<li><p>For <span class="math inline">\(a_1=2\)</span>, <span class="math inline">\(a_{n+1}=(a_n+6/a_n)/2\)</span>, predict the limit
+and justify convergence using a suitable argument.</p></li>
+<li><p>Find a closed formula for <span class="math inline">\(S_N=\sum_{n=1}^N1/[n(n+2)]\)</span> and compute
+the infinite sum.</p></li>
+<li><p>Determine the sum of <span class="math inline">\(\sum_{n=0}^\infty 7(0.4)^n\)</span>.</p></li>
+<li><p>Explain why <span class="math inline">\(\sum_{n=1}^\infty
+n/(n+2)\)</span> diverges without computing partial sums.</p></li>
+<li><p><strong>[C]</strong> Plot the first 100 partial sums of <span class="math inline">\(\sum_{n=1}^\infty(-1)^{n-1}/n\)</span>. Describe
+the pattern and distinguish evidence from proof.</p></li>
+</ol>
+<h3 class="unnumbered" id="b.-positive-term-series-and-comparison">B.
+Positive-term series and comparison</h3>
+<ol type="1">
+<li><p>Test <span class="math inline">\(\sum_{n=1}^\infty1/n^{5/4}\)</span>.</p></li>
+<li><p>Test <span class="math inline">\(\sum_{n=2}^\infty1/(n\ln
+n)\)</span> using an integral.</p></li>
+<li><p>Test <span class="math inline">\(\sum_{n=2}^\infty1/[n(\ln
+n)^3]\)</span>.</p></li>
+<li><p>Determine convergence of <span class="math inline">\(\sum_{n=1}^\infty(3n^2+1)/(n^4+2)\)</span>.</p></li>
+<li><p>Determine convergence of <span class="math inline">\(\sum_{n=1}^\infty(2n^2+7)/(n^3+1)\)</span>.</p></li>
+<li><p>Prove that <span class="math inline">\(\sum_{n=1}^\infty1/(n^2+9)\)</span> converges by
+direct comparison.</p></li>
+<li><p>Test <span class="math inline">\(\sum_{n=1}^\infty\sqrt{n}/(n^2+1)\)</span> using
+limit comparison.</p></li>
+<li><p>For <span class="math inline">\(\sum1/n^4\)</span>, derive an
+upper bound for the error after <span class="math inline">\(N\)</span>
+terms.</p></li>
+<li><p>Find a sufficient <span class="math inline">\(N\)</span> to
+approximate <span class="math inline">\(\sum1/n^4\)</span> with error
+less than <span class="math inline">\(10^{-5}\)</span>.</p></li>
+<li><p><strong>[C]</strong> Compare partial sums of <span class="math inline">\(\sum1/n\)</span> and <span class="math inline">\(\sum1/n^{1.1}\)</span> through <span class="math inline">\(N=10^4\)</span>. Explain why their apparent rates
+of growth can be misleading.</p></li>
+</ol>
+<h3 class="unnumbered" id="c.-ratio-root-and-alternating-tests">C.
+Ratio, root, and alternating tests</h3>
+<ol type="1">
+<li><p>Test <span class="math inline">\(\sum_{n=1}^\infty4^n/n!\)</span>.</p></li>
+<li><p>Test <span class="math inline">\(\sum_{n=1}^\infty
+n!/5^n\)</span>.</p></li>
+<li><p>Test <span class="math inline">\(\sum_{n=1}^\infty[(3n+2)/(7n+1)]^n\)</span>.</p></li>
+<li><p>Explain why the ratio test is inconclusive for both <span class="math inline">\(\sum1/n\)</span> and <span class="math inline">\(\sum1/n^3\)</span>.</p></li>
+<li><p>Classify <span class="math inline">\(\sum_{n=1}^\infty(-1)^{n-1}/\sqrt n\)</span> as
+absolutely, conditionally, or nonconvergent.</p></li>
+<li><p>Classify <span class="math inline">\(\sum_{n=1}^\infty(-1)^n/n^2\)</span>.</p></li>
+<li><p>Determine a sufficient number of terms to approximate <span class="math inline">\(\sum(-1)^{n-1}/n^3\)</span> within <span class="math inline">\(10^{-5}\)</span>.</p></li>
+<li><p>Give an example of a series whose terms tend to zero but whose
+sum diverges, and explain why.</p></li>
+<li><p><strong>[C]</strong> Compare the observed alternating-series
+error with the first omitted term for <span class="math inline">\(N=5,10,20,40\)</span>.</p></li>
+<li><p>Explain why absolute convergence guarantees convergence but not
+conversely.</p></li>
+</ol>
+<h3 class="unnumbered" id="d.-power-series-and-taylor-approximation">D.
+Power series and Taylor approximation</h3>
+<ol type="1">
+<li><p>Find the radius and interval of convergence of <span class="math inline">\(\sum_{n=1}^\infty x^n/(n2^n)\)</span>.</p></li>
+<li><p>Find the radius and interval of convergence of <span class="math inline">\(\sum_{n=1}^\infty n(x+1)^n/4^n\)</span>.</p></li>
+<li><p>Find the radius of convergence of <span class="math inline">\(\sum_{n=0}^\infty n!x^n\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(\sum_{n=0}^\infty
+x^n\)</span> termwise for <span class="math inline">\(|x|&lt;1\)</span>
+and identify the resulting function.</p></li>
+<li><p>Obtain a power series for <span class="math inline">\(\arctan
+x\)</span> by integrating a geometric series.</p></li>
+<li><p>Find the degree-four Maclaurin polynomial for <span class="math inline">\(\cos x\)</span>.</p></li>
+<li><p>Find the degree-three Taylor polynomial for <span class="math inline">\(\ln x\)</span> centered at <span class="math inline">\(x=1\)</span>.</p></li>
+<li><p>Approximate <span class="math inline">\(e^{0.2}\)</span> using
+its degree-three Maclaurin polynomial and give a rigorous error
+bound.</p></li>
+<li><p>Approximate <span class="math inline">\(\sin(0.3)\)</span> using
+a degree-five Maclaurin polynomial and bound the error.</p></li>
+<li><p>Explain why convergence of a Taylor series is not sufficient to
+prove that it equals its generating function.</p></li>
+<li><p>Expand <span class="math inline">\((1+x)^{-1/2}\)</span> through
+the cubic term.</p></li>
+<li><p>Use a binomial approximation to estimate <span class="math inline">\(\sqrt{1.04}\)</span> and assess its
+accuracy.</p></li>
+<li><p>Derive a series representation for <span class="math inline">\(\int_0^a e^{-x^2}\,dx\)</span> for <span class="math inline">\(0&lt;a&lt;1\)</span>.</p></li>
+<li><p><strong>[C]</strong> Plot <span class="math inline">\(e^x\)</span> and its degree-two, degree-four, and
+degree-eight Maclaurin polynomials on <span class="math inline">\([-2,2]\)</span>.</p></li>
+<li><p><strong>[C]</strong> Investigate the partial sums of <span class="math inline">\(\sum x^n/n\)</span> for <span class="math inline">\(x=-1,0.5,1\)</span>. State what the convergence
+theorems guarantee.</p></li>
+</ol>
+<h3 class="unnumbered" id="e.-conceptual-synthesis">E. Conceptual
+synthesis</h3>
+<ol type="1">
+<li><p>Distinguish the statements <span class="math inline">\(a_n\to0\)</span> and <span class="math inline">\(\sum a_n\)</span> converges.</p></li>
+<li><p>Describe the difference between radius of convergence and
+interval of convergence.</p></li>
+<li><p>Explain why a remainder bound is more informative than displaying
+ten decimal places.</p></li>
+<li><p>Construct two series with the same first five terms but different
+convergence behavior.</p></li>
+<li><p>Write a short critique of the claim: “My program produced stable
+partial sums, so the infinite series must converge.”</p></li>
+</ol>
+<h2 class="unnumbered" id="concluding-applied-project-a-reliable-approximation-engine">Concluding
+applied project: A reliable approximation engine</h2>
+<p><strong>Context.</strong> A portable environmental sensor estimates a
+cumulative response whose calibration function contains the integral
+<span class="math display">\[F(t)=\int_0^t e^{-u^2}\,du,\qquad 0\le
+t\le1.\]</span> This integral has no elementary antiderivative. A
+computational model must approximate it while providing a defensible
+error guarantee. The goal is to design, validate, and communicate a
+practical approximation method.</p>
+<h3 class="unnumbered" id="part-i-derive-the-mathematics-25-points">Part
+I: Derive the mathematics (25 points)</h3>
+<ol type="1">
+<li><p>Starting from <span class="math inline">\(e^x=\sum_{n=0}^\infty
+x^n/n!\)</span>, derive <span class="math display">\[F(t)=\sum_{n=0}^\infty\frac{(-1)^nt^{2n+1}}{n!(2n+1)}.\]</span>
+State why termwise integration is justified on the interval <span class="math inline">\([0,1]\)</span>.</p></li>
+<li><p>Write the first four nonzero terms of the approximation <span class="math inline">\(F_3(t)\)</span>.</p></li>
+<li><p>Prove that for <span class="math inline">\(0\le t\le1\)</span>,
+the terms alternate with decreasing magnitude. Derive an error bound
+using the first omitted term.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-ii-implement-and-verify-30-points">Part
+II: Implement and verify (30 points)</h3>
+<ol type="1">
+<li><p>Write an R function that accepts <span class="math inline">\(t\)</span> and a requested tolerance and adds
+terms until the next-term bound falls below the tolerance.</p></li>
+<li><p>Independently implement the same algorithm in Python. Document
+indexing and stopping conditions clearly.</p></li>
+<li><p>For <span class="math inline">\(t=0.25,0.50,0.75,1.00\)</span>,
+compare both implementations with a high-accuracy numerical integration
+benchmark. Report the estimate, the benchmark, the actual absolute
+error, and the theoretical error bound.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iii-analyze-efficiency-and-reliability-25-points">Part III:
+Analyze efficiency and reliability (25 points)</h3>
+<ol type="1">
+<li><p>Compare the number of terms required to reach tolerances <span class="math inline">\(10^{-3}\)</span>, <span class="math inline">\(10^{-6}\)</span>, and <span class="math inline">\(10^{-9}\)</span>.</p></li>
+<li><p>Graph <span class="math inline">\(F(t)\)</span> and the
+polynomial approximations with 2, 4, and 6 nonzero terms. Identify where
+the differences are largest.</p></li>
+<li><p>Explain why agreement between R and Python is useful but does not
+by itself establish mathematical correctness.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iv-communication-20-points">Part IV:
+Communication (20 points)</h3>
+<ol type="1">
+<li>Prepare a two-page technical memo explaining the derivation,
+convergence guarantee, numerical checks, and limitations of the sensor
+model. Include at least one clearly labeled figure and one concise
+results table.</li>
+</ol>
+<p><strong>Assessment rubric.</strong> Derivation and justification: 25
+points; reproducible R and Python implementations: 30 points; efficiency
+and validation: 25 points; interpretation and communication: 20 points.
+Total: 100 points.</p>
+<h2 class="unnumbered" id="chapter-synthesis">Chapter synthesis</h2>
+<p>The defining object of an infinite series is its sequence of partial
+sums. Convergence tests supply logically different kinds of information:
+some establish existence of a sum, some determine where a function
+representation is valid, and others bound approximation error. Taylor
+methods are especially powerful when the resulting remainder can be
+controlled. R and Python make the numerical behavior visible, but a
+mathematical argument explains why the computation should be
+trusted.</p>
+<p><strong>Looking ahead.</strong> Chapter 10 turns from functions
+represented by power series to curves represented parametrically or in
+polar coordinates, bringing together graphical modeling, derivatives,
+integrals, and computational visualization.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_09_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter08.html">← Techniques of Integration</a><a href="chapter10.html">Parametric Equations and Polar Coordinates →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Taylor polynomials</a></li><li><a href="#sequences">Sequences</a></li><li><a href="#infinite-series">Infinite series</a></li><li><a href="#the-integral-test">The integral test</a></li><li><a href="#comparison-tests">Comparison tests</a></li><li><a href="#the-ratio-and-root-tests">The ratio and root tests</a></li><li><a href="#alternating-series-absolute-and-conditional-convergence">Alternating
+series, absolute and conditional convergence</a></li><li><a href="#power-series">Power series</a></li><li><a href="#taylor-and-maclaurin-series">Taylor and Maclaurin series</a></li><li><a href="#convergence-of-taylor-series">Convergence of Taylor series</a></li><li><a href="#the-binomial-series-and-applications-of-taylor-series">The
+binomial series and applications of Taylor series</a></li><li><a href="#computational-investigations-r-laboratories">Computational
+investigations: R laboratories</a></li><li><a href="#computational-investigations-python-laboratories">Computational
+investigations: Python laboratories</a></li><li><a href="#chapter-exercises">Chapter exercises</a></li><li><a href="#concluding-applied-project-a-reliable-approximation-engine">Concluding
+applied project: A reliable approximation engine</a></li><li><a href="#chapter-synthesis">Chapter synthesis</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Applications of Definite Integrals | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a aria-current="page" class="active" href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="applications-of-definite-integrals">Applications of Definite
+Integrals</h1>
+<p><strong>Guiding idea.</strong> Integration converts a local quantity
+into a total. A thin slice has a small volume; a narrow band has a small
+area; a short movement against a force requires a small amount of work.
+The challenge is to identify the correct <em>differential
+contribution</em>, including its units, before taking a limit of
+sums.</p>
+<p><strong>Learning outcomes.</strong> Students will derive and apply
+slicing, disk, washer, and shell formulas; compute lengths of smooth
+curves and areas of surfaces of revolution; model work under variable
+forces; calculate moments, centroids, and centers of mass; check units
+and physical reasonableness; and reproduce and investigate results in R
+and Python.</p>
+<p><strong>Prerequisites.</strong> Definite integrals, substitution,
+derivatives, and graphing from Chapters 1–5. The chapter uses
+single-variable integrals throughout.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="choose-the-element-before-choosing-the-formula">Choose the element
+before choosing the formula</h3>
+<p>Applications of integration begin with a small physical element: a
+cross-sectional slice, cylindrical shell, short arc, or mass element.
+Draw and label that element, express its contribution using units, and
+then accumulate. This procedure is more transferable than memorizing
+unrelated formulas.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 6." src="figures/chapter_06_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 6.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> If a solid has cross-sectional
+area <span class="math inline">\(A(x)\)</span> measured in square
+centimeters and <span class="math inline">\(x\)</span> is in
+centimeters, justify why <span class="math inline">\(\int_a^b
+A(x)\,dx\)</span> has units of cubic centimeters.</p>
+<h2 id="interactive-investigation">Interactive investigation: Volumes by cross-sections</h2><div class="calc-widget" data-calc="6"><p>Rotate y = x about the x-axis from 0 to b. Compare the disk approximation with the exact volume.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="volumes-using-cross-sections">Volumes using cross-sections</h2>
+<h3 id="why-slicing-works">Why slicing works</h3>
+<p>Imagine a loaf with varying cross-sectional area. A thin slice at
+position <span class="math inline">\(x\)</span> has thickness <span class="math inline">\(\Delta x\)</span> and approximate volume <span class="math inline">\(A(x)\Delta x\)</span>. Adding slices and letting
+their thickness shrink yields the following theorem.</p>
+<p><strong>Theorem — Volume by known cross-sectional area.</strong> If a
+solid extends from <span class="math inline">\(x=a\)</span> to <span class="math inline">\(x=b\)</span> and its cross-sectional area <span class="math inline">\(A(x)\)</span> perpendicular to the <span class="math inline">\(x\)</span>-axis is continuous, then <span class="math display">\[\boxed{V=\int_a^b A(x)\,dx.}\]</span></p>
+<p><strong>Proof.</strong> Partition <span class="math inline">\([a,b]\)</span> into narrow subintervals. Replace
+each portion by a prism with base area <span class="math inline">\(A(x_i^*)\)</span> and thickness <span class="math inline">\(\Delta x_i\)</span>. Its volume is <span class="math inline">\(A(x_i^*)\Delta x_i\)</span>. Summation and the
+limit as the maximum thickness approaches zero give the integral.</p>
+<p><strong>Dimensional check:</strong> <span class="math inline">\(A(x)\)</span> has units of length squared and
+<span class="math inline">\(dx\)</span> has units of length, so <span class="math inline">\(V\)</span> has units of length cubed. The integral
+does not require a circular cross-section.</p>
+<p><strong>Example — Square cross-sections.</strong> A solid has a base
+in the first quadrant bounded by <span class="math inline">\(y=\sqrt{x}\)</span>, the <span class="math inline">\(x\)</span>-axis, and <span class="math inline">\(x=4\)</span>. Cross-sections perpendicular to the
+<span class="math inline">\(x\)</span>-axis are squares. Find its
+volume.</p>
+<p><strong>Solution.</strong> At position <span class="math inline">\(x\)</span>, the square’s side is <span class="math inline">\(s(x)=\sqrt{x}\)</span>, so <span class="math inline">\(A(x)=s(x)^2=x\)</span>. Therefore <span class="math inline">\(V=\int_0^4x\,dx=[x^2/2]_0^4=8\)</span> cubic
+units. Notice that we squared the <em>side length</em>, not the
+function’s antiderivative.</p>
+<p><strong>Example — Equilateral-triangle cross-sections.</strong> The
+base region lies under <span class="math inline">\(y=2-x\)</span> and
+above <span class="math inline">\(y=0\)</span> for <span class="math inline">\(0\le x\le2\)</span>. Perpendicular cross-sections
+are equilateral triangles.</p>
+<p><strong>Solution.</strong> Each triangle has side <span class="math inline">\(2-x\)</span> and area <span class="math inline">\(A(x)=\frac{\sqrt3}{4}(2-x)^2\)</span>. Hence <span class="math display">\[V=\frac{\sqrt3}{4}\int_0^2(2-x)^2\,dx=\frac{\sqrt3}{4}\cdot\frac83=\frac{2\sqrt3}{3}.\]</span>
+This example illustrates that the geometry of the slice determines the
+coefficient.</p>
+<h3 id="disks-and-washers">Disks and washers</h3>
+<p>Rotating a region about an axis produces a solid of revolution. A
+slice perpendicular to the axis is a disk if the region touches the axis
+and a washer if it leaves a hole.</p>
+<p><strong>Theorem — Disk method.</strong> When rotation about the <span class="math inline">\(x\)</span>-axis produces disks of radius <span class="math inline">\(R(x)\ge0\)</span> for <span class="math inline">\(a\le x\le b\)</span>, the volume is <span class="math display">\[\boxed{V=\pi\int_a^b R(x)^2\,dx.}\]</span></p>
+<p><strong>Theorem — Washer method.</strong> When rotation about the
+<span class="math inline">\(x\)</span>-axis produces washers with outer
+radius <span class="math inline">\(R(x)\)</span> and inner radius <span class="math inline">\(r(x)\)</span>, where <span class="math inline">\(0\le r(x)\le R(x)\)</span>, the volume is <span class="math display">\[\boxed{V=\pi\int_a^b\bigl(R(x)^2-r(x)^2\bigr)\,dx.}\]</span></p>
+<figure>
+<img alt="Original cross-sectional schematic: a washer has area π(R2 − r2), not π(R − r)2." src="figures/chapter06-diagram-01.svg"/>
+<figcaption>
+Original cross-sectional schematic: a washer has area <span class="math inline"><em>π</em>(<em>R</em><sup>2</sup> − <em>r</em><sup>2</sup>)</span>,
+not <span class="math inline"><em>π</em>(<em>R</em> − <em>r</em>)<sup>2</sup></span>.
+</figcaption>
+</figure>
+<p><strong>Example — Rotating a parabolic region.</strong> Rotate the
+region below <span class="math inline">\(y=\sqrt{x}\)</span>, above
+<span class="math inline">\(y=0\)</span>, and between <span class="math inline">\(x=0\)</span> and <span class="math inline">\(x=4\)</span> about the <span class="math inline">\(x\)</span>-axis.</p>
+<p><strong>Solution.</strong> Each disk has radius <span class="math inline">\(\sqrt{x}\)</span>, giving <span class="math inline">\(V=\pi\int_0^4x\,dx=8\pi\)</span>.</p>
+<p><strong>Example — A hollow solid.</strong> Rotate the region between
+<span class="math inline">\(y=3\)</span> and <span class="math inline">\(y=1+x/2\)</span> for <span class="math inline">\(0\le x\le2\)</span> about the <span class="math inline">\(x\)</span>-axis.</p>
+<p><strong>Solution.</strong> Outer radius <span class="math inline">\(R=3\)</span> and inner radius <span class="math inline">\(r=1+x/2\)</span>. Thus <span class="math display">\[V=\pi\int_0^2\left(9-(1+x/2)^2\right)dx=\pi\left[8x-\frac{x^2}{2}-\frac{x^3}{12}\right]_0^2=\frac{40\pi}{3}.\]</span>
+A sketch shows why subtracting the inner disk is essential.</p>
+<h3 id="choosing-the-direction-of-slicing">Choosing the direction of
+slicing</h3>
+<p>A horizontal slice uses <span class="math inline">\(dy\)</span>, not
+<span class="math inline">\(dx\)</span>. If a solid is rotated around a
+vertical axis, horizontal disks or washers may be simpler than vertical
+ones. Always sketch a typical slice and label the radius as a
+<em>distance from the axis</em>.</p>
+<p><strong>Example — Rotation about a horizontal line.</strong> Rotate
+the region between <span class="math inline">\(y=x\)</span> and <span class="math inline">\(y=x^2\)</span> for <span class="math inline">\(0\le x\le1\)</span> about <span class="math inline">\(y=2\)</span>.</p>
+<p><strong>Solution.</strong> The lower graph <span class="math inline">\(y=x^2\)</span> is farther from <span class="math inline">\(y=2\)</span>, so <span class="math inline">\(R=2-x^2\)</span> and <span class="math inline">\(r=2-x\)</span>. Consequently <span class="math display">\[V=\pi\int_0^1\bigl[(2-x^2)^2-(2-x)^2\bigr]dx=\pi\int_0^1(4x-5x^2+x^4)dx=\frac{8\pi}{15}.\]</span>
+A common error is to use <span class="math inline">\(x\)</span> and
+<span class="math inline">\(x^2\)</span> directly as radii even though
+the rotation axis is <span class="math inline">\(y=2\)</span>.</p>
+<h2 id="volumes-using-cylindrical-shells">Volumes using cylindrical
+shells</h2>
+<h3 id="unrolling-a-thin-shell">Unrolling a thin shell</h3>
+<p>A thin cylindrical shell with radius <span class="math inline">\(r\)</span>, height <span class="math inline">\(h\)</span>, and thickness <span class="math inline">\(\Delta r\)</span> has approximate volume <span class="math inline">\((2\pi r)h\Delta r\)</span>. The factor <span class="math inline">\(2\pi r\)</span> is the circumference of the
+shell.</p>
+<p><strong>Theorem — Shell method.</strong> If a region rotated about
+the <span class="math inline">\(y\)</span>-axis produces shells of
+radius <span class="math inline">\(x\)</span> and height <span class="math inline">\(h(x)\)</span> for <span class="math inline">\(0\le
+a\le x\le b\)</span>, then <span class="math display">\[\boxed{V=2\pi\int_a^b xh(x)\,dx.}\]</span></p>
+<p><strong>Proof.</strong> The exact volume of a hollow cylinder of
+inner radius <span class="math inline">\(r\)</span> and outer radius
+<span class="math inline">\(r+\Delta r\)</span> is <span class="math inline">\(\pi((r+\Delta r)^2-r^2)h=2\pi rh\Delta r+\pi
+h(\Delta r)^2\)</span>. The last term becomes negligible in the
+Riemann-sum limit, leaving the shell integral.</p>
+<figure>
+<img alt="Original shell schematic: a vertical strip parallel to the rotation axis generates a cylindrical shell about the y-axis." src="figures/chapter06-diagram-02.svg"/>
+<figcaption>
+Original shell schematic: a vertical strip parallel to the rotation axis
+generates a cylindrical shell about the <span class="math inline"><em>y</em></span>-axis.
+</figcaption>
+</figure>
+<p><strong>Example — Shells around the vertical axis.</strong> Rotate
+the region under <span class="math inline">\(y=4-x^2\)</span>, above
+<span class="math inline">\(y=0\)</span>, and for <span class="math inline">\(0\le x\le2\)</span> about the <span class="math inline">\(y\)</span>-axis.</p>
+<p><strong>Solution.</strong> Radius <span class="math inline">\(x\)</span>, height <span class="math inline">\(4-x^2\)</span>. Thus <span class="math display">\[V=2\pi\int_0^2x(4-x^2)dx=2\pi[2x^2-x^4/4]_0^2=8\pi.\]</span>
+To check, horizontal disks have radius <span class="math inline">\(\sqrt{4-y}\)</span> for <span class="math inline">\(0\le y\le4\)</span>, giving <span class="math inline">\(\pi\int_0^4(4-y)dy=8\pi\)</span>.</p>
+<p><strong>Example — Shells about an offset axis.</strong> Rotate the
+region under <span class="math inline">\(y=x(2-x)\)</span>, <span class="math inline">\(0\le x\le2\)</span>, about the vertical line <span class="math inline">\(x=3\)</span>.</p>
+<p><strong>Solution.</strong> The radius is <span class="math inline">\(3-x\)</span>, not <span class="math inline">\(x\)</span>. The shell height is <span class="math inline">\(x(2-x)\)</span>. Hence <span class="math display">\[V=2\pi\int_0^2(3-x)x(2-x)dx=2\pi\int_0^2(6x-5x^2+x^3)dx=\frac{16\pi}{3}.\]</span></p>
+<p><strong>Remark.</strong> Disks and washers use slices
+<em>perpendicular</em> to the rotation axis; shells use slices
+<em>parallel</em> to it. Either method can work when the setup is
+correct. Choose the one with the simpler bounds and integrand.</p>
+<h2 id="arc-length">Arc length</h2>
+<h3 id="from-a-polygonal-path-to-a-smooth-curve">From a polygonal path
+to a smooth curve</h3>
+<p>A curve can be approximated by straight line segments. For <span class="math inline">\(y=f(x)\)</span>, the length of a short chord is
+<span class="math inline">\(\sqrt{(\Delta x)^2+(\Delta
+y)^2}=\sqrt{1+(\Delta y/\Delta x)^2}\,\Delta x\)</span>. As the
+partition becomes fine, the difference quotient approaches <span class="math inline">\(f'(x)\)</span>.</p>
+<p><strong>Theorem — Arc length of a graph.</strong> If <span class="math inline">\(f'\)</span> is continuous on <span class="math inline">\([a,b]\)</span>, then the length of the graph <span class="math inline">\(y=f(x)\)</span> from <span class="math inline">\(a\)</span> to <span class="math inline">\(b\)</span> is <span class="math display">\[\boxed{L=\int_a^b\sqrt{1+[f'(x)]^2}\,dx.}\]</span></p>
+<p><strong>Proof — Derivation.</strong> Approximate the curve by a
+polygon through points <span class="math inline">\((x_i,f(x_i))\)</span>. The mean value theorem
+gives <span class="math inline">\(\Delta y_i=f'(c_i)\Delta
+x_i\)</span> for some <span class="math inline">\(c_i\)</span> in the
+subinterval. Thus the polygon length is <span class="math inline">\(\sum\sqrt{1+f'(c_i)^2}\Delta x_i\)</span>, a
+Riemann sum converging to the displayed integral.</p>
+<p><strong>Example — Length of a straight line.</strong> Find the length
+of <span class="math inline">\(y=2x+1\)</span> on <span class="math inline">\(0\le x\le3\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'=2\)</span>, so <span class="math inline">\(L=\int_0^3\sqrt5\,dx=3\sqrt5\)</span>. This
+matches the distance formula between <span class="math inline">\((0,1)\)</span> and <span class="math inline">\((3,7)\)</span>.</p>
+<p><strong>Example — A curve with an exact answer.</strong> Find the
+length of <span class="math inline">\(y=\frac23x^{3/2}\)</span> on <span class="math inline">\(0\le x\le3\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=\sqrt{x}\)</span>, so <span class="math display">\[L=\int_0^3\sqrt{1+x}\,dx=\left[\frac23(1+x)^{3/2}\right]_0^3=\frac{14}{3}.\]</span>
+The length exceeds the horizontal distance <span class="math inline">\(3\)</span>, as it must.</p>
+<h3 id="when-the-integral-has-no-elementary-antiderivative">When the
+integral has no elementary antiderivative</h3>
+<p>For <span class="math inline">\(y=x^2\)</span> on <span class="math inline">\([0,1]\)</span>, the length is <span class="math inline">\(\int_0^1\sqrt{1+4x^2}\,dx\)</span>. Numerical
+quadrature is often appropriate even when an exact expression exists.
+Numerical computation should complement, not replace, the mathematical
+derivation.</p>
+<p><strong>Theorem — Arc length for <span class="math inline">\(x=g(y)\)</span>.</strong> If <span class="math inline">\(g'\)</span> is continuous for <span class="math inline">\(c\le y\le d\)</span>, then <span class="math display">\[L=\int_c^d\sqrt{1+[g'(y)]^2}\,dy.\]</span></p>
+<p><strong>Example — Choosing the easier variable.</strong> For <span class="math inline">\(x=y^2\)</span> from <span class="math inline">\(y=0\)</span> to <span class="math inline">\(y=1\)</span>, write the arc-length integral.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(dx/dy=2y\)</span>, <span class="math inline">\(L=\int_0^1\sqrt{1+4y^2}\,dy\)</span>. Expressing
+<span class="math inline">\(y=\sqrt{x}\)</span> would introduce a
+derivative singular at <span class="math inline">\(x=0\)</span> and a
+less convenient setup.</p>
+<h2 id="areas-of-surfaces-of-revolution">Areas of surfaces of
+revolution</h2>
+<h3 id="a-narrow-frustum">A narrow frustum</h3>
+<p>Rotating a short curve segment around the <span class="math inline">\(x\)</span>-axis produces approximately a conical
+frustum. Its lateral area is approximately circumference <span class="math inline">\(2\pi y\)</span> times slant length <span class="math inline">\(ds\)</span>. From arc length, <span class="math inline">\(ds=\sqrt{1+[f'(x)]^2}\,dx\)</span>.</p>
+<p><strong>Theorem — Surface area about the <span class="math inline">\(x\)</span>-axis.</strong> If <span class="math inline">\(f\ge0\)</span> and <span class="math inline">\(f'\)</span> is continuous on <span class="math inline">\([a,b]\)</span>, then rotating <span class="math inline">\(y=f(x)\)</span> about the <span class="math inline">\(x\)</span>-axis gives surface area <span class="math display">\[\boxed{S=2\pi\int_a^b
+f(x)\sqrt{1+[f'(x)]^2}\,dx.}\]</span></p>
+<p><strong>Theorem — Surface area about the <span class="math inline">\(y\)</span>-axis.</strong> For <span class="math inline">\(f\ge0\)</span> on <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(a\ge0\)</span>, rotating <span class="math inline">\(y=f(x)\)</span> about the <span class="math inline">\(y\)</span>-axis gives <span class="math display">\[\boxed{S=2\pi\int_a^b
+x\sqrt{1+[f'(x)]^2}\,dx.}\]</span></p>
+<p><strong>Remark.</strong> A surface-area formula integrates
+<em>circumference times arc length</em>; a volume formula integrates
+<em>cross-sectional area times thickness</em>. The square root in the
+surface formula cannot generally be omitted.</p>
+<p><strong>Example — Lateral area of a cone.</strong> Rotate <span class="math inline">\(y=x/2\)</span> for <span class="math inline">\(0\le x\le4\)</span> about the <span class="math inline">\(x\)</span>-axis.</p>
+<p><strong>Solution.</strong> The radius increases from <span class="math inline">\(0\)</span> to <span class="math inline">\(2\)</span>, and <span class="math inline">\(f'=1/2\)</span>. Hence <span class="math display">\[S=2\pi\int_0^4\frac{x}{2}\sqrt{1+\frac14}\,dx=\frac{\pi\sqrt5}{2}\int_0^4x\,dx=4\pi\sqrt5.\]</span>
+This agrees with <span class="math inline">\(\pi r\ell\)</span> for
+radius <span class="math inline">\(r=2\)</span> and slant height <span class="math inline">\(\ell=2\sqrt5\)</span>.</p>
+<p><strong>Example — A curved surface.</strong> Rotate <span class="math inline">\(y=\sqrt{x}\)</span>, <span class="math inline">\(1\le x\le4\)</span>, about the <span class="math inline">\(x\)</span>-axis.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'=1/(2\sqrt{x})\)</span>, so <span class="math display">\[S=2\pi\int_1^4\sqrt{x}\sqrt{1+\frac{1}{4x}}dx=\pi\int_1^4\sqrt{4x+1}\,dx=\frac{\pi}{6}\left(17^{3/2}-5^{3/2}\right).\]</span></p>
+<h3 id="physical-modeling-considerations">Physical modeling
+considerations</h3>
+<p>If a material coating costs <span class="math inline">\(c\)</span>
+dollars per square meter, multiplying the computed area by <span class="math inline">\(c\)</span> estimates coating cost. A model must
+distinguish the curved lateral surface from end caps and account for any
+portions that are not coated.</p>
+<h2 id="work">Work</h2>
+<h3 id="from-constant-to-variable-force">From constant to variable
+force</h3>
+<p>For a constant force <span class="math inline">\(F\)</span> acting
+along the direction of motion through displacement <span class="math inline">\(d\)</span>, work is <span class="math inline">\(W=Fd\)</span>. When force varies with position,
+the work over a short movement is approximately <span class="math inline">\(F(x_i^*)\Delta x_i\)</span>.</p>
+<p><strong>Theorem — Work by a variable force.</strong> If a continuous
+force <span class="math inline">\(F(x)\)</span> acts parallel to
+displacement on <span class="math inline">\([a,b]\)</span>, the work
+performed is <span class="math display">\[\boxed{W=\int_a^b
+F(x)\,dx.}\]</span></p>
+<p><strong>Units:</strong> newtons times meters equals joules. A
+negative integral represents negative work relative to the chosen
+direction, not a negative magnitude of energy consumed.</p>
+<p><strong>Example — Stretching a spring.</strong> A spring obeys
+Hooke’s law with force magnitude <span class="math inline">\(F(x)=kx\)</span>. If <span class="math inline">\(k=120\)</span> N/m, how much work is needed to
+stretch it from its natural length to <span class="math inline">\(0.15\)</span> m?</p>
+<p><strong>Solution.</strong> <span class="math inline">\(W=\int_0^{0.15}120x\,dx=60(0.15)^2=1.35\)</span>
+J. The spring’s restoring force points opposite the stretch; the applied
+force required for a slow stretch points with the displacement.</p>
+<p><strong>Example — Work with a nonzero starting extension.</strong>
+Stretch the same spring from <span class="math inline">\(0.10\)</span> m
+to <span class="math inline">\(0.20\)</span> m.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(W=\int_{0.10}^{0.20}120x\,dx=60(0.20^2-0.10^2)=1.8\)</span>
+J. This is not the same as stretching from zero to <span class="math inline">\(0.10\)</span> m because the force increases with
+extension.</p>
+<h3 id="pumping-liquid-from-a-tank">Pumping liquid from a tank</h3>
+<p>A horizontal slice of liquid at height <span class="math inline">\(y\)</span> has volume <span class="math inline">\(A(y)dy\)</span>, weight <span class="math inline">\(\rho g A(y)dy\)</span>, and must be lifted a
+distance <span class="math inline">\(D(y)\)</span>. Therefore <span class="math display">\[\boxed{W=\int_{y_{\min}}^{y_{\max}}\rho g
+A(y)D(y)\,dy.}\]</span> Here <span class="math inline">\(\rho\)</span>
+is mass density in kg/m<span class="math inline">\(^3\)</span>, <span class="math inline">\(g\)</span> is gravitational acceleration in
+m/s<span class="math inline">\(^2\)</span>, and <span class="math inline">\(D(y)\)</span> is in meters.</p>
+<p><strong>Example — Pumping a cylindrical tank.</strong> A vertical
+cylindrical tank of radius <span class="math inline">\(1\)</span> m
+contains water to a depth of <span class="math inline">\(3\)</span> m.
+Water is pumped to a spout <span class="math inline">\(1\)</span> m
+above the top. Use <span class="math inline">\(\rho=1000\)</span>
+kg/m<span class="math inline">\(^3\)</span> and <span class="math inline">\(g=9.8\)</span> m/s<span class="math inline">\(^2\)</span>.</p>
+<p><strong>Solution.</strong> Set <span class="math inline">\(y=0\)</span> at the bottom. Each slice has area
+<span class="math inline">\(\pi\)</span> m<span class="math inline">\(^2\)</span> and must travel <span class="math inline">\(D(y)=4-y\)</span> m. Thus <span class="math display">\[W=9800\pi\int_0^3(4-y)dy=9800\pi(12-4.5)=73500\pi\
+\text{J}.\]</span> A unit check gives <span class="math inline">\((\text{N/m}^3)(\text{m}^2)(\text{m})(\text{m})=\text{N}\cdot\text{m}\)</span>.</p>
+<p><strong>Remark.</strong> For a tapered tank, the cross-sectional area
+<span class="math inline">\(A(y)\)</span> varies with height. The
+slice’s <em>volume</em> is <span class="math inline">\(A(y)dy\)</span>;
+multiplying by density alone gives mass, not weight.</p>
+<h2 id="moments-and-centers-of-mass">Moments and centers of mass</h2>
+<h3 id="balance-as-a-weighted-average">Balance as a weighted
+average</h3>
+<p>For point masses <span class="math inline">\(m_i\)</span> at
+positions <span class="math inline">\(x_i\)</span>, the center of mass
+is <span class="math inline">\(\bar x=\frac{\sum m_ix_i}{\sum
+m_i}\)</span>. A continuous mass distribution replaces sums by
+integrals.</p>
+<p><strong>Definition — One-dimensional center of mass.</strong> For a
+rod on <span class="math inline">\([a,b]\)</span> with continuous linear
+mass density <span class="math inline">\(\lambda(x)\ge0\)</span> and
+total mass <span class="math inline">\(M&gt;0\)</span>, <span class="math display">\[M=\int_a^b\lambda(x)dx,\qquad \boxed{\bar
+x=\frac1M\int_a^b x\lambda(x)dx.}\]</span></p>
+<p><strong>Example — Nonuniform rod.</strong> A rod extends from <span class="math inline">\(x=0\)</span> to <span class="math inline">\(x=2\)</span> m and has density <span class="math inline">\(\lambda(x)=1+x\)</span> kg/m. Find its center of
+mass.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(M=\int_0^2(1+x)dx=4\)</span> kg. The moment about
+the origin is <span class="math inline">\(\int_0^2x(1+x)dx=[x^2/2+x^3/3]_0^2=14/3\)</span>
+kg<span class="math inline">\(\cdot\)</span>m. Hence <span class="math inline">\(\bar x=\frac{14/3}{4}=7/6\)</span> m. Since the
+rod is heavier toward the right, its balance point lies to the right of
+<span class="math inline">\(x=1\)</span>.</p>
+<h3 id="centroids-of-plane-regions">Centroids of plane regions</h3>
+<p>For a region between an upper curve <span class="math inline">\(f(x)\)</span> and a lower curve <span class="math inline">\(g(x)\)</span> on <span class="math inline">\([a,b]\)</span>, with <span class="math inline">\(f\ge g\)</span>, a vertical strip has area <span class="math inline">\(dA=[f(x)-g(x)]dx\)</span>. Its horizontal
+coordinate is <span class="math inline">\(x\)</span> and its vertical
+center is <span class="math inline">\((f+g)/2\)</span>.</p>
+<p><strong>Theorem — Centroid of a region between two graphs.</strong>
+Let <span class="math inline">\(A=\int_a^b(f-g)dx&gt;0\)</span>. For a
+lamina of constant areal density, its centroid is <span class="math display">\[\boxed{\bar x=\frac{\int_a^b x(f-g)dx}{A},\qquad
+\bar y=\frac{\frac12\int_a^b(f^2-g^2)dx}{A}.}\]</span></p>
+<p><strong>Proof — Derivation.</strong> The moment about the <span class="math inline">\(y\)</span>-axis is <span class="math inline">\(M_y=\int x\,dA=\int_a^b x(f-g)dx\)</span>. The
+moment about the <span class="math inline">\(x\)</span>-axis is <span class="math inline">\(M_x=\int
+\frac{f+g}{2}\,dA=\frac12\int(f^2-g^2)dx\)</span>. Divide each moment by
+total area.</p>
+<p><strong>Example — Centroid under a line.</strong> Find the centroid
+of the triangle under <span class="math inline">\(y=2-x\)</span>, above
+the <span class="math inline">\(x\)</span>-axis, for <span class="math inline">\(0\le x\le2\)</span>.</p>
+<p><strong>Solution.</strong> Area <span class="math inline">\(A=\int_0^2(2-x)dx=2\)</span>. Then <span class="math display">\[\bar x=\frac12\int_0^2x(2-x)dx=\frac23,\qquad
+\bar y=\frac14\int_0^2(2-x)^2dx=\frac23.\]</span> The result agrees with
+the intersection of the medians of the triangle with vertices <span class="math inline">\((0,0)\)</span>, <span class="math inline">\((2,0)\)</span>, and <span class="math inline">\((0,2)\)</span>.</p>
+<p><strong>Example — Centroid under a parabola.</strong> Let <span class="math inline">\(0\le y\le 4-x^2\)</span> for <span class="math inline">\(-2\le x\le2\)</span>. Find the centroid.</p>
+<p><strong>Solution.</strong> Symmetry about the <span class="math inline">\(y\)</span>-axis gives <span class="math inline">\(\bar x=0\)</span>. Area is <span class="math inline">\(A=\int_{-2}^2(4-x^2)dx=32/3\)</span>. Also, <span class="math display">\[M_x=\frac12\int_{-2}^2(4-x^2)^2dx=\frac{256}{15},\quad
+\bar y=\frac{256/15}{32/3}=\frac85.\]</span> The centroid is <span class="math inline">\((0,8/5)\)</span>, inside the region as
+expected.</p>
+<h3 id="variable-areal-density">Variable areal density</h3>
+<p>If the density varies with position, geometric area is no longer
+proportional to mass. For a lamina with density <span class="math inline">\(\rho(x,y)\)</span>, one would generally require a
+double integral; that topic belongs to multivariable calculus. In this
+single-variable chapter, variable density can still be handled for a
+thin rod, or for a stripwise-uniform lamina with density depending only
+on <span class="math inline">\(x\)</span>.</p>
+<h2 id="a-problem-solving-framework">A problem-solving framework</h2>
+<ol type="1">
+<li><p><strong>Sketch and label.</strong> Identify boundaries, axes, and
+the physically meaningful variable.</p></li>
+<li><p><strong>Choose a thin element.</strong> Is it a slice, disk,
+washer, shell, curve segment, fluid layer, or mass element?</p></li>
+<li><p><strong>Write a differential contribution.</strong> Examples:
+<span class="math inline">\(A(x)dx\)</span>, <span class="math inline">\(2\pi rh\,dr\)</span>, <span class="math inline">\(\sqrt{1+(f')^2}dx\)</span>, <span class="math inline">\(F(x)dx\)</span>.</p></li>
+<li><p><strong>Check units and bounds.</strong> A correct formula with
+incorrect bounds produces an incorrect model.</p></li>
+<li><p><strong>Integrate analytically when possible.</strong> Simplify
+before computing.</p></li>
+<li><p><strong>Verify independently.</strong> Use geometry, an alternate
+slicing direction, numerical quadrature, or a dimensional
+check.</p></li>
+<li><p><strong>Interpret.</strong> Explain the meaning, magnitude, and
+limitations of the result.</p></li>
+</ol>
+<p><strong>Remark.</strong> In the following laboratories, R appears in
+a complete section before Python. Code is presented as a transparent
+computational companion to the mathematics, not as a replacement for
+derivations.</p>
+<h2 id="r-computational-laboratories">R computational laboratories</h2>
+<h3 id="laboratory-r1-compare-disk-and-shell-volumes">Laboratory R1:
+Compare disk and shell volumes</h3>
+<p>For the region under <span class="math inline">\(y=4-x^2\)</span>,
+<span class="math inline">\(0\le x\le2\)</span>, rotated about the <span class="math inline">\(y\)</span>-axis, the shell and disk methods should
+agree at <span class="math inline">\(8\pi\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>shell &lt;- integrate(function(x) 2*pi*x*(4-x^2), 0, 2)$value
+disk  &lt;- integrate(function(y) pi*(4-y), 0, 4)$value
+exact &lt;- 8*pi
+cat("Shell:", round(shell, 6), "\n")
+cat("Disk: ", round(disk, 6), "\n")
+cat("Difference:", abs(shell-disk), "\n")
+cat("Exact:", round(exact, 6), "\n")</code></pre></div>
+<p><strong>Investigate.</strong> Replace the parabola by <span class="math inline">\(y=9-x^2\)</span> on <span class="math inline">\([0,3]\)</span>. Derive the new exact volume before
+changing the code. Explain why a numerical agreement is a useful check
+but not a proof of the formulas.</p>
+<h3 id="laboratory-r2-cross-sections-and-geometric-sensitivity">Laboratory
+R2: Cross-sections and geometric sensitivity</h3>
+<p>The cross-sectional area for equilateral triangles of side <span class="math inline">\(2-x\)</span> is <span class="math inline">\(\sqrt3(2-x)^2/4\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>area &lt;- function(x) sqrt(3)/4 * (2-x)^2
+volume &lt;- integrate(area, 0, 2)$value
+cat("Triangular cross-section volume:", volume, "\n")
+x &lt;- seq(0, 2, length.out=200)
+plot(x, area(x), type="l", lwd=2, xlab="Position x",
+     ylab="Cross-sectional area A(x)")</code></pre></div>
+<p><strong>Investigate.</strong> Suppose all triangle side lengths are
+multiplied by <span class="math inline">\(1.1\)</span>. By what factor
+does the volume change? Explain the square-law scaling.</p>
+<h3 id="laboratory-r3-polygonal-approximations-to-arc-length">Laboratory
+R3: Polygonal approximations to arc length</h3>
+<p>A polygonal approximation uses straight segments joining sampled
+points on the curve <span class="math inline">\(y=x^2\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>poly_length &lt;- function(n) {
+  x &lt;- seq(0, 1, length.out=n+1)
+  y &lt;- x^2
+  sum(sqrt(diff(x)^2 + diff(y)^2))
+}
+exact_num &lt;- integrate(function(x) sqrt(1+4*x^2), 0, 1)$value
+for (n in c(4, 8, 16, 32, 64, 128)) {
+  cat("n =", n, "polygon =", round(poly_length(n), 8),
+      "error =", round(exact_num-poly_length(n), 8), "\n")
+}</code></pre></div>
+<p><strong>Investigate.</strong> Why do the polygonal estimates approach
+the integral from below for this example? Can you conclude that this
+must occur for every possible curve?</p>
+<h3 id="laboratory-r4-surface-area-and-coating-cost">Laboratory R4:
+Surface area and coating cost</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>surface &lt;- integrate(function(x) 2*pi*sqrt(x)*
+                     sqrt(1+1/(4*x)), 1, 4)$value
+cost_per_m2 &lt;- 18
+cat("Lateral surface area:", round(surface, 6), "m^2\n")
+cat("Estimated coating cost: $", round(cost_per_m2*surface, 2), "\n")</code></pre></div>
+<p><strong>Investigate.</strong> Explain why the calculation does not
+automatically include circular end caps. If coating thickness changes
+with position, what additional model information is required?</p>
+<h3 id="laboratory-r5-pumping-work-and-outlet-height">Laboratory R5:
+Pumping work and outlet height</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>work &lt;- function(spout_height) {
+  integrate(function(y) 1000*9.8*pi*(spout_height-y),
+            0, 3)$value
+}
+heights &lt;- c(3, 3.5, 4, 5)
+results &lt;- data.frame(outlet_m=heights,
+                      work_J=sapply(heights, work))
+print(results)
+plot(results$outlet_m, results$work_J, type="b",
+     xlab="Outlet height above bottom (m)", ylab="Work (J)")</code></pre></div>
+<p><strong>Investigate.</strong> Derive a formula for work as a function
+of spout height <span class="math inline">\(H\ge3\)</span>. Interpret
+its slope in terms of the total weight of the water.</p>
+<h3 id="laboratory-r6-numerical-centroids">Laboratory R6: Numerical
+centroids</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter06-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) 4-x^2
+A &lt;- integrate(f, -2, 2)$value
+My &lt;- integrate(function(x) x*f(x), -2, 2)$value
+Mx &lt;- integrate(function(x) 0.5*f(x)^2, -2, 2)$value
+cat("Area:", A, "\n")
+cat("Centroid x:", My/A, "\n")
+cat("Centroid y:", Mx/A, "\n")</code></pre></div>
+<p><strong>Investigate.</strong> Restrict the region to <span class="math inline">\(0\le x\le2\)</span>. Predict the sign of the new
+<span class="math inline">\(\bar x\)</span> before computing it.</p>
+<h2 id="python-computational-laboratories">Python computational
+laboratories</h2>
+<p>Each Python laboratory reproduces the corresponding R investigation.
+The purpose of using two languages is to compare transparent
+implementations of the same mathematical model.</p>
+<h3 id="laboratory-p1-compare-disk-and-shell-volumes">Laboratory P1:
+Compare disk and shell volumes</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+shell = quad(lambda x: 2*np.pi*x*(4-x*x), 0, 2)[0]
+disk = quad(lambda y: np.pi*(4-y), 0, 4)[0]
+print(f"Shell: {shell:.6f}")
+print(f"Disk:  {disk:.6f}")
+print(f"Difference: {abs(shell-disk):.3e}")
+print(f"Exact: {8*np.pi:.6f}")</code></pre></div>
+<h3 id="laboratory-p2-cross-sections-and-geometric-sensitivity">Laboratory
+P2: Cross-sections and geometric sensitivity</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+area = lambda x: np.sqrt(3)/4*(2-x)**2
+volume = quad(area, 0, 2)[0]
+print("Volume:", volume)
+x = np.linspace(0, 2, 200)
+plt.plot(x, area(x))
+plt.xlabel("Position x")
+plt.ylabel("Cross-sectional area A(x)")
+plt.show()</code></pre></div>
+<h3 id="laboratory-p3-polygonal-approximations-to-arc-length">Laboratory
+P3: Polygonal approximations to arc length</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+def polygon_length(n):
+    x = np.linspace(0, 1, n+1)
+    y = x**2
+    return np.sum(np.hypot(np.diff(x), np.diff(y)))
+reference = quad(lambda x: np.sqrt(1+4*x*x), 0, 1)[0]
+for n in [4, 8, 16, 32, 64, 128]:
+    estimate = polygon_length(n)
+    print(f"n={n:3d}, length={estimate:.8f}, error={reference-estimate:.8f}")</code></pre></div>
+<h3 id="laboratory-p4-surface-area-and-coating-cost">Laboratory P4:
+Surface area and coating cost</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+surface = quad(lambda x: 2*np.pi*np.sqrt(x)*
+               np.sqrt(1+1/(4*x)), 1, 4)[0]
+print(f"Lateral surface area: {surface:.6f} m^2")
+print(f"Estimated coating cost: ${18*surface:.2f}")</code></pre></div>
+<h3 id="laboratory-p5-pumping-work-and-outlet-height">Laboratory P5:
+Pumping work and outlet height</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+from scipy.integrate import quad
+def work(H):
+    return quad(lambda y: 1000*9.8*np.pi*(H-y), 0, 3)[0]
+heights = np.array([3, 3.5, 4, 5])
+values = np.array([work(H) for H in heights])
+for H, W in zip(heights, values):
+    print(f"Outlet {H:.1f} m: {W:.2f} J")
+plt.plot(heights, values, marker="o")
+plt.xlabel("Outlet height above bottom (m)")
+plt.ylabel("Work (J)")
+plt.show()</code></pre></div>
+<h3 id="laboratory-p6-numerical-centroids">Laboratory P6: Numerical
+centroids</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter06-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from scipy.integrate import quad
+f = lambda x: 4-x*x
+A = quad(f, -2, 2)[0]
+My = quad(lambda x: x*f(x), -2, 2)[0]
+Mx = quad(lambda x: 0.5*f(x)**2, -2, 2)[0]
+print("Area:", A)
+print("Centroid x:", My/A)
+print("Centroid y:", Mx/A)</code></pre></div>
+<h2 id="concept-checks-and-common-misconceptions">Concept checks and
+common misconceptions</h2>
+<ol type="1">
+<li><p>Why is a cross-sectional area multiplied by a thickness, whereas
+shell volume uses circumference times height times thickness?</p></li>
+<li><p>In the washer method, why is the integrand <span class="math inline">\(\pi(R^2-r^2)\)</span> rather than <span class="math inline">\(\pi(R-r)^2\)</span>?</p></li>
+<li><p>Explain how the rotation axis changes the radius in a shell or
+washer integral.</p></li>
+<li><p>Why is arc length generally greater than the horizontal span of a
+graph?</p></li>
+<li><p>Why does the surface-area formula include <span class="math inline">\(\sqrt{1+(f')^2}\)</span>?</p></li>
+<li><p>Distinguish the force exerted by a spring from the external force
+needed to stretch it slowly.</p></li>
+<li><p>Explain the role of the lifting distance in a pumping-work
+integral.</p></li>
+<li><p>Why does the center of mass of a nonuniform rod generally differ
+from its midpoint?</p></li>
+<li><p>When may symmetry be used to conclude that a centroid coordinate
+is zero?</p></li>
+<li><p>What does agreement between R and Python verify, and what does it
+not prove?</p></li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<p><strong>Directions.</strong> Show the setup and reasoning, including
+a labeled sketch where appropriate. For numerical exercises, report
+units and justify any approximation. Exercises marked
+<em>Investigate</em> invite R and Python verification after an
+analytical setup.</p>
+<h3 class="unnumbered" id="cross-sectional-volumes">Cross-sectional
+volumes</h3>
+<ol type="1">
+<li><p>For a base under <span class="math inline">\(y=3-x\)</span> on
+<span class="math inline">\([0,3]\)</span>, find the volume when
+perpendicular cross-sections are squares.</p></li>
+<li><p>For the same base, find the volume when cross-sections are
+semicircles with diameter equal to the vertical height.</p></li>
+<li><p>A solid has triangular cross-sections with base <span class="math inline">\(2\sqrt{x}\)</span> and height <span class="math inline">\(\sqrt{x}\)</span> for <span class="math inline">\(0\le x\le4\)</span>. Find its volume.</p></li>
+<li><p>Find the volume formed by rotating <span class="math inline">\(y=x^2\)</span>, <span class="math inline">\(0\le
+x\le2\)</span>, about the <span class="math inline">\(x\)</span>-axis.</p></li>
+<li><p>Find the volume formed by rotating the region between <span class="math inline">\(y=4\)</span> and <span class="math inline">\(y=x^2\)</span>, <span class="math inline">\(-2\le
+x\le2\)</span>, about the <span class="math inline">\(x\)</span>-axis.</p></li>
+<li><p>Rotate the region between <span class="math inline">\(y=x\)</span> and <span class="math inline">\(y=x^2\)</span>, <span class="math inline">\(0\le
+x\le1\)</span>, about <span class="math inline">\(y=-1\)</span>. Set up
+and evaluate the washer integral.</p></li>
+<li><p>For <span class="math inline">\(x=\sqrt{y}\)</span> on <span class="math inline">\(0\le y\le9\)</span>, set up a disk integral for
+rotation about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p><em>Investigate.</em> Explain how the volume of a solid changes
+if every cross-sectional length is doubled while the interval of
+integration is unchanged.</p></li>
+</ol>
+<h3 class="unnumbered" id="cylindrical-shells">Cylindrical shells</h3>
+<ol type="1">
+<li><p>Use shells to rotate the region under <span class="math inline">\(y=2x\)</span>, <span class="math inline">\(0\le
+x\le3\)</span>, about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p>Use shells to rotate the region under <span class="math inline">\(y=9-x^2\)</span>, <span class="math inline">\(0\le
+x\le3\)</span>, about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p>Use shells to rotate the region between <span class="math inline">\(y=x\)</span> and <span class="math inline">\(y=x^2\)</span>, <span class="math inline">\(0\le
+x\le1\)</span>, about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p>Rotate the region under <span class="math inline">\(y=2-x\)</span>, <span class="math inline">\(0\le
+x\le2\)</span>, about <span class="math inline">\(x=4\)</span> using
+shells.</p></li>
+<li><p>Use both shells and washers to find the volume obtained by
+rotating <span class="math inline">\(y=3-x\)</span>, <span class="math inline">\(0\le x\le3\)</span>, about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p>For the region <span class="math inline">\(0\le
+y\le\sqrt{x}\)</span>, <span class="math inline">\(0\le x\le4\)</span>,
+choose the simpler of shells and washers for rotation about <span class="math inline">\(x=5\)</span>. Explain.</p></li>
+<li><p><em>Investigate.</em> Construct two different correct integrals
+for the same solid and compare their numerical values.</p></li>
+<li><p>Write a short explanation of the difference between a radius and
+a shell height.</p></li>
+</ol>
+<h3 class="unnumbered" id="arc-length-and-surface-area">Arc length and
+surface area</h3>
+<ol type="1">
+<li><p>Find the length of <span class="math inline">\(y=3x-2\)</span>
+for <span class="math inline">\(-1\le x\le2\)</span>.</p></li>
+<li><p>Find the length of <span class="math inline">\(y=\frac12x^2\)</span> for <span class="math inline">\(0\le x\le2\)</span>; a numerical answer is
+acceptable after a correct setup.</p></li>
+<li><p>Find the length of <span class="math inline">\(y=\frac23x^{3/2}\)</span> on <span class="math inline">\(1\le x\le4\)</span>.</p></li>
+<li><p>Set up the arc length of <span class="math inline">\(y=\sin
+x\)</span> for <span class="math inline">\(0\le x\le\pi\)</span> and
+approximate numerically.</p></li>
+<li><p>Find the lateral surface area generated by rotating <span class="math inline">\(y=2\)</span> on <span class="math inline">\(0\le
+x\le5\)</span> about the <span class="math inline">\(x\)</span>-axis.</p></li>
+<li><p>Find the surface area generated by rotating <span class="math inline">\(y=x\)</span>, <span class="math inline">\(0\le
+x\le3\)</span>, about the <span class="math inline">\(x\)</span>-axis.</p></li>
+<li><p>Set up and evaluate the surface area when <span class="math inline">\(y=\sqrt{x}\)</span>, <span class="math inline">\(1\le x\le4\)</span>, rotates about the <span class="math inline">\(x\)</span>-axis.</p></li>
+<li><p>Set up the surface area when <span class="math inline">\(y=1+x^2\)</span>, <span class="math inline">\(0\le
+x\le1\)</span>, rotates about the <span class="math inline">\(y\)</span>-axis.</p></li>
+<li><p><em>Investigate.</em> Approximate the length of <span class="math inline">\(y=x^2\)</span> on <span class="math inline">\([0,1]\)</span> with <span class="math inline">\(n=5,10,20,40\)</span> line segments.</p></li>
+<li><p>Explain why a numerical polygon length is not generally identical
+to the exact curve length.</p></li>
+</ol>
+<h3 class="unnumbered" id="work-and-physical-models">Work and physical
+models</h3>
+<ol type="1">
+<li><p>A force <span class="math inline">\(F(x)=5+2x\)</span> N moves an
+object from <span class="math inline">\(x=0\)</span> to <span class="math inline">\(x=4\)</span> m. Find the work.</p></li>
+<li><p>A spring has stiffness <span class="math inline">\(k=200\)</span>
+N/m. Find the work to stretch it from <span class="math inline">\(0\)</span> to <span class="math inline">\(0.08\)</span> m.</p></li>
+<li><p>For the same spring, find the work to stretch it from <span class="math inline">\(0.08\)</span> to <span class="math inline">\(0.16\)</span> m.</p></li>
+<li><p>A force <span class="math inline">\(F(x)=10-x\)</span> N acts
+over <span class="math inline">\(0\le x\le5\)</span> m. Compute work and
+interpret its sign.</p></li>
+<li><p>A tank with horizontal cross-sectional area <span class="math inline">\(2\)</span> m<span class="math inline">\(^2\)</span> contains water to a depth of <span class="math inline">\(3\)</span> m. Set up the work needed to pump it to
+height <span class="math inline">\(4\)</span> m.</p></li>
+<li><p>A vertical cylinder of radius <span class="math inline">\(0.5\)</span> m contains water to depth <span class="math inline">\(2\)</span> m. Find the work to pump it to the
+top.</p></li>
+<li><p>A tank has cross-sectional area <span class="math inline">\(A(y)=1+y\)</span> m<span class="math inline">\(^2\)</span> at height <span class="math inline">\(y\)</span>, <span class="math inline">\(0\le
+y\le2\)</span>. Set up the pumping-work integral to a spout at height
+<span class="math inline">\(3\)</span> m.</p></li>
+<li><p><em>Investigate.</em> Plot pumping work against outlet height for
+the cylindrical tank in the text. Explain the linear
+relationship.</p></li>
+</ol>
+<h3 class="unnumbered" id="moments-and-centroids">Moments and
+centroids</h3>
+<ol type="1">
+<li><p>Find the center of mass of a uniform rod on <span class="math inline">\([0,5]\)</span>.</p></li>
+<li><p>Find the center of mass of a rod on <span class="math inline">\([0,3]\)</span> with density <span class="math inline">\(\lambda(x)=2+x\)</span>.</p></li>
+<li><p>Find the center of mass of a rod on <span class="math inline">\([1,4]\)</span> with density <span class="math inline">\(\lambda(x)=x^2\)</span>.</p></li>
+<li><p>Find the centroid of the triangle bounded by the coordinate axes
+and <span class="math inline">\(y=3-x\)</span>.</p></li>
+<li><p>Find the centroid of the region under <span class="math inline">\(y=x\)</span>, above the <span class="math inline">\(x\)</span>-axis, <span class="math inline">\(0\le
+x\le2\)</span>.</p></li>
+<li><p>Find the centroid of the region under <span class="math inline">\(y=x^2\)</span>, above the <span class="math inline">\(x\)</span>-axis, <span class="math inline">\(0\le
+x\le1\)</span>.</p></li>
+<li><p>Find the centroid of the region between <span class="math inline">\(y=x\)</span> and <span class="math inline">\(y=x^2\)</span> on <span class="math inline">\([0,1]\)</span>.</p></li>
+<li><p>Explain why the centroid of a symmetric region need not coincide
+with the midpoint of its vertical extent.</p></li>
+<li><p><em>Investigate.</em> Recompute the centroid of <span class="math inline">\(y=4-x^2\)</span> over <span class="math inline">\([0,2]\)</span> and compare it to the full
+symmetric region.</p></li>
+<li><p>Derive a formula for the center of mass of a rod with <span class="math inline">\(\lambda(x)=c(1+x)\)</span> on <span class="math inline">\([0,L]\)</span> and show why <span class="math inline">\(c\)</span> cancels.</p></li>
+</ol>
+<h2 id="capstone-project-designing-and-pumping-a-water-storage-tank">Capstone
+project: Designing and pumping a water-storage tank</h2>
+<p><strong>Context.</strong> A community is comparing the material
+requirements and pumping energy for a vertical tank whose horizontal
+cross-sectional radius depends on height. For <span class="math inline">\(0\le y\le3\)</span> meters, consider <span class="math display">\[r(y)=0.8+0.1y\quad\text{(meters)},\qquad
+A(y)=\pi[r(y)]^2.\]</span> Assume water density <span class="math inline">\(1000\)</span> kg/m<span class="math inline">\(^3\)</span>, gravitational acceleration <span class="math inline">\(9.8\)</span> m/s<span class="math inline">\(^2\)</span>, and an outlet at height <span class="math inline">\(H=4\)</span> m above the bottom. The model
+represents a gently widening tank and is intended as a mathematical
+design exercise rather than an engineering specification.</p>
+<h3 class="unnumbered" id="part-a-mathematical-model-25-points">Part A:
+Mathematical model (25 points)</h3>
+<ol type="1">
+<li><p>Draw the tank’s profile and label the vertical coordinate,
+radius, and outlet height. Explain why <span class="math inline">\(A(y)\)</span> has units m<span class="math inline">\(^2\)</span>.</p></li>
+<li><p>Derive the capacity <span class="math inline">\(V=\int_0^3\pi(0.8+0.1y)^2dy\)</span> and evaluate
+it analytically.</p></li>
+<li><p>Determine the total mass of water and explain the distinction
+between mass and weight.</p></li>
+<li><p>Calculate the mean cross-sectional area <span class="math inline">\(V/3\)</span> and interpret it
+geometrically.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-b-pumping-energy-25-points">Part B:
+Pumping energy (25 points)</h3>
+<ol type="1">
+<li><p>Derive <span class="math inline">\(W(H)=9800\pi\int_0^3(0.8+0.1y)^2(H-y)dy\)</span>
+for <span class="math inline">\(H\ge3\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(W(4)\)</span>, showing all
+algebraic steps and units.</p></li>
+<li><p>Find <span class="math inline">\(W'(H)\)</span> and interpret
+its value as a physical quantity.</p></li>
+<li><p>Compare <span class="math inline">\(W(4)\)</span> and <span class="math inline">\(W(5)\)</span>. Explain why the change has a simple
+expression.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-c-r-analysis-15-points">Part C: R
+analysis (15 points)</h3>
+<p>Write an R script that evaluates <span class="math inline">\(V\)</span> and <span class="math inline">\(W(H)\)</span> numerically, computes values for
+<span class="math inline">\(H=3,3.5,4,4.5,5\)</span>, and produces a
+labeled plot of <span class="math inline">\(W(H)\)</span> against <span class="math inline">\(H\)</span>. Include a comparison with your
+analytic answer and a short explanation of numerical accuracy.</p>
+<h3 class="unnumbered" id="part-d-python-analysis-15-points">Part D:
+Python analysis (15 points)</h3>
+<p>Independently reproduce the same numerical results and plot in
+Python. Include readable printed output and a numerical comparison of
+the two languages’ answers. Discuss why agreement does not establish
+that the physical model is correct.</p>
+<h3 class="unnumbered" id="part-e-design-decision-and-reflection-20-points">Part E: Design
+decision and reflection (20 points)</h3>
+<p>A proposed redesign increases the radius at every height by <span class="math inline">\(10\%\)</span> without changing height or outlet
+position. Derive the scaling factor for tank capacity and pumping work,
+then verify numerically. Write a 300–400-word recommendation addressing
+capacity, energy requirements, model limitations, and one additional
+measurement needed for an engineering decision.</p>
+<h3 class="unnumbered" id="assessment-rubric">Assessment rubric</h3>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Criterion</th>
+<th style="text-align: right;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Geometric setup, capacity, and
+interpretation</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pumping work and parameter analysis</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Correct and interpretable R
+implementation</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Correct and interpretable Python
+implementation</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Design comparison, communication, and
+limitations</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="chapter-synthesis">Chapter synthesis</h2>
+<p><strong>One integral, many meanings.</strong> The mathematical
+operation <span class="math inline">\(\int_a^b q(x)dx\)</span> can
+represent volume, length, surface area, work, or moment depending on the
+meaning and units of <span class="math inline">\(q(x)\)</span>. The
+central modeling skill is identifying the correct local contribution:
+<span class="math inline">\(A(x)dx\)</span> for volume, <span class="math inline">\(2\pi rh\,dx\)</span> for shells, <span class="math inline">\(ds\)</span> for length, <span class="math inline">\(2\pi r\,ds\)</span> for surface area, <span class="math inline">\(F(x)dx\)</span> for work, and position times mass
+for a moment.</p>
+<p><strong>Looking ahead.</strong> The next chapter develops additional
+integration tools and transcendental functions. Those techniques make it
+possible to evaluate more of the integrals introduced here exactly.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_06_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter05.html">← Integration</a><a href="chapter07.html">Integrals and Transcendental Functions →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Volumes by cross-sections</a></li><li><a href="#volumes-using-cross-sections">Volumes using cross-sections</a></li><li><a href="#volumes-using-cylindrical-shells">Volumes using cylindrical
+shells</a></li><li><a href="#arc-length">Arc length</a></li><li><a href="#areas-of-surfaces-of-revolution">Areas of surfaces of
+revolution</a></li><li><a href="#work">Work</a></li><li><a href="#moments-and-centers-of-mass">Moments and centers of mass</a></li><li><a href="#a-problem-solving-framework">A problem-solving framework</a></li><li><a href="#r-computational-laboratories">R computational laboratories</a></li><li><a href="#python-computational-laboratories">Python computational
+laboratories</a></li><li><a href="#concept-checks-and-common-misconceptions">Concept checks and
+common misconceptions</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#capstone-project-designing-and-pumping-a-water-storage-tank">Capstone
+project: Designing and pumping a water-storage tank</a></li><li><a href="#chapter-synthesis">Chapter synthesis</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

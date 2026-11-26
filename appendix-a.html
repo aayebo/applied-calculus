@@ -1,0 +1,803 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction to R and RStudio | Applied Calculus Using R and Python</title><link rel="stylesheet" href="site.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav class="site-nav" aria-label="Book navigation"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" type="search" placeholder="Search chapters"><div id="search-results" class="search-results" aria-live="polite"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html" class="active" aria-current="page">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button class="menu" aria-expanded="false">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="introduction-to-r-and-rstudio">Introduction to R and
+RStudio</h1>
+<p><strong>Purpose.</strong> This appendix assumes no previous
+programming experience. Its goal is not to turn you into a software
+developer; it is to help you use R as a reliable companion to
+mathematical reasoning. In this book, you will first learn and justify
+the calculus, then use code to explore examples, check calculations,
+produce figures, and investigate models.</p>
+<p><strong>By the end of this appendix, you should be able to:</strong>
+install and open R and RStudio; write and save an R script; distinguish
+the Console from the Source editor; create and manipulate variables,
+vectors, and functions; make labeled plots; approximate derivatives and
+integrals; solve simple numerical problems; import data; diagnose common
+errors; and prepare a reproducible report of your calculations.</p>
+<h2 id="what-are-r-and-rstudio">What Are R and RStudio?</h2>
+<p><strong>R</strong> is a programming language and environment for
+computation, graphics, and data analysis. It can calculate numbers,
+apply formulas to many inputs, draw mathematical functions, solve
+equations numerically, and analyze data. R is free and open source.</p>
+<p><strong>RStudio</strong> is an integrated development environment
+(IDE): an application that makes working with R easier. It offers a
+script editor, Console, plot viewer, file browser, help system, and
+project management tools. RStudio does not replace R: you install R
+first, then use RStudio to work with it. The RStudio IDE is distributed
+by Posit.</p>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-a-diagram-01.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure A.1. Conceptual diagram of a common RStudio layout (not a
+screenshot). Pane locations can be customized.</em></p>
+</div>
+<p><strong>A typical workflow:</strong> write commands in the Source
+editor, save the script, run a line or selection, inspect the result in
+the Console or Plots pane, revise if necessary, and rerun from the
+beginning to confirm reproducibility.</p>
+<h2 id="installation-and-your-first-session">Installation and Your First
+Session</h2>
+<ol type="1">
+<li><p>Visit <a class="uri" href="https://cran.r-project.org/">https://cran.r-project.org/</a> and install a current
+version of R for your operating system.</p></li>
+<li><p>Visit <a class="uri" href="https://posit.co/download/rstudio-desktop/">https://posit.co/download/rstudio-desktop/</a> and install
+RStudio Desktop. Installation pages and labels can change over
+time.</p></li>
+<li><p>Open RStudio. Locate the Console and type <code>2 + 3</code>,
+then press Enter.</p></li>
+<li><p>Create a script using <strong>File <span class="math inline">\(\rightarrow\)</span> New File <span class="math inline">\(\rightarrow\)</span> R Script</strong>. Save it as
+<code>appendix_a_practice.R</code> in a folder for this course.</p></li>
+<li><p>Type the following lines into the script and run them
+individually using the editor’s <strong>Run</strong> command (often
+Ctrl+Enter on Windows/Linux or Cmd+Enter on macOS).</p></li>
+</ol>
+<div class="code-shell"><div class="code-bar">Code<button class="copy" type="button">Copy code</button></div><pre class="text"><code>&lt;!-- --&gt;</code></pre></div>
+<p><a href="code/appendix-a-01.txt">Download code</a> 2 + 3 sqrt(81) pi
+sin(pi / 2)</p>
+<p>The first expression gives 5, the second gives 9, and
+<code>sin(pi / 2)</code> is 1 to floating-point precision. R uses
+<code>pi</code> for <span class="math inline">\(\pi\)</span>, not the
+symbol typed directly into a formula.</p>
+<p>A new script is not automatically saved. Running commands in the
+Console alone does not preserve your analysis. Save the script
+frequently.</p>
+<h2 id="the-console-prompts-and-scripts">The Console, Prompts, and
+Scripts</h2>
+<p>The Console usually displays <code>&gt;</code> when it is ready for a
+command. If you type an incomplete expression, R displays <code>+</code>
+to request the rest of the command. This plus sign is a <em>continuation
+prompt</em>, not a computed answer.</p>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-a-02.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code># This is a comment: R ignores everything after #.
+(2 + 3) * 4</code></pre></div>
+<p>For example, typing <code>(2 + 3</code> without the closing
+parenthesis will produce a continuation prompt. Finish the expression by
+typing <code>)</code> or cancel the unfinished command using the
+Console’s interrupt/escape action.</p>
+<p><strong>Good habits.</strong> Give scripts descriptive filenames; add
+short comments explaining <em>why</em> a calculation is being done; use
+blank lines to separate sections; and keep all commands needed to
+reproduce a result in the same script or clearly referenced files.</p>
+<h2 id="arithmetic-objects-and-assignment">Arithmetic, Objects, and
+Assignment</h2>
+<p>R supports addition <code>+</code>, subtraction <code>-</code>,
+multiplication <code>*</code>, division <code>/</code>, powers
+<code>^</code>, and parentheses. Multiplication must be written
+explicitly: <code>2*x</code>, not <code>2x</code>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>3^2                # 9
+(8 + 4) / 3        # 4
+radius &lt;- 5
+area &lt;- pi * radius^2
+area</code></pre></div>
+<p>The arrow <code>&lt;-</code> assigns a value to a named object. Read
+<code>radius &lt;- 5</code> as “store the number 5 under the name
+radius.” The final line prints the value of <code>area</code>. R also
+accepts <code>=</code> for many assignments, but this appendix
+consistently uses <code>&lt;-</code> to make assignment visually
+distinct from mathematical equality.</p>
+<p><strong>Naming guidance.</strong> Use names such as
+<code>time</code>, <code>velocity</code>, and <code>total_area</code>;
+avoid spaces and names that conflict with built-in functions, such as
+<code>sum</code> or <code>c</code>. R is case-sensitive:
+<code>Rate</code> and <code>rate</code> are different objects.</p>
+<p>Change <code>radius</code> to 7 and rerun the area calculation. Does
+the stored value of <code>area</code> change automatically if you run
+only the first assignment? Explain why not.</p>
+<h2 id="numbers-logical-values-and-missing-values">Numbers, Logical
+Values, and Missing Values</h2>
+<p>Most calculations in this book use numeric objects. R also has
+logical values <code>TRUE</code> and <code>FALSE</code>, text strings in
+quotation marks, and the special missing-value marker
+<code>NA</code>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>3 &lt; 5
+abs(-7)
+round(pi, 3)
+value &lt;- NA
+is.na(value)</code></pre></div>
+<p>Comparison operators include <code>&lt;</code>, <code>&gt;</code>,
+<code>&lt;=</code>, <code>&gt;=</code>, <code>==</code> (equal to), and
+<code>!=</code> (not equal to). The symbol <code>==</code> tests
+equality; it does not assign a value.</p>
+<p><strong>Important distinction:</strong> <code>NA</code> means a value
+is missing, <code>NaN</code> means a numerical result is undefined (for
+example, <code>0/0</code>), and <code>Inf</code> represents an infinite
+numerical result. These values should not be silently treated as
+ordinary data.</p>
+<h2 id="vectors-calculating-at-many-inputs">Vectors: Calculating at Many
+Inputs</h2>
+<p>A <em>vector</em> is an ordered collection of values. Vectors make R
+particularly useful for plotting and numerical calculus, because one
+expression can evaluate a function at hundreds of points.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- c(0, 1, 2, 3)
+t^2
+seq(0, 1, by = 0.25)
+seq(0, 1, length.out = 6)
+rep(2, times = 4)</code></pre></div>
+<p>The function <code>c()</code> combines values. The function
+<code>seq()</code> constructs a sequence; <code>length.out</code>
+specifies the number of points, including endpoints. Arithmetic such as
+<code>t2̂</code> is applied element by element.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0, 4, by = 0.5)
+s &lt;- 3*t^2 - 2*t + 1
+head(s)                 # First six values
+length(s)               # Number of values
+s[1]                    # First entry, not entry zero</code></pre></div>
+<p>R indexing begins at 1, unlike Python indexing. Also, vector
+arithmetic can <em>recycle</em> shorter vectors; if their lengths do not
+match, a calculation may be misleading. For introductory work, make sure
+paired vectors have the same length.</p>
+<p>A Riemann sum requires many sample points; a function graph requires
+many <span class="math inline">\((x,f(x))\)</span> pairs. Vectors let
+you construct these objects without manually repeating a
+calculation.</p>
+<h2 id="writing-mathematical-functions">Writing Mathematical
+Functions</h2>
+<p>In mathematics we write <span class="math inline">\(f(x)=x^3-2x+1\)</span>. In R we define a function
+using <code>function(x)</code> followed by an expression or a block in
+braces.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-07.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) {
+  x^3 - 2*x + 1
+}
+f(2)
+f(c(0, 1, 2))</code></pre></div>
+<p>This particular function is <em>vectorized</em>: it accepts either a
+single number or a vector. The final expression is returned
+automatically. For clarity, you can also write
+<code>return(x3̂ - 2*x + 1)</code>.</p>
+<p><strong>Functions with parameters.</strong> A model may depend on
+time <span class="math inline">\(t\)</span> and constants that describe
+a physical system.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-08.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>concentration &lt;- function(t, initial = 18, rate = 0.3) {
+  2 + initial * exp(-rate * t)
+}
+concentration(0)
+concentration(5)
+concentration(c(0, 5, 10), rate = 0.2)</code></pre></div>
+<p>Here <code>initial</code> and <code>rate</code> have default values.
+The call <code>concentration(5)</code> uses those defaults; the last
+call changes the decay rate explicitly.</p>
+<p>Write an R function for <span class="math inline">\(g(x)=\sqrt{1+x^2}\)</span>. Evaluate it at <span class="math inline">\(-2\)</span>, 0, and 2. Explain why all outputs are
+positive.</p>
+<h2 id="essential-mathematical-functions">Essential Mathematical
+Functions</h2>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Mathematics</th>
+<th style="text-align: left;">R expression</th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sqrt{x}\)</span></td>
+<td style="text-align: left;"><code>sqrt(x)</code></td>
+<td style="text-align: left;"><code>sqrt(16)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(|x|\)</span></td>
+<td style="text-align: left;"><code>abs(x)</code></td>
+<td style="text-align: left;"><code>abs(-3)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(e^x\)</span></td>
+<td style="text-align: left;"><code>exp(x)</code></td>
+<td style="text-align: left;"><code>exp(1)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\ln
+x\)</span></td>
+<td style="text-align: left;"><code>log(x)</code></td>
+<td style="text-align: left;"><code>log(exp(2))</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\log_{10}x\)</span></td>
+<td style="text-align: left;"><code>log10(x)</code></td>
+<td style="text-align: left;"><code>log10(100)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sin
+x\)</span></td>
+<td style="text-align: left;"><code>sin(x)</code></td>
+<td style="text-align: left;"><code>sin(pi/6)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\cos
+x\)</span></td>
+<td style="text-align: left;"><code>cos(x)</code></td>
+<td style="text-align: left;"><code>cos(pi)</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\tan
+x\)</span></td>
+<td style="text-align: left;"><code>tan(x)</code></td>
+<td style="text-align: left;"><code>tan(pi/4)</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\arctan
+x\)</span></td>
+<td style="text-align: left;"><code>atan(x)</code></td>
+<td style="text-align: left;"><code>atan(1)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Angles are in radians.</strong> R’s trigonometric functions
+interpret their arguments as radians, not degrees. Convert degrees by
+multiplying by <code>pi/180</code>.</p>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-a-09.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>sin(30 * pi / 180)     # Sine of 30 degrees = 0.5
+log(100)              # Natural logarithm, not log base 10
+log10(100)            # 2</code></pre></div>
+<p><code>log(-1)</code> returns <code>NaN</code> for real-number input;
+<code>sqrt(-1)</code> does likewise. These are domain restrictions, not
+software malfunctions.</p>
+<h2 id="creating-clear-graphs-in-base-r">Creating Clear Graphs in Base
+R</h2>
+<p>The simplest graph uses <code>plot()</code>. For a smooth
+mathematical curve, create a dense vector of inputs, evaluate the
+function, and use <code>type = "l"</code> (the letter ell, for
+line).</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-10.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x &lt;- seq(-3, 3, length.out = 401)
+y &lt;- x^3 - 2*x + 1
+plot(x, y, type = "l", lwd = 2,
+     main = "A cubic function",
+     xlab = "x", ylab = "f(x)")
+abline(h = 0, v = 0, lty = 3)
+grid()</code></pre></div>
+<p><strong>Reading the commands:</strong> <code>main</code> sets the
+title; <code>xlab</code> and <code>ylab</code> label axes;
+<code>lwd</code> controls line width; <code>abline()</code> adds
+reference lines; and <code>grid()</code> adds a background grid. These
+choices make a graph easier to interpret, not merely more
+attractive.</p>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-a-diagram-02.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure A.2. Original illustration of <span class="math inline">\(f(x)=x^3-2x+1\)</span>. Students can recreate this
+figure with the preceding R code.</em></p>
+</div>
+<h3 class="unnumbered" id="graphing-two-functions-on-the-same-axes">Graphing two functions on
+the same axes</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-11.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x &lt;- seq(-2, 2, length.out = 401)
+plot(x, x^2, type = "l", lwd = 2,
+     ylim = c(-1, 5), xlab = "x", ylab = "y")
+lines(x, 2*x + 1, lty = 2, lwd = 2)
+legend("topleft", legend = c("x^2", "2x + 1"),
+       lty = c(1, 2), lwd = 2, bty = "n")</code></pre></div>
+<p>The function <code>lines()</code> adds a curve to the existing graph.
+The <code>ylim</code> argument ensures both curves fit on the vertical
+axis. Without a deliberate axis range, a second curve may be
+clipped.</p>
+<h3 class="unnumbered" id="graphing-a-function-directly">Graphing a
+function directly</h3>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-a-12.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>curve(exp(-x), from = 0, to = 5,
+      xlab = "Time", ylab = "Relative amount",
+      main = "Exponential decay", lwd = 2)</code></pre></div>
+<p><code>curve()</code> is convenient when you already have an
+expression in <span class="math inline">\(x\)</span>. The vector-based
+approach is more flexible when plotting data, approximations, or model
+comparisons.</p>
+<h2 id="reading-and-interpreting-numerical-output">Reading and
+Interpreting Numerical Output</h2>
+<p>A printed vector may begin with <code>[1]</code> or <code>[7]</code>.
+These bracketed numbers identify the index of the first displayed
+element on that output line; they are not part of the data.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-13.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>values &lt;- c(4, 7, 10, 13)
+mean(values)
+sum(values)
+min(values)
+max(values)
+round(mean(values), 2)</code></pre></div>
+<p>R commonly prints many decimal places. <code>round()</code> controls
+displayed numerical precision, but rounding intermediate steps can
+reduce accuracy. Prefer to retain full precision during calculations and
+round only when presenting results.</p>
+<h2 id="numerical-limits-what-a-table-can-and-cannot-show">Numerical
+Limits: What a Table Can and Cannot Show</h2>
+<p>To explore <span class="math inline">\(\lim_{x\to
+2}(x^2-4)/(x-2)\)</span>, evaluate the expression near 2, but not at
+2.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-14.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) (x^2 - 4) / (x - 2)
+h &lt;- c(0.1, 0.01, 0.001, 0.0001)
+left  &lt;- f(2 - h)
+right &lt;- f(2 + h)
+data.frame(h, left, right)</code></pre></div>
+<p>Both sides approach 4. Algebra explains why: for <span class="math inline">\(x\ne2\)</span>, <span class="math inline">\((x^2-4)/(x-2)=x+2\)</span>. At <span class="math inline">\(x=2\)</span>, the original expression is
+undefined, even though the limit exists.</p>
+<p><strong>Numerical evidence is not proof.</strong> A finite table
+samples only finitely many inputs. Floating-point rounding can also
+obscure behavior for extremely small <span class="math inline">\(h\)</span>. Use numerical work to form and test
+conjectures; use mathematical reasoning to establish the limit.</p>
+<h2 id="numerical-differentiation">Numerical Differentiation</h2>
+<p>The derivative <span class="math inline">\(f'(a)\)</span> is the
+limit of difference quotients. For a small nonzero step <span class="math inline">\(h\)</span>, the <em>forward difference</em> is
+<span class="math display">\[D_h^{\mathrm{forward}}f(a)=\frac{f(a+h)-f(a)}{h}.\]</span>
+An often more accurate approximation is the <em>central difference</em>,
+<span class="math display">\[D_h^{\mathrm{central}}f(a)=\frac{f(a+h)-f(a-h)}{2h}.\]</span></p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-15.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^3 - 2*x + 1
+a &lt;- 1
+h &lt;- 0.01
+forward &lt;- (f(a + h) - f(a)) / h
+central &lt;- (f(a + h) - f(a - h)) / (2*h)
+exact &lt;- 3*a^2 - 2
+c(forward = forward, central = central, exact = exact)</code></pre></div>
+<p>For this example the exact derivative at <span class="math inline">\(a=1\)</span> is 1. The central difference is
+generally closer than the forward difference when <span class="math inline">\(h\)</span> is sufficiently small. However,
+<em>smaller is not always better</em>: extremely tiny <span class="math inline">\(h\)</span> values can cause subtractive
+cancellation in floating-point arithmetic.</p>
+<h3 class="unnumbered" id="a-reusable-derivative-function">A reusable
+derivative function</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-16.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>central_diff &lt;- function(f, x, h = 1e-4) {
+  (f(x + h) - f(x - h)) / (2*h)
+}
+central_diff(function(x) sin(x), pi/3)
+cos(pi/3)</code></pre></div>
+<p>This function approximates a derivative at a point. It does not
+replace a symbolic derivative proof. It is especially useful when
+checking a complicated analytical expression.</p>
+<h2 id="riemann-sums-and-numerical-integration">Riemann Sums and
+Numerical Integration</h2>
+<p>Suppose <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span>. A midpoint Riemann sum with <span class="math inline">\(n\)</span> equal subintervals uses <span class="math inline">\(\Delta x=(b-a)/n\)</span> and midpoints <span class="math inline">\(x_i^*=a+(i-\tfrac12)\Delta x\)</span>: <span class="math display">\[M_n=\sum_{i=1}^n f(x_i^*)\Delta x.\]</span></p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-17.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>midpoint_sum &lt;- function(f, a, b, n = 100) {
+  dx &lt;- (b - a) / n
+  midpoints &lt;- a + ((1:n) - 0.5) * dx
+  sum(f(midpoints)) * dx
+}
+f &lt;- function(x) x^2
+midpoint_sum(f, 0, 2, n = 10)
+midpoint_sum(f, 0, 2, n = 1000)
+8/3                         # Exact integral</code></pre></div>
+<p>The midpoint approximation approaches <span class="math inline">\(8/3\)</span>, the exact value of <span class="math inline">\(\int_0^2 x^2\,dx\)</span>. The <code>1:n</code>
+expression is suitable here because <span class="math inline">\(n\)</span> is assumed to be a positive integer. In
+reusable software, validate inputs before constructing sequences.</p>
+<h3 class="unnumbered" id="built-in-adaptive-integration">Built-in
+adaptive integration</h3>
+<p>Base R provides <code>integrate()</code> for one-dimensional
+numerical integration.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-18.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) exp(-x^2)
+result &lt;- integrate(f, lower = 0, upper = 1)
+result$value
+result$abs.error</code></pre></div>
+<p>The output contains a numerical estimate and an estimated absolute
+error. An error estimate is not an algebraic proof of the answer;
+accuracy depends on the function and numerical method. In particular,
+some improper or highly oscillatory integrals require special care.</p>
+<p>The function supplied to <code>integrate()</code> must accept a
+vector of inputs and return a vector of the corresponding outputs.
+Ordinary arithmetic and built-in functions are usually vectorized, but
+some custom functions are not.</p>
+<h2 id="solving-equations-numerically">Solving Equations
+Numerically</h2>
+<p>In calculus, equations such as <span class="math inline">\(e^{-t}=0.2\)</span> describe threshold times. Base
+R’s <code>uniroot()</code> locates a root of a continuous function over
+a specified interval when the endpoint values have opposite signs.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-19.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(t) exp(-t) - 0.2
+solution &lt;- uniroot(f, interval = c(0, 5))
+solution$root
+-log(0.2)                    # Exact comparison</code></pre></div>
+<p><strong>Before using a root finder:</strong> define the equation as
+<span class="math inline">\(f(x)=0\)</span>; choose an interval that is
+meaningful for the application; check for a sign change; and verify the
+reported root by substituting it back into the original equation.</p>
+<p>A numerical solution is often the most practical way to find a
+threshold when an equation cannot be rearranged into an elementary
+closed form.</p>
+<h2 id="working-with-data-frames-and-csv-files">Working with Data Frames
+and CSV Files</h2>
+<p>A <em>data frame</em> is a rectangular table in which columns can
+represent variables and rows can represent observations. For example, a
+small synthetic cooling dataset might be:</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-20.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>time &lt;- c(0, 2, 4, 6, 8)
+temperature &lt;- c(82, 68, 58, 50, 44)
+cooling &lt;- data.frame(time, temperature)
+print(cooling)
+plot(cooling$time, cooling$temperature,
+     xlab = "Time (min)", ylab = "Temperature (C)",
+     pch = 19)</code></pre></div>
+<p>The dollar sign selects a named column: <code>cooling$time</code>
+means the <code>time</code> column of <code>cooling</code>. To load an
+existing comma-separated file, use:</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-21.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code># Run only after saving a file with this name in the project folder.
+measurements &lt;- read.csv("measurements.csv")
+head(measurements)
+str(measurements)</code></pre></div>
+<p>If the file cannot be found, inspect the project’s working directory
+and the filename. Prefer an RStudio Project and project-relative
+filenames to hard-coded computer-specific paths. For this appendix, the
+data are created in code so that no external file is required.</p>
+<h2 id="a-first-modeling-example-exponential-cooling">A First Modeling
+Example: Exponential Cooling</h2>
+<p>Newton’s cooling model can be written <span class="math display">\[T(t)=T_a+(T_0-T_a)e^{-kt},\qquad k&gt;0,\]</span>
+where <span class="math inline">\(T_a\)</span> is ambient temperature,
+<span class="math inline">\(T_0\)</span> is initial temperature, and
+<span class="math inline">\(k\)</span> is a cooling-rate parameter.
+Differentiating gives <span class="math display">\[T'(t)=-k(T_0-T_a)e^{-kt}=-k\bigl(T(t)-T_a\bigr).\]</span>
+The derivative is negative when <span class="math inline">\(T_0&gt;T_a\)</span>, and the temperature
+approaches <span class="math inline">\(T_a\)</span> as <span class="math inline">\(t\to\infty\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-22.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>ambient &lt;- 22
+initial &lt;- 82
+k &lt;- 0.12
+Tmodel &lt;- function(t) ambient + (initial - ambient)*exp(-k*t)
+time &lt;- seq(0, 30, length.out = 301)
+plot(time, Tmodel(time), type = "l", lwd = 2,
+     xlab = "Time (min)", ylab = "Temperature (C)",
+     main = "Cooling model")
+abline(h = ambient, lty = 2)</code></pre></div>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-a-diagram-03.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure A.3. A model temperature approaches the ambient
+temperature without crossing it.</em></p>
+</div>
+<p><strong>Interpretation matters.</strong> A model parameter has units:
+here <span class="math inline">\(k\)</span> is measured in inverse
+minutes. Without units, it is easy to compare incompatible rates or
+misinterpret a numerical result.</p>
+<h2 id="loops-and-conditional-statements">Loops and Conditional
+Statements</h2>
+<p>Many calculations can be performed directly on vectors, but loops are
+useful when a calculation must be repeated in a sequence of steps.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-23.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>for (n in c(10, 100, 1000)) {
+  estimate &lt;- midpoint_sum(function(x) x^2, 0, 2, n)
+  cat("n =", n, ": estimate =", round(estimate, 6), "\n")
+}</code></pre></div>
+<p>The braces enclose the commands repeated for each value of
+<code>n</code>. The function <code>cat()</code> prints a readable
+message; <code>"</code><br/>
+<code>n"</code> starts a new line.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-24.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>error &lt;- abs(estimate - 8/3)
+if (error &lt; 0.001) {
+  cat("The approximation meets the tolerance.\n")
+} else {
+  cat("Increase the number of subintervals.\n")
+}</code></pre></div>
+<p>A conditional statement chooses between actions based on a logical
+test. Notice that <code>if</code> expects a single <code>TRUE</code> or
+<code>FALSE</code> value, not a vector of many logical values.</p>
+<h2 id="debugging-understanding-error-messages">Debugging: Understanding
+Error Messages</h2>
+<p>When code fails, read the error message carefully and identify the
+first line that caused the problem. Common issues include:</p>
+<ol type="1">
+<li><p><strong>Object not found:</strong> a variable was misspelled, not
+created, or created only in an earlier session.</p></li>
+<li><p><strong>Unexpected symbol:</strong> a missing comma, operator, or
+closing parenthesis makes the command syntactically invalid.</p></li>
+<li><p><strong>Non-numeric argument:</strong> a text value was used
+where arithmetic requires numbers.</p></li>
+<li><p><strong>Wrong domain:</strong> a function was evaluated outside
+its real domain, producing <code>NaN</code> or a warning.</p></li>
+<li><p><strong>File not found:</strong> the working directory or
+filename is incorrect.</p></li>
+<li><p><strong>Blank or clipped graph:</strong> the plotted range is
+inappropriate or the output contains non-finite values.</p></li>
+</ol>
+<p><strong>A debugging checklist:</strong> run the script from the top;
+print intermediate values; check <code>length()</code>,
+<code>class()</code>, and <code>str()</code>; simplify the problem;
+compare with a hand calculation; and change only one issue at a
+time.</p>
+<h2 id="reproducible-work-and-project-organization">Reproducible Work
+and Project Organization</h2>
+<p>For each chapter project, create a folder containing the script, any
+needed input data, and the final figures. A simple structure is:</p>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-a-25.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>chapter_project/
+  analysis.R
+  data/
+  figures/
+  notes.txt</code></pre></div>
+<p>In RStudio, creating an <em>RStudio Project</em> helps keep related
+files together. The analysis should be rerunnable from a fresh R session
+without relying on objects created manually in the Console.</p>
+<h3 class="unnumbered" id="saving-a-figure">Saving a figure</h3>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-a-26.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>png("cooling_curve.png", width = 1000, height = 700,
+    res = 140)
+plot(time, Tmodel(time), type = "l", lwd = 2,
+     xlab = "Time (min)", ylab = "Temperature (C)")
+abline(h = ambient, lty = 2)
+dev.off()</code></pre></div>
+<p>The <code>png()</code> command opens an image device; subsequent
+plotting commands draw into that file. <code>dev.off()</code> closes the
+device and completes the image. Ensure the output directory exists
+before saving into a subfolder.</p>
+<h3 class="unnumbered" id="reporting-an-answer-professionally">Reporting
+an answer professionally</h3>
+<p>A complete computational answer includes the mathematical model,
+parameter values and units, the method, the numerical result, and a
+brief interpretation. Avoid reporting a number without explaining what
+it means.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-27.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>target &lt;- 40
+threshold &lt;- uniroot(function(t) Tmodel(t) - target,
+                     interval = c(0, 30))$root
+cat("The model reaches", target, "C at about",
+    round(threshold, 2), "minutes.\n")</code></pre></div>
+<p>The code above assumes the target temperature lies between the
+initial and modeled temperature at 30 minutes. Check the interval before
+running <code>uniroot()</code> for a different target.</p>
+<h2 id="guided-laboratory-a1-a-derivative-and-its-tangent-line">Guided
+Laboratory A1: A Derivative and Its Tangent Line</h2>
+<p><strong>Question.</strong> For <span class="math inline">\(f(x)=x^3-3x+2\)</span>, find the tangent line at
+<span class="math inline">\(x=2\)</span> and compare it with the
+graph.</p>
+<p><strong>Mathematics first.</strong> Since <span class="math inline">\(f'(x)=3x^2-3\)</span>, we have <span class="math inline">\(f(2)=4\)</span> and <span class="math inline">\(f'(2)=9\)</span>. The tangent line is <span class="math inline">\(L(x)=4+9(x-2)\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-28.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^3 - 3*x + 2
+L &lt;- function(x) 4 + 9*(x - 2)
+x &lt;- seq(1.2, 2.6, length.out = 300)
+plot(x, f(x), type = "l", lwd = 2,
+     xlab = "x", ylab = "y",
+     main = "Function and tangent line")
+lines(x, L(x), lty = 2, lwd = 2)
+points(2, 4, pch = 19)
+legend("topleft", c("f(x)", "Tangent at x=2"),
+       lty = c(1, 2), lwd = 2, bty = "n")
+central_diff(f, 2)</code></pre></div>
+<p><strong>Reflect.</strong> How does the tangent line’s approximation
+error change as you move farther from <span class="math inline">\(x=2\)</span>? Explain using the curvature of the
+cubic.</p>
+<h2 id="guided-laboratory-a2-accumulation-from-a-rate">Guided Laboratory
+A2: Accumulation from a Rate</h2>
+<p><strong>Question.</strong> A system receives fluid at rate <span class="math inline">\(q(t)=3+0.4t\)</span> liters per minute for <span class="math inline">\(0\le t\le10\)</span>. Estimate the total amount
+received and verify it analytically.</p>
+<p><strong>Mathematics first.</strong> <span class="math display">\[Q=\int_0^{10}(3+0.4t)\,dt=\left[3t+0.2t^2\right]_0^{10}=50\text{
+liters}.\]</span></p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-29.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>q &lt;- function(t) 3 + 0.4*t
+midpoint_sum(q, 0, 10, n = 20)
+integrate(q, 0, 10)$value</code></pre></div>
+<p><strong>Reflect.</strong> Why does multiplying rate (liters/minute)
+by time (minutes) yield liters? How would the integral change if the
+rate could be negative?</p>
+<h2 id="guided-laboratory-a3-threshold-time-and-model-checking">Guided
+Laboratory A3: Threshold Time and Model Checking</h2>
+<p><strong>Question.</strong> For the cooling model introduced earlier
+in this appendix, find when the temperature reaches <span class="math inline">\(40^\circ\)</span>C. Compare numerical and
+analytical solutions.</p>
+<p><strong>Mathematics first.</strong> Solve <span class="math inline">\(40=22+60e^{-0.12t}\)</span>, so <span class="math inline">\(e^{-0.12t}=0.3\)</span> and <span class="math display">\[t=-\frac{\ln(0.3)}{0.12}\approx 10.03\text{
+minutes}.\]</span></p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/appendix-a-30.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>analytic_time &lt;- -log(0.3) / 0.12
+numeric_time &lt;- uniroot(function(t) Tmodel(t) - 40,
+                        interval = c(0, 30))$root
+c(analytic = analytic_time, numerical = numeric_time)
+Tmodel(numeric_time)</code></pre></div>
+<p><strong>Reflect.</strong> If the ambient temperature were higher than
+<span class="math inline">\(40^\circ\)</span>C, would this cooling model
+ever reach <span class="math inline">\(40^\circ\)</span>C? Explain
+before changing the code.</p>
+<h2 id="quick-reference-r-commands-used-in-this-book">Quick Reference: R
+Commands Used in This Book</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command</th>
+<th style="text-align: left;">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Command</td>
+<td style="text-align: left;">Purpose</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>&lt;-</code></td>
+<td style="text-align: left;">Assign a value to a name</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>c(...)</code></td>
+<td style="text-align: left;">Combine values into a vector</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>seq(...)</code></td>
+<td style="text-align: left;">Create equally spaced input values</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>length(x)</code></td>
+<td style="text-align: left;">Count elements in a vector</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>function(x)</code></td>
+<td style="text-align: left;">Define a reusable mathematical
+function</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sqrt, exp, log</code></td>
+<td style="text-align: left;">Square root, exponential, natural
+logarithm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>sin, cos, tan</code></td>
+<td style="text-align: left;">Trigonometric functions using radians</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>plot, lines, curve</code></td>
+<td style="text-align: left;">Create and extend graphs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>abline, legend, grid</code></td>
+<td style="text-align: left;">Add reference lines, labels, and grid</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>sum, mean, round</code></td>
+<td style="text-align: left;">Summarize and format numerical
+results</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>integrate(f,a,b)</code></td>
+<td style="text-align: left;">Numerically estimate a definite
+integral</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>uniroot(f, interval)</code></td>
+<td style="text-align: left;">Locate a root on a sign-changing
+interval</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>data.frame(...)</code></td>
+<td style="text-align: left;">Construct a rectangular data table</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>read.csv(...)</code></td>
+<td style="text-align: left;">Import comma-separated data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>head, str, class</code></td>
+<td style="text-align: left;">Inspect the structure of an object</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>cat(...)</code></td>
+<td style="text-align: left;">Print explanatory text and results</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>png(...), dev.off()</code></td>
+<td style="text-align: left;">Save a plot to an image file</td>
+</tr>
+</tbody>
+</table>
+<h2 id="practice-exercises">Practice Exercises</h2>
+<p><strong>Part I: First steps</strong></p>
+<ol type="1">
+<li><p>Evaluate <span class="math inline">\(\sqrt{49}+3^2\)</span> in R.
+Compare with a hand calculation.</p></li>
+<li><p>Create a variable <code>height</code> equal to 2.5 and compute
+the volume of a cube with that side length. Label the units.</p></li>
+<li><p>Construct 11 equally spaced numbers between <span class="math inline">\(-1\)</span> and 1. Print the first, middle, and
+last entries.</p></li>
+<li><p>Define <span class="math inline">\(f(x)=2x^2-5x+1\)</span> as an
+R function. Evaluate <span class="math inline">\(f(-1)\)</span>, <span class="math inline">\(f(0)\)</span>, and <span class="math inline">\(f(3)\)</span>.</p></li>
+<li><p>Explain the difference between <code>=</code> and <code>==</code>
+in typical R code. Explain why <code>2x</code> is invalid
+syntax.</p></li>
+<li><p>Evaluate <span class="math inline">\(\sin(60^\circ)\)</span>
+correctly using radians. Explain why <code>sin(60)</code> gives a
+different result.</p></li>
+</ol>
+<p><strong>Part II: Graphs and calculus</strong></p>
+<ol type="1">
+<li><p>Plot <span class="math inline">\(f(x)=x^2-4x+3\)</span> on <span class="math inline">\([-1,5]\)</span>. Add the horizontal axis and label
+both intercepts.</p></li>
+<li><p>Plot <span class="math inline">\(\sin x\)</span> and <span class="math inline">\(\cos x\)</span> on <span class="math inline">\([0,2\pi]\)</span> with distinct line styles and a
+legend.</p></li>
+<li><p>Create a numerical table for <span class="math inline">\(\lim_{x\to1}(x^2-1)/(x-1)\)</span>, approaching
+from both sides. Explain why the expression is undefined at 1.</p></li>
+<li><p>Use <code>central_diff()</code> to estimate the derivative of
+<span class="math inline">\(\ln x\)</span> at <span class="math inline">\(x=2\)</span>. Compare with the exact
+derivative.</p></li>
+<li><p>Approximate <span class="math inline">\(\int_0^1(1+x^2)\,dx\)</span> with midpoint sums
+using <span class="math inline">\(n=10,100,1000\)</span>. Compare with
+<span class="math inline">\(4/3\)</span>.</p></li>
+<li><p>Use <code>integrate()</code> to estimate <span class="math inline">\(\int_0^2e^{-x^2}\,dx\)</span>. Explain why
+numerical integration is useful here.</p></li>
+<li><p>Use <code>uniroot()</code> to solve <span class="math inline">\(x^3-x-1=0\)</span> on <span class="math inline">\([1,2]\)</span>. Verify the residual by evaluating
+the function at the reported root.</p></li>
+<li><p>For <span class="math inline">\(s(t)=t^3-6t^2+9t\)</span>, plot
+position and approximate velocity. Identify when the particle changes
+direction and justify analytically.</p></li>
+</ol>
+<p><strong>Part III: Modeling and reproducibility</strong></p>
+<ol type="1">
+<li><p>Modify the cooling model to use <span class="math inline">\(T_a=18\)</span>, <span class="math inline">\(T_0=75\)</span>, and <span class="math inline">\(k=0.08\)</span>. Plot it and estimate the time to
+reach <span class="math inline">\(30^\circ\)</span>C.</p></li>
+<li><p>Create a data frame of time values <span class="math inline">\(0,1,\ldots,10\)</span> and their modeled
+temperatures from Exercise A.15. Explain the meaning of each
+column.</p></li>
+<li><p>Save a graph as a PNG. Close and reopen RStudio, rerun the saved
+script, and verify that the graph can be recreated.</p></li>
+<li><p>Deliberately create a syntax error, an undefined-object error,
+and a domain error. Record the message and explain how to correct each
+one.</p></li>
+<li><p>Write a short paragraph reporting a numerical integral, including
+its mathematical definition, units, numerical method, and
+interpretation.</p></li>
+<li><p>Explain why a numerical derivative can become less accurate when
+<span class="math inline">\(h\)</span> is made extremely small.
+Investigate several values of <span class="math inline">\(h\)</span>
+experimentally.</p></li>
+</ol>
+<h2 id="mini-project-a-reproducible-calculus-investigation">Mini-Project: A
+Reproducible Calculus Investigation</h2>
+<p><strong>Scenario.</strong> A quantity is modeled by <span class="math display">\[M(t)=5+30e^{-0.25t},\qquad 0\le t\le20,\]</span>
+where <span class="math inline">\(M\)</span> is measured in milligrams
+and <span class="math inline">\(t\)</span> in hours. The formula is a
+simplified model intended for learning, not a clinical dosing
+recommendation.</p>
+<ol type="1">
+<li><p>Identify the initial quantity and long-run level, and justify
+them mathematically.</p></li>
+<li><p>Derive <span class="math inline">\(M'(t)\)</span> and explain
+its sign and units.</p></li>
+<li><p>Plot <span class="math inline">\(M(t)\)</span> with labeled axes
+and a horizontal line at the long-run level.</p></li>
+<li><p>Use central differences to estimate <span class="math inline">\(M'(4)\)</span> and compare with the exact
+derivative.</p></li>
+<li><p>Find analytically and numerically the time when <span class="math inline">\(M(t)=10\)</span> mg.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^{20}M(t)\,dt\)</span>
+analytically and numerically. State the units and explain why the
+integral is not itself a single measurement of <span class="math inline">\(M\)</span>.</p></li>
+<li><p>Prepare a single R script that reproduces all computations and
+saves the graph. Include a short written interpretation and at least two
+limitations of the model.</p></li>
+</ol>
+<p><strong>Suggested assessment (100 points):</strong> mathematical
+reasoning (30), correct and readable R code (25), graph quality and
+units (15), numerical verification (15), interpretation and limitations
+(15).</p>
+<h2 id="closing-perspective">Closing Perspective</h2>
+<p>R is most valuable when it supports rather than replaces mathematical
+understanding. A plot can suggest a limit but cannot prove it. A
+numerical derivative can check a symbolic result but does not explain
+the differentiation rule. A numerical integral can estimate accumulation
+but must be interpreted with units and assumptions. As you progress
+through this book, follow the same habit: <em>reason mathematically,
+compute carefully, visualize clearly, and explain what the result
+means.</em></p>
+<footer><a href="chapter10.html">← Parametric Equations and Polar Coordinates</a><a href="appendix-b.html">Introduction to Python and Jupyter →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#what-are-r-and-rstudio">What Are R and RStudio?</a></li><li><a href="#installation-and-your-first-session">Installation and Your First
+Session</a></li><li><a href="#the-console-prompts-and-scripts">The Console, Prompts, and
+Scripts</a></li><li><a href="#arithmetic-objects-and-assignment">Arithmetic, Objects, and
+Assignment</a></li><li><a href="#numbers-logical-values-and-missing-values">Numbers, Logical
+Values, and Missing Values</a></li><li><a href="#vectors-calculating-at-many-inputs">Vectors: Calculating at Many
+Inputs</a></li><li><a href="#writing-mathematical-functions">Writing Mathematical
+Functions</a></li><li><a href="#essential-mathematical-functions">Essential Mathematical
+Functions</a></li><li><a href="#creating-clear-graphs-in-base-r">Creating Clear Graphs in Base
+R</a></li><li><a href="#reading-and-interpreting-numerical-output">Reading and
+Interpreting Numerical Output</a></li><li><a href="#numerical-limits-what-a-table-can-and-cannot-show">Numerical
+Limits: What a Table Can and Cannot Show</a></li><li><a href="#numerical-differentiation">Numerical Differentiation</a></li><li><a href="#riemann-sums-and-numerical-integration">Riemann Sums and
+Numerical Integration</a></li><li><a href="#solving-equations-numerically">Solving Equations
+Numerically</a></li><li><a href="#working-with-data-frames-and-csv-files">Working with Data Frames
+and CSV Files</a></li><li><a href="#a-first-modeling-example-exponential-cooling">A First Modeling
+Example: Exponential Cooling</a></li><li><a href="#loops-and-conditional-statements">Loops and Conditional
+Statements</a></li><li><a href="#debugging-understanding-error-messages">Debugging: Understanding
+Error Messages</a></li><li><a href="#reproducible-work-and-project-organization">Reproducible Work
+and Project Organization</a></li><li><a href="#guided-laboratory-a1-a-derivative-and-its-tangent-line">Guided
+Laboratory A1: A Derivative and Its Tangent Line</a></li><li><a href="#guided-laboratory-a2-accumulation-from-a-rate">Guided Laboratory
+A2: Accumulation from a Rate</a></li><li><a href="#guided-laboratory-a3-threshold-time-and-model-checking">Guided
+Laboratory A3: Threshold Time and Model Checking</a></li><li><a href="#quick-reference-r-commands-used-in-this-book">Quick Reference: R
+Commands Used in This Book</a></li><li><a href="#practice-exercises">Practice Exercises</a></li><li><a href="#mini-project-a-reproducible-calculus-investigation">Mini-Project: A
+Reproducible Calculus Investigation</a></li><li><a href="#closing-perspective">Closing Perspective</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script></body></html>

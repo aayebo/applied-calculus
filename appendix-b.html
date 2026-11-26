@@ -1,0 +1,771 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Introduction to Python and Jupyter | Applied Calculus Using R and Python</title><link rel="stylesheet" href="site.css"><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav class="site-nav" aria-label="Book navigation"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" type="search" placeholder="Search chapters"><div id="search-results" class="search-results" aria-live="polite"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html" class="active" aria-current="page">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button class="menu" aria-expanded="false">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="introduction-to-python-and-jupyter">Introduction to Python and
+Jupyter</h1>
+<p><strong>Purpose.</strong> This appendix assumes no programming
+experience. Its goal is to help you use Python to investigate,
+visualize, and verify calculus—not to replace mathematical reasoning.
+First formulate the mathematical problem, then write code, check the
+result, and explain what it means.</p>
+<p><strong>Learning goals.</strong> By the end, you should be able to
+open a Jupyter notebook; create and execute cells; distinguish Python
+objects and data types; use NumPy arrays; write functions; produce
+labeled plots; approximate limits, derivatives, integrals, and roots;
+work with a small dataset; recognize common errors; and share
+reproducible work.</p>
+<h2 id="what-are-python-and-jupyter">What Are Python and Jupyter?</h2>
+<p><strong>Python</strong> is a general-purpose programming language. In
+calculus, it helps us evaluate mathematical expressions, process arrays
+of values, make graphs, approximate derivatives and integrals, and
+analyze mathematical models. Python is free and open source.</p>
+<p><strong>Jupyter</strong> provides interactive notebooks combining
+executable code, explanatory text, mathematical notation, and displayed
+results. A notebook file ends in <code>.ipynb</code>. A notebook is not
+the Python language itself: Python runs through a computational
+<em>kernel</em> connected to the notebook.</p>
+<p><strong>JupyterLab</strong> is a browser-based workspace for
+notebooks and other files. <strong>Jupyter Notebook</strong> is another
+notebook interface. Both can run the examples in this appendix. You can
+also use Python in a regular <code>.py</code> script or an editor such
+as VS Code; the mathematics remains the same.</p>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-b-diagram-01.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure B.1. Conceptual notebook layout; not a screenshot. The
+example is illustrative of input and output cells.</em></p>
+</div>
+<h2 id="installing-python-and-opening-jupyter">Installing Python and
+Opening Jupyter</h2>
+<p>A beginner-friendly route is to install a Python distribution that
+includes JupyterLab and scientific packages, such as Anaconda. Another
+route is to install Python from <a class="uri" href="https://www.python.org/">https://www.python.org/</a> and add packages using
+<code>pip</code>. Choose one route and follow the current installation
+instructions for your operating system.</p>
+<p><strong>Option 1: Anaconda.</strong> Download a suitable installer
+from <a class="uri" href="https://www.anaconda.com/download">https://www.anaconda.com/download</a>. Follow the installer
+instructions and launch JupyterLab through the distribution’s interface,
+or through its terminal tools. Exact menu names vary by version.</p>
+<p><strong>Option 2: Python and pip.</strong> After installing Python,
+open a terminal and run the following commands. Depending on your
+system, <code>python3</code> may replace <code>python</code>.</p>
+<div class="code-shell"><div class="code-bar">Code<a download="" href="code/appendix-b-01.sh">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>python -m pip install jupyterlab numpy matplotlib scipy
+python -m jupyter lab</code></pre></div>
+<p>These commands belong in a <em>terminal</em>, not a Python notebook
+cell. The second command launches JupyterLab, typically opening a
+browser tab. For coursework, a virtual environment is recommended to
+keep project dependencies separate.</p>
+<p><strong>First session:</strong> create a new notebook with a Python
+kernel; rename it <code>appendix_b_practice.ipynb</code>; type
+<code>2 + 3</code> into a code cell; run the cell using Shift+Enter. A
+result of 5 should appear. Save the notebook using the save control or
+keyboard shortcut. If the notebook shows a message that no kernel is
+available, select or install a Python kernel. Restarting the kernel
+clears objects stored in memory, even if the notebook still displays
+earlier outputs.</p>
+<h2 id="cells-execution-order-and-markdown">Cells, Execution Order, and
+Markdown</h2>
+<p>A notebook contains <strong>code cells</strong> (executed by Python)
+and <strong>Markdown cells</strong> (used for prose, headings, and
+mathematical notation). Use Markdown to explain the model, show
+derivations, and interpret numerical output.</p>
+<ol type="1">
+<li><p>In a Markdown cell, type
+<code># My first calculus investigation</code> to create a
+heading.</p></li>
+<li><p>To display an equation, enter <code>$$f(x)=x^2+1$$</code> in a
+Markdown cell and render it.</p></li>
+<li><p>In a code cell, type the example below and run it with
+Shift+Enter.</p></li>
+</ol>
+<div class="sourceCode" id="cb2"><div class="code-shell"><div class="code-bar">Code<button class="copy" type="button">Copy code</button></div><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="op">&lt;</span>!-- <span class="ex">--</span><span class="op">&gt;</span></span></code></pre></div></div>
+<p><a href="code/appendix-b-01.sh">Download code</a> x = 2 f = x**2 + 1
+print(f)</p>
+<p>The output is 5. Notice that <code>**</code> means exponentiation in
+Python, while <code>^</code> does <em>not</em> mean exponentiation.</p>
+<p><strong>Execution order matters.</strong> If you execute a cell using
+<code>x</code> before the cell assigning <code>x = 2</code>, Python may
+report a <code>NameError</code>. When sharing a notebook, restart the
+kernel and run all cells from top to bottom. This is an important
+reproducibility check.</p>
+<h2 id="arithmetic-variables-and-mathematical-notation">Arithmetic,
+Variables, and Mathematical Notation</h2>
+<p>Python supports addition <code>+</code>, subtraction <code>-</code>,
+multiplication <code>*</code>, division <code>/</code>, exponentiation
+<code>**</code>, and parentheses. Use a descriptive name for a quantity
+whenever possible.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-03.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>radius = 3
+area = 3.141592653589793 * radius**2
+print(area)
+print(7 / 2)   # 3.5: ordinary division
+print(7 // 2)  # 3: floor division
+print(7 % 2)   # 1: remainder</code></pre></div>
+<p>The symbol <code>=</code> assigns a value; <code>==</code> tests
+equality. Comments begin with <code>#</code> and are not executed. Names
+are case-sensitive: <code>Time</code> and <code>time</code> refer to
+different objects.</p>
+<p>If <span class="math inline">\(A=\pi r^2\)</span>, Python requires
+explicit multiplication: <code>math.pi * r**2</code>, not
+<code>pi r^2</code>. Writing the expression correctly is part of
+translating mathematics into code.</p>
+<h2 id="numbers-strings-booleans-and-missing-values">Numbers, Strings,
+Booleans, and Missing Values</h2>
+<p><code>int</code> represents integers; <code>float</code> represents
+approximate real numbers; <code>str</code> represents text; and
+<code>bool</code> represents <code>True</code> or <code>False</code>.
+The value <code>None</code> is often used for a missing or unspecified
+value, but it is not the same as the floating-point <code>nan</code>
+used in numerical arrays.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-04.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>count = 5
+step = 0.01
+label = "time (seconds)"
+valid = step &gt; 0
+print(type(count), type(step), type(label), valid)</code></pre></div>
+<p>Computers store most real numbers approximately. For example,
+<code>0.1 + 0.2 == 0.3</code> may evaluate to <code>False</code> because
+of floating-point representation. To compare computed numbers, use a
+tolerance rather than exact equality.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-05.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+print(math.isclose(0.1 + 0.2, 0.3))</code></pre></div>
+<h2 id="importing-mathematical-libraries">Importing Mathematical
+Libraries</h2>
+<p>The built-in <code>math</code> module provides constants and
+functions for individual numbers. NumPy supports numerical arrays;
+Matplotlib makes graphs; SciPy provides numerical algorithms such as
+integration and root-finding.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-06.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import integrate, optimize
+
+print(math.pi)
+print(math.sqrt(49))
+print(np.sin(np.pi / 2))</code></pre></div>
+<p>The short names <code>np</code> and <code>plt</code> are conventions,
+not new languages. <code>math.sin</code> operates on one ordinary
+number; <code>np.sin</code> can operate on an entire NumPy array.
+Trigonometric functions use radians. To convert degrees to radians, use
+<code>np.deg2rad(30)</code>. For example,
+<code>np.sin(np.deg2rad(30))</code> is approximately <span class="math inline">\(0.5\)</span>.</p>
+<h2 id="lists-and-numpy-arrays">Lists and NumPy Arrays</h2>
+<p>A Python list stores a sequence of items. A NumPy array supports
+efficient elementwise arithmetic, making it particularly useful for
+evaluating functions at many inputs.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>values = [1, 2, 3]
+print(values * 2)           # repeats the list
+x = np.array([1, 2, 3])
+print(x * 2)                # array([2, 4, 6])
+print(x**2 + 1)             # array([2, 5, 10])</code></pre></div>
+<p>The distinction is essential: Python lists and NumPy arrays behave
+differently. In the calculus laboratories, use arrays when you want
+mathematical operations applied element by element.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x = np.linspace(-2, 2, 9)
+y = x**2
+print(x)
+print(y)</code></pre></div>
+<p><code>np.linspace(a,b,n)</code> creates <span class="math inline">\(n\)</span> equally spaced points including the
+endpoints. Here, the step size is <span class="math inline">\(0.5\)</span>. By contrast,
+<code>np.arange(0,1,0.2)</code> uses a step size and may be affected by
+floating-point rounding.</p>
+<h2 id="writing-mathematical-functions">Writing Mathematical
+Functions</h2>
+<p>A function collects a mathematical rule into a reusable block. Python
+uses the keyword <code>def</code>; the function body is indented. The
+<code>return</code> statement specifies the output.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def f(x):
+    return x**2 - 3*x + 2
+
+print(f(0))
+print(f(2))
+print(f(np.array([0, 1, 2, 3])))</code></pre></div>
+<p>For this polynomial, <span class="math inline">\(f(0)=2\)</span> and
+<span class="math inline">\(f(2)=0\)</span>. The same function also
+accepts a NumPy array because its operations are elementwise. A function
+that uses <code>math.exp</code> may not accept an array; use
+<code>np.exp</code> for array-based evaluations.</p>
+<p>Define <span class="math inline">\(g(t)=5e^{-0.4t}+2\)</span> using
+<code>np.exp</code>. Evaluate <span class="math inline">\(g(0)\)</span>,
+<span class="math inline">\(g(5)\)</span>, and <span class="math inline">\(g(10)\)</span>. Explain why the outputs approach 2
+as <span class="math inline">\(t\)</span> increases.</p>
+<h2 id="plotting-mathematical-functions">Plotting Mathematical
+Functions</h2>
+<p>A good graph includes an informative title, labeled axes, units when
+relevant, and a legend when more than one curve is shown. The following
+code plots <span class="math inline">\(f(x)=x^2-3x+2\)</span>.</p>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-b-10.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x = np.linspace(-1, 4, 400)
+y = f(x)
+plt.figure(figsize=(7, 4.5))
+plt.plot(x, y, label="f(x) = x^2 - 3x + 2")
+plt.axhline(0, color="gray", linewidth=0.8)
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.title("A quadratic function")
+plt.grid(alpha=0.25)
+plt.legend()
+plt.show()</code></pre></div>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-b-diagram-02.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure B.2. A quadratic with zeros at <span class="math inline">\(x=1\)</span> and <span class="math inline">\(x=2\)</span>. The plot is a visual aid, not a
+substitute for solving the equation.</em></p>
+</div>
+<h3 class="unnumbered" id="graphing-two-functions-on-the-same-axes">Graphing two functions on
+the same axes</h3>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-b-11.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x = np.linspace(0, 3, 300)
+plt.plot(x, np.exp(-x), label="exp(-x)")
+plt.plot(x, 1 / (1 + x), label="1/(1+x)")
+plt.xlabel("x")
+plt.ylabel("Function value")
+plt.title("Two decreasing functions")
+plt.legend()
+plt.grid(alpha=0.25)
+plt.show()</code></pre></div>
+<p>A line plot across a discontinuity can be misleading: connecting
+points on opposite sides of a vertical asymptote may draw a false line.
+Plot the two sides separately or mask invalid values.</p>
+<h2 id="reading-and-interpreting-numerical-output">Reading and
+Interpreting Numerical Output</h2>
+<p>Printed values may contain many digits, but not all are
+scientifically meaningful. A model’s assumptions, units, and measurement
+precision should guide reporting.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>rate = 0.34789215
+print(f"Estimated rate: {rate:.3f} per hour")
+print(f"After 4 hours: {np.exp(-rate*4):.2%} remains")</code></pre></div>
+<p>The <code>f</code> before the quotation mark creates an
+<em>f-string</em>. The format <code>:.3f</code> prints three digits
+after the decimal point, while <code>:.2%</code> prints a percentage to
+two decimal places. Formatting changes the display, not the stored
+number.</p>
+<h2 id="numerical-limits-evidence-and-caution">Numerical Limits:
+Evidence and Caution</h2>
+<p>Consider <span class="math inline">\(\lim_{x\to
+2}(x^2-4)/(x-2)\)</span>. The original expression is undefined at <span class="math inline">\(x=2\)</span>, but it simplifies to <span class="math inline">\(x+2\)</span> for <span class="math inline">\(x\ne2\)</span>, so the limit is 4.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-13.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def quotient(x):
+    return (x**2 - 4) / (x - 2)
+
+for h in [0.1, 0.01, 0.001, 0.0001]:
+    print(f"h={h:.4g}, value={quotient(2+h):.8f}")</code></pre></div>
+<p>The table suggests the limit is 4, but the algebra establishes it.
+Very small values of <span class="math inline">\(h\)</span> can produce
+cancellation and rounding errors. Never conclude that a limit exists
+solely because a few numerical values appear stable.</p>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-b-diagram-03.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure B.3. A removable discontinuity at <span class="math inline">\((2,4)\)</span>: the limit exists although the
+original expression is undefined there.</em></p>
+</div>
+<h2 id="numerical-differentiation">Numerical Differentiation</h2>
+<p>The derivative is defined by the limit <span class="math inline">\(f'(a)=\lim_{h\to0}[f(a+h)-f(a)]/h\)</span>. A
+centered difference often gives a more accurate approximation than a
+forward difference for smooth functions: <span class="math display">\[f'(a)\approx
+\frac{f(a+h)-f(a-h)}{2h}.\]</span></p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-14.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def derivative_centered(fun, a, h=1e-4):
+    return (fun(a+h) - fun(a-h)) / (2*h)
+
+def cubic(x):
+    return x**3 - 2*x
+
+estimate = derivative_centered(cubic, 2)
+exact = 3*2**2 - 2
+print(estimate, exact, abs(estimate-exact))</code></pre></div>
+<p>For <span class="math inline">\(f(x)=x^3-2x\)</span>, <span class="math inline">\(f'(2)=10\)</span>. The centered approximation
+should be close to 10. Choosing <span class="math inline">\(h\)</span>
+too large creates truncation error; choosing it extremely small may
+magnify floating-point error. This is why a smaller step is not always
+better.</p>
+<h3 class="unnumbered" id="tangent-line-approximation">Tangent-line
+approximation</h3>
+<p>At <span class="math inline">\(a=2\)</span>, the tangent line is
+<span class="math inline">\(L(x)=f(2)+f'(2)(x-2)\)</span>. We can
+compare it to the function near the contact point.</p>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-b-15.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>a = 2
+slope = derivative_centered(cubic, a)
+x = np.linspace(1.4, 2.6, 250)
+tangent = cubic(a) + slope*(x-a)
+plt.plot(x, cubic(x), label="f(x)")
+plt.plot(x, tangent, "--", label="Tangent line")
+plt.scatter([a], [cubic(a)])
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid(alpha=0.25)
+plt.show()</code></pre></div>
+<h2 id="riemann-sums-and-numerical-integration">Riemann Sums and
+Numerical Integration</h2>
+<p>A definite integral represents signed accumulation. For <span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([0,2]\)</span>, the exact value is <span class="math inline">\(\int_0^2x^2\,dx=8/3\)</span>.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-16.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def midpoint_rule(fun, a, b, n):
+    width = (b-a)/n
+    midpoints = a + (np.arange(n)+0.5)*width
+    return width*np.sum(fun(midpoints))
+
+for n in [4, 10, 50, 200]:
+    print(n, midpoint_rule(lambda x: x**2, 0, 2, n))
+print("Exact:", 8/3)</code></pre></div>
+<p>The midpoint rule estimates the integral using <span class="math inline">\(n\)</span> rectangles. As <span class="math inline">\(n\)</span> increases, the estimate generally
+improves for this smooth example. The approximation does not become an
+exact symbolic integral simply because it uses many rectangles.</p>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-b-diagram-04.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure B.4. Four midpoint rectangles approximate the area under
+<span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([0,2]\)</span>.</em></p>
+</div>
+<h3 class="unnumbered" id="adaptive-numerical-integration-with-scipy">Adaptive numerical
+integration with SciPy</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-17.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from scipy.integrate import quad
+value, error_estimate = quad(lambda x: x**2, 0, 2)
+print(value, error_estimate)</code></pre></div>
+<p><code>quad</code> returns an integral estimate and an estimated
+absolute error. This is numerical evidence; the exact result <span class="math inline">\(8/3\)</span> comes from the Fundamental Theorem of
+Calculus. The error estimate is not a guarantee for every pathological
+integrand.</p>
+<h2 id="solving-equations-numerically">Solving Equations
+Numerically</h2>
+<p>A root of <span class="math inline">\(g(x)\)</span> is a number <span class="math inline">\(c\)</span> satisfying <span class="math inline">\(g(c)=0\)</span>. For <span class="math inline">\(g(x)=\cos x-x\)</span>, a sign change between 0
+and 1 ensures at least one root by continuity and the Intermediate Value
+Theorem.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-18.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def g(x):
+    return np.cos(x) - x
+
+root = optimize.brentq(g, 0, 1)
+print(f"Root: {root:.8f}")
+print(f"Residual: {g(root):.2e}")</code></pre></div>
+<p>The root is approximately <span class="math inline">\(0.73908513\)</span>. The residual measures how
+closely the numerical answer satisfies the equation. The method requires
+a suitable interval with opposite signs at its endpoints; a sign change
+is a useful sufficient condition, not a necessary condition for a
+root.</p>
+<h3 class="unnumbered" id="a-simple-bisection-algorithm">A simple
+bisection algorithm</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-19.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def bisection(fun, left, right, tol=1e-8):
+    if fun(left)*fun(right) &gt; 0:
+        raise ValueError("Endpoints must bracket a root")
+    while right-left &gt; tol:
+        middle = (left+right)/2
+        if fun(left)*fun(middle) &lt;= 0:
+            right = middle
+        else:
+            left = middle
+    return (left+right)/2
+
+print(bisection(g, 0, 1))</code></pre></div>
+<p>This basic educational implementation assumes a continuous function,
+a valid bracket, and finite evaluations. Production algorithms need
+additional safeguards and stopping criteria.</p>
+<h2 id="working-with-data-and-csv-files">Working with Data and CSV
+Files</h2>
+<p>A dataset may contain measurements collected at different times.
+NumPy can load simple numeric CSV files; larger data-analysis projects
+often use pandas, but pandas is not required for the following
+example.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-20.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>time = np.array([0, 2, 4, 6, 8], dtype=float)
+temperature = np.array([82, 67, 56, 48, 42], dtype=float)
+np.savetxt("cooling_data.csv",
+           np.column_stack([time, temperature]),
+           delimiter=",", header="time,temp", comments="")
+data = np.loadtxt("cooling_data.csv", delimiter=",",
+                  skiprows=1)
+print(data)</code></pre></div>
+<p>This creates a small example file in the notebook’s working directory
+and reads it back. A CSV is a plain-text table, not a notebook. Keep
+your input data separate from the analysis code.</p>
+<h2 id="an-exponential-modeling-example">An Exponential Modeling
+Example</h2>
+<p>Suppose temperature is modeled by Newton’s cooling law: <span class="math display">\[T(t)=T_a+(T_0-T_a)e^{-kt}.\]</span> Take ambient
+temperature <span class="math inline">\(T_a=22^\circ\mathrm{C}\)</span>,
+initial temperature <span class="math inline">\(T_0=82^\circ\mathrm{C}\)</span>, and <span class="math inline">\(k=0.18\,\mathrm{min}^{-1}\)</span>. Then <span class="math display">\[T'(t)=-k(T_0-T_a)e^{-kt}.\]</span> The
+derivative is negative and its magnitude decreases with time. The model
+approaches ambient temperature asymptotically.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-21.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>ambient = 22.0
+initial = 82.0
+k = 0.18
+
+def temp(t):
+    return ambient + (initial-ambient)*np.exp(-k*t)
+
+def cooling_rate(t):
+    return -k*(initial-ambient)*np.exp(-k*t)
+
+t = np.linspace(0, 20, 250)
+plt.plot(t, temp(t), label="Temperature")
+plt.axhline(ambient, linestyle="--", color="gray",
+            label="Ambient temperature")
+plt.xlabel("Time (minutes)")
+plt.ylabel("Temperature (degrees C)")
+plt.title("Newton's cooling model")
+plt.legend()
+plt.grid(alpha=0.25)
+plt.show()
+print("Rate at t=5:", cooling_rate(5))</code></pre></div>
+<div class="center">
+<figure>
+<img alt="Original diagram" src="figures/appendix-b-diagram-05.svg"/>
+<figcaption aria-hidden="true">Original diagram</figcaption>
+</figure>
+</div>
+<div class="center">
+<p><em>Figure B.5. The cooling model approaches the ambient temperature
+without crossing it.</em></p>
+</div>
+<h2 id="loops-conditionals-and-comprehensions">Loops, Conditionals, and
+Comprehensions</h2>
+<p>A loop repeats an operation. An <code>if</code> statement makes a
+decision based on a condition. Indentation is required in Python.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-22.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>for n in [4, 8, 16, 32]:
+    approximation = midpoint_rule(lambda x: x**2, 0, 2, n)
+    error = abs(approximation - 8/3)
+    print(f"n={n:2d}, error={error:.6f}")
+
+if error &lt; 0.001:
+    print("The final approximation met the tolerance.")
+else:
+    print("Increase n or use a better method.")</code></pre></div>
+<p>A list comprehension offers another compact way to create a sequence,
+such as <code>[n**2 for n in range(1,6)]</code>. Prefer readable loops
+when learning, especially if you need to explain intermediate steps.</p>
+<h2 id="debugging-and-common-errors">Debugging and Common Errors</h2>
+<p><strong>NameError:</strong> a name was not defined, often because a
+cell was not executed. <strong>SyntaxError:</strong> Python could not
+parse the command. <strong>IndentationError:</strong> the spaces in a
+code block are inconsistent. <strong>TypeError:</strong> an operation
+was applied to an incompatible object.
+<strong>ModuleNotFoundError:</strong> a package is unavailable in the
+selected kernel. <strong>ZeroDivisionError:</strong> a scalar division
+has zero in the denominator.</p>
+<p>When a cell fails, read the <em>last line</em> of the error message
+first. Check names, parentheses, capitalization, indentation, package
+imports, and the order in which cells ran. Fix one issue at a time and
+rerun the affected cells.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-23.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code># Incorrect: ^ is not exponentiation in Python.
+# y = x^2
+# Correct:
+x = 3
+y = x**2
+print(y)</code></pre></div>
+<p>Do not paste a full terminal command such as
+<code>python -m pip install numpy</code> into an ordinary Python code
+cell. Use a terminal, or the notebook’s supported package-installation
+mechanism (for example, <code>%pip install numpy</code>) when
+appropriate.</p>
+<h2 id="reproducible-notebooks-and-project-organization">Reproducible
+Notebooks and Project Organization</h2>
+<p>A reproducible notebook should state the question, explain the
+mathematical model, document assumptions and units, execute from top to
+bottom, label plots, and interpret results. Avoid relying on values
+created in an earlier interactive session.</p>
+<ol type="1">
+<li><p>Put a title, learning objective, and mathematical formulas in
+Markdown cells.</p></li>
+<li><p>Put imports near the beginning and define parameters
+explicitly.</p></li>
+<li><p>Keep reusable functions separate from calculations that use
+them.</p></li>
+<li><p>Report the computed quantity with units and appropriate
+precision.</p></li>
+<li><p>Restart the kernel and run all cells before submitting.</p></li>
+<li><p>Save the <code>.ipynb</code> file and any required data or
+exported figures together.</p></li>
+</ol>
+<h3 class="unnumbered" id="saving-a-figure">Saving a figure</h3>
+<div class="code-shell"><div class="code-bar">Text<a download="" href="code/appendix-b-24.txt">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x = np.linspace(0, 2*np.pi, 400)
+plt.plot(x, np.sin(x))
+plt.xlabel("x (radians)")
+plt.ylabel("sin(x)")
+plt.title("Sine function")
+plt.savefig("sine_curve.png", dpi=200, bbox_inches="tight")
+plt.show()</code></pre></div>
+<h2 id="guided-laboratory-b1-a-derivative-and-its-tangent-line">Guided
+Laboratory B1: A Derivative and Its Tangent Line</h2>
+<p><strong>Question.</strong> For <span class="math inline">\(f(x)=x^3-3x+1\)</span>, estimate <span class="math inline">\(f'(2)\)</span> and compare it with the exact
+derivative. Graph the tangent line at <span class="math inline">\(x=2\)</span>.</p>
+<ol type="1">
+<li><p>Differentiate by hand: <span class="math inline">\(f'(x)=3x^2-3\)</span>, so <span class="math inline">\(f'(2)=9\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(f(2)=3\)</span>. The tangent
+line is <span class="math inline">\(L(x)=3+9(x-2)\)</span>.</p></li>
+<li><p>Run the code, compare the numerical slope with 9, and inspect the
+plot near <span class="math inline">\(x=2\)</span>.</p></li>
+</ol>
+<div class="sourceCode" id="cb25"><div class="code-shell"><div class="code-bar">Code<button class="copy" type="button">Copy code</button></div><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a aria-hidden="true" href="#cb25-1" tabindex="-1"></a><span class="op">&lt;!--</span> <span class="op">--&gt;</span></span></code></pre></div></div>
+<p><a href="code/appendix-b-02.py">Download code</a> def f_lab(x):
+return x**3 - 3*x + 1</p>
+<div class="code-shell"><div class="code-bar">Code<button class="copy" type="button">Copy code</button></div><pre><code>a = 2
+slope = derivative_centered(f_lab, a)
+x = np.linspace(1.5, 2.5, 250)
+line = f_lab(a) + slope*(x-a)
+plt.plot(x, f_lab(x), label="f(x)")
+plt.plot(x, line, "--", label="Tangent")
+plt.scatter([a], [f_lab(a)])
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.show()
+print("Numerical slope:", slope)</code></pre></div>
+<p><strong>Reflect.</strong> Why does the tangent line approximate the
+function well near <span class="math inline">\(x=2\)</span> but not
+necessarily far from that point? What happens when you change the
+difference step from <span class="math inline">\(10^{-2}\)</span> to
+<span class="math inline">\(10^{-6}\)</span>?</p>
+<h2 id="guided-laboratory-b2-accumulation-from-a-rate">Guided Laboratory
+B2: Accumulation from a Rate</h2>
+<p><strong>Question.</strong> A pump transfers water at rate <span class="math inline">\(r(t)=4+0.5t\)</span> liters per minute, for <span class="math inline">\(0\le t\le 12\)</span>. How much water is
+transferred? <span class="math display">\[V=\int_0^{12}(4+0.5t)\,dt=\left[4t+0.25t^2\right]_0^{12}=84\text{
+liters}.\]</span></p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-26.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def rate(t):
+    return 4 + 0.5*t
+
+for n in [4, 12, 48, 192]:
+    print(n, midpoint_rule(rate, 0, 12, n))
+value, err = integrate.quad(rate, 0, 12)
+print("Numerical integral:", value)
+print("Exact integral:", 84)</code></pre></div>
+<p><strong>Reflect.</strong> Why do midpoint sums give the exact result
+for this linear rate (up to rounding)? Explain the meaning of the
+integral’s units.</p>
+<h2 id="guided-laboratory-b3-threshold-time-and-model-checking">Guided
+Laboratory B3: Threshold Time and Model Checking</h2>
+<p><strong>Question.</strong> Using the cooling model above, when does
+the temperature first reach <span class="math inline">\(35^\circ\mathrm{C}\)</span>? <span class="math display">\[35=22+60e^{-0.18t}\quad\Longrightarrow\quad
+t=\frac{\ln(60/13)}{0.18}.\]</span></p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/appendix-b-27.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>threshold = 35
+analytic_time = np.log((initial-ambient) /
+                       (threshold-ambient)) / k
+numerical_time = optimize.brentq(
+    lambda t: temp(t)-threshold, 0, 30)
+print("Analytic:", analytic_time)
+print("Numerical:", numerical_time)
+print("Check:", temp(numerical_time))</code></pre></div>
+<p><strong>Reflect.</strong> State the threshold time with units.
+Explain why the equation has one solution for this model and why it is
+reasonable to bracket the root on <span class="math inline">\([0,30]\)</span>.</p>
+<h2 id="quick-reference-python-commands-used-in-this-book">Quick
+Reference: Python Commands Used in This Book</h2>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><strong>Command</strong></th>
+<th style="text-align: left;"><strong>Purpose</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>print(x)</code></td>
+<td style="text-align: left;">Display a value or message.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>type(x)</code></td>
+<td style="text-align: left;">Inspect the type of an object.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>np.array([...])</code></td>
+<td style="text-align: left;">Create a numerical array.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>np.linspace(a,b,n)</code></td>
+<td style="text-align: left;">Create <span class="math inline">\(n\)</span> evenly spaced inputs.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>np.exp(x)</code>,
+<code>np.log(x)</code></td>
+<td style="text-align: left;">Exponential and natural logarithm.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>np.sin(x)</code>,
+<code>np.cos(x)</code></td>
+<td style="text-align: left;">Trigonometric functions in radians.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>np.sqrt(x)</code></td>
+<td style="text-align: left;">Square root.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>np.sum(x)</code></td>
+<td style="text-align: left;">Sum array elements.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>def f(x):</code></td>
+<td style="text-align: left;">Define a function (indent the body).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>plt.plot(x,y)</code></td>
+<td style="text-align: left;">Draw a line graph.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>plt.xlabel(...)</code></td>
+<td style="text-align: left;">Label the horizontal axis.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>plt.ylabel(...)</code></td>
+<td style="text-align: left;">Label the vertical axis.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>plt.legend()</code></td>
+<td style="text-align: left;">Display a legend for labeled curves.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>plt.savefig(...)</code></td>
+<td style="text-align: left;">Save a plot to a file.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>integrate.quad(f,a,b)</code></td>
+<td style="text-align: left;">Estimate a definite integral.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>optimize.brentq(f,a,b)</code></td>
+<td style="text-align: left;">Find a root in a valid bracket.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>abs(x)</code></td>
+<td style="text-align: left;">Absolute value.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>range(n)</code></td>
+<td style="text-align: left;">Generate integers from 0 through <span class="math inline">\(n-1\)</span>.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>np.loadtxt(...)</code></td>
+<td style="text-align: left;">Load a simple numeric text dataset.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>np.savetxt(...)</code></td>
+<td style="text-align: left;">Save a numeric array as text.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="practice-exercises">Practice Exercises</h2>
+<p>Complete these exercises in a saved notebook. For computational
+questions, include the code, labeled output, and a one- or two-sentence
+interpretation. Unless instructed otherwise, perform the mathematical
+derivation before computing.</p>
+<ol type="1">
+<li><p>Evaluate <span class="math inline">\(3^4-2(5)\)</span> in Python.
+Explain the role of <code>**</code> and <code>*</code>.</p></li>
+<li><p>Calculate <span class="math inline">\(\sin(\pi/6)\)</span> using
+NumPy. Why must the input be in radians?</p></li>
+<li><p>Create a NumPy array containing the integers 0 through 10 and
+compute their squares.</p></li>
+<li><p>Define <span class="math inline">\(f(x)=2x^3-x+4\)</span>.
+Evaluate <span class="math inline">\(f(-2)\)</span>, <span class="math inline">\(f(0)\)</span>, and <span class="math inline">\(f(3)\)</span>.</p></li>
+<li><p>Graph <span class="math inline">\(f(x)=x^2-4x+3\)</span> for
+<span class="math inline">\(-1\le x\le5\)</span>. Label its zeros and
+vertex.</p></li>
+<li><p>Graph <span class="math inline">\(e^{-x}\)</span> and <span class="math inline">\(1/(1+x)\)</span> for <span class="math inline">\(0\le x\le4\)</span>. Describe two
+differences.</p></li>
+<li><p>Investigate <span class="math inline">\(\lim_{x\to3}(x^2-9)/(x-3)\)</span> numerically.
+Prove the limit algebraically.</p></li>
+<li><p>Explain why a table alone cannot establish the existence of a
+limit.</p></li>
+<li><p>Approximate the derivative of <span class="math inline">\(x^4\)</span> at <span class="math inline">\(x=1.5\)</span> using centered differences and
+compare with the exact derivative.</p></li>
+<li><p>Repeat Exercise 9 for three step sizes. Explain changes in the
+error.</p></li>
+<li><p>Construct the tangent line to <span class="math inline">\(f(x)=\ln x\)</span> at <span class="math inline">\(x=1\)</span> and graph it with the
+function.</p></li>
+<li><p>Write a function for a left-endpoint Riemann sum on <span class="math inline">\([a,b]\)</span>.</p></li>
+<li><p>Approximate <span class="math inline">\(\int_0^3x^2\,dx\)</span>
+with midpoint sums for <span class="math inline">\(n=6,30,150\)</span>.
+Compare with 9.</p></li>
+<li><p>Use <code>integrate.quad</code> to estimate <span class="math inline">\(\int_0^1e^{-x^2}\,dx\)</span>. Explain why a
+numerical method is useful here.</p></li>
+<li><p>Solve <span class="math inline">\(x^3-x-1=0\)</span> numerically
+on <span class="math inline">\([1,2]\)</span>. Report a
+residual.</p></li>
+<li><p>Modify the bisection function to count iterations.</p></li>
+<li><p>Create and save a graph of <span class="math inline">\(T(t)=20+55e^{-0.15t}\)</span> for <span class="math inline">\(0\le t\le30\)</span>.</p></li>
+<li><p>Calculate <span class="math inline">\(T'(10)\)</span>
+analytically and numerically. Interpret its units.</p></li>
+<li><p>Find the time when the model in Exercise 17 reaches <span class="math inline">\(30^\circ\mathrm C\)</span>.</p></li>
+<li><p>Save five time–temperature observations in a CSV file and read
+them back into Python.</p></li>
+<li><p>Explain the difference between a Python list and a NumPy array
+using an example.</p></li>
+<li><p>Intentionally create a <code>NameError</code>, correct it, and
+describe what caused it.</p></li>
+<li><p>Explain why notebook cells should be rerun from top to bottom
+before submission.</p></li>
+<li><p>Create a Markdown cell with an equation, a brief derivation, and
+an interpretation of a numerical result.</p></li>
+</ol>
+<h2 id="mini-project-a-reproducible-calculus-investigation">Mini-Project: A
+Reproducible Calculus Investigation</h2>
+<p><strong>Scenario.</strong> A hypothetical medication concentration is
+modeled by <span class="math display">\[C(t)=2+18e^{-0.3t},\qquad
+t\ge0,\]</span> where <span class="math inline">\(C\)</span> is in mg/L
+and <span class="math inline">\(t\)</span> is in hours. This is a
+mathematical teaching model, not a clinical dosing recommendation.</p>
+<ol type="1">
+<li><p><strong>Mathematical setup (15 points).</strong> State the
+initial concentration, long-run concentration, and units. Explain what
+the model assumes.</p></li>
+<li><p><strong>Visualization (15 points).</strong> Plot <span class="math inline">\(C(t)\)</span> over <span class="math inline">\(0\le t\le24\)</span>, label the axes, and identify
+the horizontal asymptote.</p></li>
+<li><p><strong>Derivative (15 points).</strong> Derive <span class="math inline">\(C'(t)\)</span> by hand, estimate it
+numerically at <span class="math inline">\(t=4\)</span>, and compare the
+results.</p></li>
+<li><p><strong>Threshold (15 points).</strong> Find analytically when
+<span class="math inline">\(C(t)=5\)</span> and verify numerically using
+a bracketed root-finder.</p></li>
+<li><p><strong>Accumulation (15 points).</strong> Derive <span class="math inline">\(\int_0^{12}C(t)\,dt\)</span> analytically and
+compare with midpoint sums and adaptive numerical integration. Explain
+the units of the result.</p></li>
+<li><p><strong>Sensitivity (10 points).</strong> Repeat the threshold
+analysis for decay rates <span class="math inline">\(k=0.2,0.3,0.4\)</span> per hour while keeping the
+initial and long-run concentrations fixed.</p></li>
+<li><p><strong>Reproducibility (10 points).</strong> Organize the
+notebook with Markdown explanations, code cells, labeled graphs, and a
+concluding interpretation. Restart and run all cells
+successfully.</p></li>
+<li><p><strong>Reflection (5 points).</strong> Identify two limitations
+of the model and one question that would require additional
+data.</p></li>
+</ol>
+<p><strong>Submission.</strong> Provide the executable
+<code>.ipynb</code> notebook, any separately required data files, and a
+short PDF export if requested by your instructor. Your mathematical
+reasoning should remain understandable without executing the
+notebook.</p>
+<h2 id="closing-perspective">Closing Perspective</h2>
+<p>Python and Jupyter are tools for exploration, checking,
+visualization, and reproducibility. They complement but do not replace
+mathematical proofs and careful interpretation. When a numerical result
+disagrees with a derivation, investigate the assumptions, units, code,
+and numerical method before deciding which is correct.</p>
+<p><strong>Connection to Appendix A.</strong> R and Python use different
+syntax, but the mathematical workflow is the same: define a model,
+calculate, visualize, verify, and interpret. The paired laboratories
+throughout this textbook encourage students to recognize the
+mathematical ideas beneath the software commands.</p>
+<footer><a href="appendix-a.html">← Introduction to R and RStudio</a><a href="resources.html">Computational resources →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#what-are-python-and-jupyter">What Are Python and Jupyter?</a></li><li><a href="#installing-python-and-opening-jupyter">Installing Python and
+Opening Jupyter</a></li><li><a href="#cells-execution-order-and-markdown">Cells, Execution Order, and
+Markdown</a></li><li><a href="#arithmetic-variables-and-mathematical-notation">Arithmetic,
+Variables, and Mathematical Notation</a></li><li><a href="#numbers-strings-booleans-and-missing-values">Numbers, Strings,
+Booleans, and Missing Values</a></li><li><a href="#importing-mathematical-libraries">Importing Mathematical
+Libraries</a></li><li><a href="#lists-and-numpy-arrays">Lists and NumPy Arrays</a></li><li><a href="#writing-mathematical-functions">Writing Mathematical
+Functions</a></li><li><a href="#plotting-mathematical-functions">Plotting Mathematical
+Functions</a></li><li><a href="#reading-and-interpreting-numerical-output">Reading and
+Interpreting Numerical Output</a></li><li><a href="#numerical-limits-evidence-and-caution">Numerical Limits:
+Evidence and Caution</a></li><li><a href="#numerical-differentiation">Numerical Differentiation</a></li><li><a href="#riemann-sums-and-numerical-integration">Riemann Sums and
+Numerical Integration</a></li><li><a href="#solving-equations-numerically">Solving Equations
+Numerically</a></li><li><a href="#working-with-data-and-csv-files">Working with Data and CSV
+Files</a></li><li><a href="#an-exponential-modeling-example">An Exponential Modeling
+Example</a></li><li><a href="#loops-conditionals-and-comprehensions">Loops, Conditionals, and
+Comprehensions</a></li><li><a href="#debugging-and-common-errors">Debugging and Common Errors</a></li><li><a href="#reproducible-notebooks-and-project-organization">Reproducible
+Notebooks and Project Organization</a></li><li><a href="#guided-laboratory-b1-a-derivative-and-its-tangent-line">Guided
+Laboratory B1: A Derivative and Its Tangent Line</a></li><li><a href="#guided-laboratory-b2-accumulation-from-a-rate">Guided Laboratory
+B2: Accumulation from a Rate</a></li><li><a href="#guided-laboratory-b3-threshold-time-and-model-checking">Guided
+Laboratory B3: Threshold Time and Model Checking</a></li><li><a href="#quick-reference-python-commands-used-in-this-book">Quick
+Reference: Python Commands Used in This Book</a></li><li><a href="#practice-exercises">Practice Exercises</a></li><li><a href="#mini-project-a-reproducible-calculus-investigation">Mini-Project: A
+Reproducible Calculus Investigation</a></li><li><a href="#closing-perspective">Closing Perspective</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script></body></html>

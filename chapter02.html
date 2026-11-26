@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Limits and Continuity | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a aria-current="page" class="active" href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="limits-and-continuity">Limits and Continuity</h1>
+<p><strong>Chapter overview.</strong> Calculus begins by asking what a
+quantity approaches when its input gets close to a value. This question
+is more subtle than evaluating a formula at a point: a function may be
+undefined there, or its assigned value may disagree with its nearby
+behavior. Limits give us a rigorous language for such behavior;
+continuity tells us when the limiting and actual values agree. In
+Chapter 3, these ideas become the foundation of the derivative.<br/>
+<strong>Learning outcomes.</strong> Students will (i) estimate limits
+from tables and graphs while recognizing the limitations of numerical
+evidence; (ii) distinguish one-sided and two-sided limits; (iii) apply
+limit laws and algebraic techniques; (iv) interpret infinite limits and
+end behavior; (v) understand and use the formal epsilon–delta
+definition; (vi) classify discontinuities and apply the intermediate
+value theorem; and (vii) investigate limits and continuity using
+equivalent R and Python programs.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="a-limit-is-not-the-value-at-the-point">A
+limit is not the value at the point</h3>
+<p>The assertion <span class="math inline">\(\lim_{x\to
+a}f(x)=L\)</span> describes what happens at inputs near <span class="math inline">\(a\)</span>, not necessarily what happens at <span class="math inline">\(a\)</span>. In particular, <span class="math inline">\(f(a)\)</span> may be undefined, may equal <span class="math inline">\(L\)</span>, or may differ from <span class="math inline">\(L\)</span>. A table with inputs approaching from
+both sides is a useful exploratory tool, but finite observations cannot
+establish a limit for all nearby inputs.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 2." src="figures/chapter_02_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 2.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> Explain why <span class="math inline">\(\lim_{x\to0}\sin(x)/x=1\)</span> is consistent
+with the expression being undefined at zero. What extra statement is
+required for continuity?</p>
+<h2 id="interactive-investigation">Interactive investigation: One-sided limits</h2><div class="calc-widget" data-calc="2"><p>Move the distance toward zero. Does changing the isolated function value change either one-sided limit?</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="approaching-a-value-the-idea-of-a-limit">Approaching a value:
+the idea of a limit</h2>
+<h3 id="near-a-point-is-not-necessarily-at-the-point">Near a point is
+not necessarily at the point</h3>
+<p>Suppose a sensor measures the average rate of change of a position
+function <span class="math inline">\(s(t)\)</span> between times <span class="math inline">\(t=2\)</span> and <span class="math inline">\(t=2+h\)</span>. For <span class="math inline">\(s(t)=t^2\)</span>, the average rate is <span class="math display">\[\frac{s(2+h)-s(2)}{h}=\frac{(2+h)^2-4}{h}=4+h,\qquad
+h\ne0.\]</span> As <span class="math inline">\(h\)</span> approaches
+zero, this rate approaches <span class="math inline">\(4\)</span>. The
+expression is not defined at <span class="math inline">\(h=0\)</span>,
+yet its nearby values have a clear limiting behavior. This is precisely
+why limits matter.</p>
+<p><strong>Definition.</strong> We write <span class="math inline">\(\lim_{x\to a}f(x)=L\)</span> when the values of
+<span class="math inline">\(f(x)\)</span> approach <span class="math inline">\(L\)</span> as <span class="math inline">\(x\)</span> approaches <span class="math inline">\(a\)</span> from either side, with <span class="math inline">\(x\ne a\)</span>. The limit depends on nearby
+values, not necessarily on <span class="math inline">\(f(a)\)</span>.</p>
+<p><strong>Example — A hole does not prevent a limit.</strong> Find
+<span class="math inline">\(\lim_{x\to2}\frac{x^2-4}{x-2}\)</span>.</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(x\ne2\)</span>, factor and cancel: <span class="math inline">\(\frac{(x-2)(x+2)}{x-2}=x+2\)</span>. Therefore the
+limit is <span class="math inline">\(4\)</span>. The original expression
+is undefined at <span class="math inline">\(x=2\)</span>; substituting
+directly would yield <span class="math inline">\(0/0\)</span>, which is
+an indeterminate form, not a numerical answer.</p>
+<figure>
+<img alt="A removable hole at (2, 4): the limit exists even though the original quotient is undefined at x = 2." src="figures/chapter02-diagram-01.svg"/>
+<figcaption>
+A removable hole at <span class="math inline">(2, 4)</span>: the limit
+exists even though the original quotient is undefined at <span class="math inline"><em>x</em> = 2</span>.
+</figcaption>
+</figure>
+<h3 id="tables-are-evidence-not-proofs">Tables are evidence, not
+proofs</h3>
+<p>A table may suggest a limit, but a finite set of sample points cannot
+prove one. The function <span class="math inline">\(g(x)=\sin(\pi/(x-2))\)</span> oscillates
+infinitely often near <span class="math inline">\(x=2\)</span>; even
+very fine sampling can misrepresent its behavior. A table can also
+suffer from rounding or floating-point cancellation.</p>
+<p><strong>Example — A numerical table.</strong> Estimate <span class="math inline">\(\lim_{h\to0}\frac{\sqrt{9+h}-3}{h}\)</span> and
+verify algebraically.</p>
+<p><strong>Solution.</strong> Multiply numerator and denominator by the
+conjugate: <span class="math display">\[\frac{\sqrt{9+h}-3}{h}=\frac{1}{\sqrt{9+h}+3},\qquad
+h\ne0.\]</span> The limit is <span class="math inline">\(1/6\)</span>.
+Numerically, the original quotient becomes unreliable for extremely
+small <span class="math inline">\(h\)</span> because it subtracts nearly
+equal numbers; the rationalized form is stable.</p>
+<h3 id="one-sided-limits">One-sided limits</h3>
+<p><strong>Definition.</strong> The left-hand limit <span class="math inline">\(\lim_{x\to a^-}f(x)\)</span> describes approach
+through <span class="math inline">\(x&lt;a\)</span>; the right-hand
+limit <span class="math inline">\(\lim_{x\to a^+}f(x)\)</span> describes
+approach through <span class="math inline">\(x&gt;a\)</span>. A finite
+two-sided limit exists exactly when both one-sided limits exist and
+agree.</p>
+<p><strong>Example — Different one-sided limits.</strong> Let <span class="math inline">\(f(x)=\begin{cases}x+1,&amp;x&lt;1,\\4-x,&amp;x\ge1.\end{cases}\)</span>
+Determine the one-sided limits and <span class="math inline">\(\lim_{x\to1}f(x)\)</span>.</p>
+<p><strong>Solution.</strong> Approaching from the left gives <span class="math inline">\(2\)</span>; from the right gives <span class="math inline">\(3\)</span>. Since <span class="math inline">\(2\ne3\)</span>, the two-sided limit does not
+exist, even though <span class="math inline">\(f(1)=3\)</span>.</p>
+<figure>
+<img alt="A jump discontinuity: the left-hand and right-hand limits differ." src="figures/chapter02-diagram-02.svg"/>
+<figcaption>
+A jump discontinuity: the left-hand and right-hand limits differ.
+</figcaption>
+</figure>
+<h2 id="limit-laws-and-algebraic-techniques">Limit laws and algebraic
+techniques</h2>
+<p><strong>Theorem — Limit laws.</strong> If <span class="math inline">\(\lim_{x\to a}f(x)=L\)</span> and <span class="math inline">\(\lim_{x\to a}g(x)=M\)</span> are finite, then
+<span class="math display">\[\lim(f\pm g)=L\pm M,\quad
+\lim(fg)=LM,\quad\lim\frac{f}{g}=\frac LM\ \text{if }M\ne0.\]</span> For
+a continuous function <span class="math inline">\(\phi\)</span> at <span class="math inline">\(L\)</span>, <span class="math inline">\(\lim_{x\to
+a}\phi(f(x))=\phi(L)\)</span>.</p>
+<p>These laws justify substitution for polynomials and rational
+functions at points where the denominator is nonzero. When direct
+substitution gives <span class="math inline">\(0/0\)</span>, the laws do
+not themselves determine the answer; algebraic work is needed.</p>
+<h3 id="factoring-rationalizing-and-common-denominators">Factoring,
+rationalizing, and common denominators</h3>
+<p><strong>Example — A factored polynomial quotient.</strong> Evaluate
+<span class="math inline">\(\lim_{x\to3}\frac{x^2-9}{x^2-4x+3}\)</span>.</p>
+<p><strong>Solution.</strong> Factor numerator and denominator: <span class="math display">\[\frac{(x-3)(x+3)}{(x-3)(x-1)}=\frac{x+3}{x-1}\quad(x\ne3).\]</span>
+The limit is <span class="math inline">\(6/2=3\)</span>. Cancellation is
+valid for nearby <span class="math inline">\(x\ne3\)</span> and does not
+assert equality at the excluded point.</p>
+<p><strong>Example — A nested fraction.</strong> Evaluate <span class="math inline">\(\lim_{x\to0}\frac{\frac{1}{1+x}-1}{x}\)</span>.</p>
+<p><strong>Solution.</strong> Combine the numerator: <span class="math inline">\(\frac{1}{1+x}-1=-\frac{x}{1+x}\)</span>. For <span class="math inline">\(x\ne0\)</span>, the quotient equals <span class="math inline">\(-1/(1+x)\)</span>, so the limit is <span class="math inline">\(-1\)</span>.</p>
+<p><strong>Example — Rationalization.</strong> Find <span class="math inline">\(\lim_{x\to0}\frac{\sqrt{4+x}-2}{x}\)</span>.</p>
+<p><strong>Solution.</strong> Multiply by the conjugate to obtain <span class="math inline">\(1/(\sqrt{4+x}+2)\)</span> for <span class="math inline">\(x\ne0\)</span>. The limit is <span class="math inline">\(1/4\)</span>.</p>
+<h3 id="trigonometric-limits">Trigonometric limits</h3>
+<p>The fundamental trigonometric limit (with angles in radians) is <span class="math display">\[\lim_{x\to0}\frac{\sin x}{x}=1.\]</span> It
+follows geometrically from comparisons of areas in the unit circle and
+can also be established using the squeeze theorem.</p>
+<p><strong>Example — A scaled sine quotient.</strong> Evaluate <span class="math inline">\(\lim_{x\to0}\frac{\sin(5x)}{3x}\)</span>.</p>
+<p><strong>Solution.</strong> Write <span class="math inline">\(\frac{\sin(5x)}{3x}=\frac53\frac{\sin(5x)}{5x}\)</span>.
+The second factor approaches <span class="math inline">\(1\)</span>,
+giving <span class="math inline">\(5/3\)</span>.</p>
+<p><strong>Example — Cosine cancellation.</strong> Find <span class="math inline">\(\lim_{x\to0}\frac{1-\cos x}{x^2}\)</span>.</p>
+<p><strong>Solution.</strong> Use <span class="math inline">\(1-\cos
+x=2\sin^2(x/2)\)</span>: <span class="math display">\[\frac{1-\cos
+x}{x^2}=\frac12\left(\frac{\sin(x/2)}{x/2}\right)^2\longrightarrow\frac12.\]</span></p>
+<h2 id="the-squeeze-theorem-and-oscillation">The squeeze theorem and
+oscillation</h2>
+<p><strong>Theorem — Squeeze theorem.</strong> If <span class="math inline">\(g(x)\le f(x)\le h(x)\)</span> for all <span class="math inline">\(x\)</span> sufficiently near <span class="math inline">\(a\)</span> (except possibly at <span class="math inline">\(a\)</span>), and <span class="math inline">\(\lim_{x\to a}g(x)=\lim_{x\to a}h(x)=L\)</span>,
+then <span class="math inline">\(\lim_{x\to a}f(x)=L\)</span>.</p>
+<p><strong>Example — Oscillation with shrinking amplitude.</strong>
+Determine <span class="math inline">\(\lim_{x\to0}x^2\sin(1/x)\)</span>,
+where the expression is defined for <span class="math inline">\(x\ne0\)</span>.</p>
+<p><strong>Solution.</strong> Because <span class="math inline">\(-1\le\sin(1/x)\le1\)</span>, we have <span class="math inline">\(-x^2\le x^2\sin(1/x)\le x^2\)</span>. Both bounds
+approach zero; hence the limit is zero. The inner oscillation does not
+have a limit, but its amplitude vanishes.</p>
+<figure>
+<img alt="The oscillatory function x2sin (1/x) is trapped between ±x2." src="figures/chapter02-diagram-03.svg"/>
+<figcaption>
+The oscillatory function <span class="math inline"><em>x</em><sup>2</sup>sin (1/<em>x</em>)</span> is
+trapped between <span class="math inline">±<em>x</em><sup>2</sup></span>.
+</figcaption>
+</figure>
+<h2 id="a-precise-definition-epsilon-and-delta">A precise definition:
+epsilon and delta</h2>
+<p>The intuitive phrase “gets close” is useful but not a proof. The
+following definition quantifies how close the input must be to guarantee
+a desired accuracy in the output.</p>
+<p><strong>Definition — Epsilon–delta limit.</strong> For a function
+defined near <span class="math inline">\(a\)</span>, we say <span class="math inline">\(\lim_{x\to a}f(x)=L\)</span> if for every <span class="math inline">\(\varepsilon&gt;0\)</span> there exists <span class="math inline">\(\delta&gt;0\)</span> such that <span class="math display">\[0&lt;|x-a|&lt;\delta\quad\Longrightarrow\quad
+|f(x)-L|&lt;\varepsilon.\]</span> The requirement <span class="math inline">\(0&lt;|x-a|\)</span> excludes the point <span class="math inline">\(a\)</span> itself.</p>
+<p><strong>Example — Proof for a linear function.</strong> Prove <span class="math inline">\(\lim_{x\to2}(3x-1)=5\)</span>.</p>
+<p><strong>Solution.</strong> Given <span class="math inline">\(\varepsilon&gt;0\)</span>, choose <span class="math inline">\(\delta=\varepsilon/3\)</span>. Whenever <span class="math inline">\(0&lt;|x-2|&lt;\delta\)</span>, we have <span class="math display">\[|(3x-1)-5|=3|x-2|&lt;3\delta=\varepsilon.\]</span>
+Therefore the limit is <span class="math inline">\(5\)</span>.</p>
+<p><strong>Example — Proof for a quadratic.</strong> Prove <span class="math inline">\(\lim_{x\to2}x^2=4\)</span>.</p>
+<p><strong>Solution.</strong> We need <span class="math inline">\(|x^2-4|=|x-2||x+2|&lt;\varepsilon\)</span>. First
+restrict <span class="math inline">\(|x-2|&lt;1\)</span>, so <span class="math inline">\(1&lt;x&lt;3\)</span> and <span class="math inline">\(|x+2|&lt;5\)</span>. Choose <span class="math inline">\(\delta=\min\{1,\varepsilon/5\}\)</span>. Then
+<span class="math inline">\(0&lt;|x-2|&lt;\delta\)</span> implies <span class="math inline">\(|x^2-4|&lt;5\delta\le\varepsilon\)</span>.</p>
+<p><strong>Remark.</strong> In an epsilon–delta proof, <span class="math inline">\(\delta\)</span> may depend on <span class="math inline">\(\varepsilon\)</span> and on the fixed point <span class="math inline">\(a\)</span>, but not on the variable input <span class="math inline">\(x\)</span>. A numerical plot cannot establish this
+universal condition.</p>
+<h2 id="infinite-limits-and-vertical-asymptotes">Infinite limits and
+vertical asymptotes</h2>
+<p>When a function increases without bound near a point, we write <span class="math inline">\(\lim_{x\to a}f(x)=+\infty\)</span>; this is not a
+finite real-number limit. Left and right behavior may differ.</p>
+<p><strong>Example — One-sided infinite behavior.</strong> Examine <span class="math inline">\(f(x)=1/(x-1)\)</span>.</p>
+<p><strong>Solution.</strong> As <span class="math inline">\(x\to1^+\)</span> the denominator is positive and
+approaches zero, so <span class="math inline">\(f(x)\to+\infty\)</span>.
+As <span class="math inline">\(x\to1^-\)</span> it is negative and
+approaches zero, so <span class="math inline">\(f(x)\to-\infty\)</span>.
+The line <span class="math inline">\(x=1\)</span> is a vertical
+asymptote.</p>
+<figure>
+<img alt="The vertical asymptote x = 1 separates branches with opposite infinite behavior." src="figures/chapter02-diagram-04.svg"/>
+<figcaption>
+The vertical asymptote <span class="math inline"><em>x</em> = 1</span>
+separates branches with opposite infinite behavior.
+</figcaption>
+</figure>
+<h3 id="infinite-limits-versus-very-large-finite-values">Infinite limits
+versus very large finite values</h3>
+<p>A computer displays finite floating-point numbers. Near an asymptote
+it may show very large values or overflow, but neither outcome proves
+the mathematical limit. We must examine signs, denominator behavior, and
+one-sided approach.</p>
+<h2 id="limits-at-infinity-and-horizontal-asymptotes">Limits at infinity
+and horizontal asymptotes</h2>
+<p>The notation <span class="math inline">\(x\to\infty\)</span> means
+that <span class="math inline">\(x\)</span> becomes arbitrarily large,
+not that it approaches a real input. A horizontal asymptote <span class="math inline">\(y=L\)</span> is suggested by a finite limit <span class="math inline">\(\lim_{x\to\infty}f(x)=L\)</span> or <span class="math inline">\(\lim_{x\to-\infty}f(x)=L\)</span>.</p>
+<p><strong>Example — Dominant powers.</strong> Find <span class="math inline">\(\lim_{x\to\infty}\frac{3x^2-2x+1}{x^2+5}\)</span>.</p>
+<p><strong>Solution.</strong> Divide by <span class="math inline">\(x^2\)</span>: <span class="math display">\[\frac{3-2/x+1/x^2}{1+5/x^2}\longrightarrow3.\]</span>
+Thus <span class="math inline">\(y=3\)</span> is a horizontal asymptote
+as <span class="math inline">\(x\to+\infty\)</span> (and also as <span class="math inline">\(x\to-\infty\)</span>).</p>
+<p><strong>Example — Different behavior at the two ends.</strong> Find
+the limits of <span class="math inline">\(f(x)=x/\sqrt{x^2+1}\)</span>
+as <span class="math inline">\(x\to\pm\infty\)</span>.</p>
+<p><strong>Solution.</strong> Write <span class="math inline">\(\sqrt{x^2+1}=|x|\sqrt{1+1/x^2}\)</span>. For
+positive <span class="math inline">\(x\)</span>, <span class="math inline">\(x/|x|=1\)</span>; for negative <span class="math inline">\(x\)</span>, <span class="math inline">\(x/|x|=-1\)</span>. The limits are <span class="math inline">\(1\)</span> and <span class="math inline">\(-1\)</span>, respectively. Replacing <span class="math inline">\(\sqrt{x^2}\)</span> by <span class="math inline">\(x\)</span> without accounting for <span class="math inline">\(|x|\)</span> would give the wrong negative-end
+limit.</p>
+<h2 id="continuity-and-types-of-discontinuities">Continuity and types of
+discontinuities</h2>
+<p><strong>Definition.</strong> A function <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(a\)</span> if (1) <span class="math inline">\(f(a)\)</span> is defined, (2) <span class="math inline">\(\lim_{x\to a}f(x)\)</span> exists and is finite,
+and (3) <span class="math inline">\(\lim_{x\to a}f(x)=f(a)\)</span>. At
+endpoints of a domain, continuity uses the appropriate one-sided
+limit.</p>
+<p><strong>Example — Repairing a removable discontinuity.</strong>
+Define <span class="math inline">\(f(x)=\frac{x^2-1}{x-1}\)</span> for
+<span class="math inline">\(x\ne1\)</span>. How should <span class="math inline">\(f(1)\)</span> be defined to make <span class="math inline">\(f\)</span> continuous at <span class="math inline">\(1\)</span>?</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(x\ne1\)</span>, <span class="math inline">\(f(x)=x+1\)</span>, so <span class="math inline">\(\lim_{x\to1}f(x)=2\)</span>. Defining <span class="math inline">\(f(1)=2\)</span> fills the hole and makes the
+function continuous.</p>
+<h3 id="removable-jump-infinite-and-oscillatory-discontinuities">Removable,
+jump, infinite, and oscillatory discontinuities</h3>
+<p>A <em>removable</em> discontinuity occurs when the finite two-sided
+limit exists but the function value is missing or different. A
+<em>jump</em> occurs when finite one-sided limits disagree. An
+<em>infinite</em> discontinuity involves unbounded behavior; an
+<em>oscillatory</em> discontinuity involves failure to settle to a
+single value. These classifications guide how to interpret models and
+numerical plots.</p>
+<p><strong>Example — Classify a piecewise function.</strong> Let <span class="math inline">\(f(x)=\begin{cases}x^2,&amp;x&lt;2,\\c,&amp;x=2,\\3x-2,&amp;x&gt;2.\end{cases}\)</span>
+Find <span class="math inline">\(c\)</span> so <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(2\)</span>.</p>
+<p><strong>Solution.</strong> The left-hand limit is <span class="math inline">\(4\)</span> and the right-hand limit is <span class="math inline">\(3(2)-2=4\)</span>. Thus the common limit is <span class="math inline">\(4\)</span>, and continuity requires <span class="math inline">\(c=4\)</span>.</p>
+<p><strong>Theorem — Algebra of continuous functions.</strong> Sums,
+products, and scalar multiples of functions continuous at <span class="math inline">\(a\)</span> are continuous there. Quotients are
+continuous wherever the denominator is nonzero; compositions are
+continuous when the inner function is continuous at <span class="math inline">\(a\)</span> and the outer function is continuous at
+the inner function’s value.</p>
+<h2 id="the-intermediate-value-theorem-and-existence-of-roots">The
+intermediate value theorem and existence of roots</h2>
+<p><strong>Theorem — Intermediate value theorem.</strong> If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and <span class="math inline">\(N\)</span> lies between <span class="math inline">\(f(a)\)</span> and <span class="math inline">\(f(b)\)</span>, then there is some <span class="math inline">\(c\in[a,b]\)</span> such that <span class="math inline">\(f(c)=N\)</span>.</p>
+<p>The theorem guarantees existence, not uniqueness, and does not
+generally give an exact formula for the input <span class="math inline">\(c\)</span>.</p>
+<p><strong>Example — A root exists.</strong> Show that <span class="math inline">\(f(x)=x^3-x-1\)</span> has a zero in <span class="math inline">\((1,2)\)</span>.</p>
+<p><strong>Solution.</strong> A polynomial is continuous. Since <span class="math inline">\(f(1)=-1\)</span> and <span class="math inline">\(f(2)=5\)</span>, zero lies between the endpoint
+values. The intermediate value theorem guarantees at least one <span class="math inline">\(c\in(1,2)\)</span> with <span class="math inline">\(f(c)=0\)</span>.</p>
+<h3 id="bisection-as-a-constructive-companion">Bisection as a
+constructive companion</h3>
+<p>If a continuous function changes sign across <span class="math inline">\([a,b]\)</span>, repeatedly evaluate its midpoint
+and keep the half-interval with a sign change. After <span class="math inline">\(n\)</span> halvings the bracket width is <span class="math inline">\((b-a)/2^n\)</span>; the midpoint error is at most
+half this width. Bisection requires a continuous function and a valid
+sign-changing bracket, but not a derivative.</p>
+<p><strong>Example — Three bisection iterations.</strong> Start with
+<span class="math inline">\(f(x)=x^3-x-1\)</span> on <span class="math inline">\([1,2]\)</span>.</p>
+<p><strong>Solution.</strong> At <span class="math inline">\(1.5\)</span>, <span class="math inline">\(f=0.875&gt;0\)</span>, so retain <span class="math inline">\([1,1.5]\)</span>. At <span class="math inline">\(1.25\)</span>, <span class="math inline">\(f=-0.296875&lt;0\)</span>, so retain <span class="math inline">\([1.25,1.5]\)</span>. At <span class="math inline">\(1.375\)</span>, <span class="math inline">\(f=0.224609375&gt;0\)</span>, so retain <span class="math inline">\([1.25,1.375]\)</span>. Its midpoint <span class="math inline">\(1.3125\)</span> approximates the root with error
+at most <span class="math inline">\(0.0625\)</span>.</p>
+<h2 id="computational-laboratories-paired-r-and-python">Computational
+laboratories: paired R and Python</h2>
+<p>The code in each laboratory answers the same mathematical question in
+both languages. Record inputs, compare numerical outputs, and explain
+whether the evidence supports a theorem, suggests a conjecture, or
+merely illustrates a result.</p>
+<h3 id="laboratory-1-a-removable-discontinuity-and-numerical-stability">Laboratory
+1: a removable discontinuity and numerical stability</h3>
+<p>Study <span class="math inline">\(q(h)=(\sqrt{9+h}-3)/h\)</span> and
+its algebraically equivalent stable form <span class="math inline">\(1/(\sqrt{9+h}+3)\)</span>. For <span class="math inline">\(h\ne0\)</span>, both are equal mathematically, but
+floating-point arithmetic may distinguish them for very small <span class="math inline">\(h\)</span>.</p>
+<h5 id="r">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter02-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>h &lt;- 10^(-seq(1, 14, by = 1))
+naive &lt;- (sqrt(9 + h) - 3) / h
+stable &lt;- 1 / (sqrt(9 + h) + 3)
+results &lt;- data.frame(h, naive, stable,
+                      absolute_error = abs(naive - 1/6))
+print(results, digits = 9)
+plot(h, abs(naive - 1/6), log = "xy", pch = 19,
+     xlab = "h", ylab = "Absolute error")
+points(h, abs(stable - 1/6), col = "red", pch = 1)</code></pre></div>
+<h5 id="python">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter02-02.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+h = 10.0**(-np.arange(1, 15))
+naive = (np.sqrt(9 + h) - 3) / h
+stable = 1 / (np.sqrt(9 + h) + 3)
+for hi, ni, si in zip(h, naive, stable):
+    print(f"h={hi:.1e}, naive={ni:.9f}, stable={si:.9f}")
+plt.loglog(h, np.abs(naive - 1/6), "o", label="naive")
+plt.loglog(h, np.abs(stable - 1/6), "s", label="stable")
+plt.xlabel("h"); plt.ylabel("Absolute error")
+plt.legend(); plt.show()</code></pre></div>
+<p><strong>Interpretation.</strong> Smaller <span class="math inline">\(h\)</span> does not necessarily produce a more
+accurate computer answer. Rationalization avoids catastrophic
+cancellation. The mathematical limit remains <span class="math inline">\(1/6\)</span>.</p>
+<h3 id="laboratory-2-one-sided-limits-and-misleading-plots">Laboratory
+2: one-sided limits and misleading plots</h3>
+<p>Investigate <span class="math inline">\(f(x)=1/(x-1)\)</span> on
+intervals that stop short of the asymptote. Never connect points from
+opposite sides.</p>
+<h5 id="r-1">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter02-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) 1/(x - 1)
+left &lt;- seq(-1, 0.95, length.out = 400)
+right &lt;- seq(1.05, 3, length.out = 400)
+plot(left, f(left), type = "l", col = "navy",
+     xlim = c(-1, 3), ylim = c(-15, 15),
+     xlab = "x", ylab = "f(x)")
+lines(right, f(right), col = "firebrick")
+abline(v = 1, lty = 2)</code></pre></div>
+<h5 id="python-1">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter02-04.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+for lo, hi in [(-1, 0.95), (1.05, 3)]:
+    x = np.linspace(lo, hi, 400)
+    plt.plot(x, 1/(x - 1))
+plt.axvline(1, linestyle="--", color="gray")
+plt.xlim(-1, 3); plt.ylim(-15, 15)
+plt.xlabel("x"); plt.ylabel("f(x)"); plt.show()</code></pre></div>
+<h3 id="laboratory-3-epsilondelta-visualization">Laboratory 3:
+epsilon–delta visualization</h3>
+<p>For <span class="math inline">\(f(x)=x^2\)</span> near <span class="math inline">\(a=2\)</span>, the proof uses <span class="math inline">\(\delta=\min\{1,\varepsilon/5\}\)</span>. Plot the
+horizontal band <span class="math inline">\(4\pm\varepsilon\)</span> and
+vertical band <span class="math inline">\(2\pm\delta\)</span>.</p>
+<h5 id="r-2">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter02-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>epsilon &lt;- 0.4
+delta &lt;- min(1, epsilon/5)
+x &lt;- seq(1.7, 2.3, length.out = 400)
+plot(x, x^2, type = "l", col = "navy",
+     xlab = "x", ylab = "x^2")
+abline(h = c(4-epsilon, 4+epsilon), col = "red", lty = 2)
+abline(v = c(2-delta, 2+delta), col = "blue", lty = 2)
+cat("epsilon =", epsilon, "delta =", delta, "\n")</code></pre></div>
+<h5 id="python-2">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter02-06.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+epsilon = 0.4
+delta = min(1, epsilon/5)
+x = np.linspace(1.7, 2.3, 400)
+plt.plot(x, x**2)
+for y in (4-epsilon, 4+epsilon):
+    plt.axhline(y, linestyle="--", color="red")
+for v in (2-delta, 2+delta):
+    plt.axvline(v, linestyle="--", color="blue")
+plt.xlabel("x"); plt.ylabel("x^2"); plt.show()
+print("epsilon =", epsilon, "delta =", delta)</code></pre></div>
+<p><strong>Interpretation.</strong> The picture illustrates the
+definition for a particular <span class="math inline">\(\varepsilon\)</span>. The proof must work for
+<em>every</em> positive <span class="math inline">\(\varepsilon\)</span>.</p>
+<h3 id="laboratory-4-bisection-and-the-intermediate-value-theorem">Laboratory
+4: bisection and the intermediate value theorem</h3>
+<p>Find a root of <span class="math inline">\(x^3-x-1=0\)</span> to
+within <span class="math inline">\(10^{-6}\)</span> using a
+sign-changing bracket.</p>
+<h5 id="r-3">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter02-07.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^3 - x - 1
+a &lt;- 1; b &lt;- 2; tolerance &lt;- 1e-6
+while ((b-a)/2 &gt; tolerance) {
+  m &lt;- (a+b)/2
+  if (f(a)*f(m) &lt;= 0) b &lt;- m else a &lt;- m
+}
+root &lt;- (a+b)/2
+cat("Root estimate:", format(root, digits = 12), "\n")
+cat("Guaranteed error &lt;=", (b-a)/2, "\n")
+stopifnot(abs(f(root)) &lt; 1e-4)</code></pre></div>
+<h5 id="python-3">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter02-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def f(x):
+    return x**3 - x - 1
+
+a, b, tolerance = 1.0, 2.0, 1e-6
+while (b-a)/2 &gt; tolerance:
+    m = (a+b)/2
+    if f(a)*f(m) &lt;= 0:
+        b = m
+    else:
+        a = m
+root = (a+b)/2
+print("Root estimate:", root)
+print("Guaranteed error &lt;=", (b-a)/2)
+assert abs(f(root)) &lt; 1e-4</code></pre></div>
+<h2 id="real-world-applications">Real-world applications</h2>
+<h3 id="application-1-a-threshold-in-a-health-screening-rule">Application 1:
+a threshold in a health screening rule</h3>
+<p>Suppose a screening policy assigns follow-up levels using <span class="math inline">\(R(s)=\begin{cases}1,&amp;s&lt;50,\\2,&amp;s\ge50,\end{cases}\)</span>
+where <span class="math inline">\(s\)</span> is a numerical risk score.
+At <span class="math inline">\(s=50\)</span> the classification jumps.
+The left-hand limit is <span class="math inline">\(1\)</span>, the
+right-hand limit is <span class="math inline">\(2\)</span>, and the
+function is discontinuous. This is a discontinuity in a <em>decision
+rule</em>, not necessarily a discontinuity in a patient’s underlying
+health. Students should distinguish mathematical properties of a policy
+from biological mechanisms.</p>
+<h3 id="application-2-concentration-approaching-a-background-level">Application
+2: concentration approaching a background level</h3>
+<p>A stylized contaminant model is <span class="math inline">\(C(t)=C_{\mathrm{bg}}+C_0e^{-kt}\)</span> for <span class="math inline">\(t\ge0\)</span>, with <span class="math inline">\(k&gt;0\)</span>. Since <span class="math inline">\(e^{-kt}\to0\)</span> as <span class="math inline">\(t\to\infty\)</span>, <span class="math inline">\(\lim_{t\to\infty}C(t)=C_{\mathrm{bg}}\)</span>.
+The limiting value is a long-run model prediction; finite-time
+measurements can approach it without ever equaling it exactly.</p>
+<p><strong>Example — Interpret the long-run concentration.</strong> If
+<span class="math inline">\(C(t)=2+18e^{-0.3t}\)</span> in mg/L, find
+the initial concentration and long-run limit. When is the concentration
+within <span class="math inline">\(1\)</span> mg/L of the
+background?</p>
+<p><strong>Solution.</strong> <span class="math inline">\(C(0)=20\)</span> mg/L and <span class="math inline">\(\lim_{t\to\infty}C(t)=2\)</span> mg/L. Solve <span class="math inline">\(18e^{-0.3t}\le1\)</span>, yielding <span class="math inline">\(t\ge\ln(18)/0.3\approx9.63\)</span> time units.
+This is a threshold time, not the time at which the concentration
+becomes exactly <span class="math inline">\(2\)</span>.</p>
+<h3 id="application-3-continuity-in-calibration">Application 3:
+continuity in calibration</h3>
+<p>A laboratory instrument is modeled by <span class="math inline">\(V(T)=0.04T+0.8\)</span> volts over its operating
+range. Because this is linear, small temperature changes produce small
+voltage changes, and the model is continuous. If a software interface
+rounds voltage to the nearest <span class="math inline">\(0.1\)</span>
+V, however, the <em>reported</em> value becomes a step function.
+Distinguish the continuous physical response from the discontinuous
+digital display.</p>
+<h2 id="chapter-exercises">Chapter exercises</h2>
+<p><strong>Directions.</strong> Give mathematical justification for
+analytical answers. For computational questions, include the same
+mathematical problem in R and Python, label plots, and interpret results
+in complete sentences. Unless otherwise stated, do not use derivative
+rules or L’Hôpital’s rule, which belong to later chapters.</p>
+<h3 class="unnumbered" id="a.-understanding-limits">A. Understanding
+limits</h3>
+<ol type="1">
+<li><p>Explain why <span class="math inline">\(f(a)\)</span> and <span class="math inline">\(\lim_{x\to a}f(x)\)</span> can differ. Construct
+an explicit example.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to4}(3x^2-2x+1)\)</span> and state which
+limit laws you use.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to-1}\frac{x^2-1}{x+1}\)</span> and state
+the original domain restriction.</p></li>
+<li><p>Determine <span class="math inline">\(\lim_{x\to0}\frac{\sqrt{16+x}-4}{x}\)</span> by
+rationalization.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to2}\frac{x^2-4}{x^2-3x+2}\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to0}\frac{\sin(7x)}{2x}\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to0}\frac{1-\cos(3x)}{x^2}\)</span>.</p></li>
+<li><p>Determine whether <span class="math inline">\(\lim_{x\to0}\sin(1/x)\)</span> exists; explain
+without relying only on a graph.</p></li>
+<li><p>Use the squeeze theorem to evaluate <span class="math inline">\(\lim_{x\to0}x\sin(1/x)\)</span>.</p></li>
+<li><p>Construct a piecewise function with left limit <span class="math inline">\(-1\)</span>, right limit <span class="math inline">\(2\)</span>, and defined value <span class="math inline">\(5\)</span> at zero.</p></li>
+</ol>
+<h3 class="unnumbered" id="b.-infinite-limits-and-continuity">B.
+Infinite limits and continuity</h3>
+<ol type="1">
+<li><p>Find both one-sided limits of <span class="math inline">\(1/(x+2)\)</span> at <span class="math inline">\(x=-2\)</span>.</p></li>
+<li><p>Analyze <span class="math inline">\(\lim_{x\to\infty}\frac{4x^3-x}{2x^3+5}\)</span>.</p></li>
+<li><p>Find the limits of <span class="math inline">\(x/\sqrt{x^2+9}\)</span> as <span class="math inline">\(x\to\pm\infty\)</span>.</p></li>
+<li><p>Classify the discontinuity of <span class="math inline">\(f(x)=\frac{x^2-9}{x-3}\)</span> at <span class="math inline">\(x=3\)</span> when <span class="math inline">\(f(3)\)</span> is undefined.</p></li>
+<li><p>Choose <span class="math inline">\(c\)</span> so <span class="math inline">\(f(x)=\begin{cases}2x+1,&amp;x&lt;2,\\c,&amp;x=2,\\x^2+1,&amp;x&gt;2\end{cases}\)</span>
+is continuous at <span class="math inline">\(2\)</span>, or explain why
+no such <span class="math inline">\(c\)</span> exists.</p></li>
+<li><p>Prove using the definition that <span class="math inline">\(\lim_{x\to3}(2x+1)=7\)</span>.</p></li>
+<li><p>Prove using epsilon–delta that <span class="math inline">\(\lim_{x\to1}x^2=1\)</span>.</p></li>
+<li><p>State why the intermediate value theorem does not apply to <span class="math inline">\(f(x)=1/x\)</span> on <span class="math inline">\([-1,1]\)</span>.</p></li>
+<li><p>Prove that <span class="math inline">\(x^3-2x-2=0\)</span> has at
+least one solution in <span class="math inline">\((1,2)\)</span>.</p></li>
+<li><p>Find a continuous function on <span class="math inline">\([0,2]\)</span> with more than one zero; explain
+why the intermediate value theorem does not guarantee
+uniqueness.</p></li>
+</ol>
+<h3 class="unnumbered" id="c.-rpython-investigations">C. R/Python
+investigations</h3>
+<ol type="1">
+<li><p>Generate a table for <span class="math inline">\(\frac{\sqrt{1+h}-1}{h}\)</span> using <span class="math inline">\(h=10^{-1},\ldots,10^{-14}\)</span>. Compare direct
+and rationalized forms in both languages.</p></li>
+<li><p>Plot <span class="math inline">\(f(x)=\sin(1/x)\)</span>
+separately on <span class="math inline">\([-1,-0.01]\)</span> and <span class="math inline">\([0.01,1]\)</span>. Explain why finite sampling
+cannot prove a limit exists or fails to exist.</p></li>
+<li><p>For <span class="math inline">\(f(x)=x^2\)</span> at <span class="math inline">\(a=3\)</span>, derive a valid <span class="math inline">\(\delta(\varepsilon)\)</span> and illustrate the
+<span class="math inline">\(\varepsilon\)</span>-band and <span class="math inline">\(\delta\)</span>-band in both languages.</p></li>
+<li><p>Implement bisection for <span class="math inline">\(x^3-x-1\)</span> and record the number of
+iterations needed for tolerances <span class="math inline">\(10^{-2}\)</span>, <span class="math inline">\(10^{-4}\)</span>, and <span class="math inline">\(10^{-6}\)</span>.</p></li>
+<li><p>Compare <span class="math inline">\(\frac{\sin h}{h}\)</span>
+with its theoretical limit for progressively smaller positive <span class="math inline">\(h\)</span>; explain any eventual numerical
+deterioration.</p></li>
+<li><p>Plot <span class="math inline">\(f(x)=\frac{x^2-4}{x-2}\)</span>
+without filling the hole. Explain why a default graph may misrepresent
+the domain.</p></li>
+<li><p>Investigate the limiting value of <span class="math inline">\(\frac{3x^2+1}{x^2+2}\)</span> for <span class="math inline">\(x=10,10^2,10^3,10^4\)</span>; compare numerical
+evidence with an algebraic proof.</p></li>
+<li><p>Modify the bisection program to return a table of iteration, left
+endpoint, right endpoint, midpoint, and residual. Interpret the
+interval-width bound.</p></li>
+</ol>
+<h3 class="unnumbered" id="d.-applications-and-mathematical-communication">D. Applications and
+mathematical communication</h3>
+<ol type="1">
+<li><p>A contaminant follows <span class="math inline">\(C(t)=1.5+12e^{-0.2t}\)</span>. Find the long-run
+concentration and the time needed to come within <span class="math inline">\(0.5\)</span> units of it.</p></li>
+<li><p>A tiered billing rule charges <span class="math inline">\(B(q)=\begin{cases}4q,&amp;0\le
+q\le10,\\40+6(q-10),&amp;q&gt;10.\end{cases}\)</span> Determine whether
+it is continuous at <span class="math inline">\(q=10\)</span>. Explain
+why the rate of change may still shift abruptly.</p></li>
+<li><p>Explain the difference between a discontinuous screening
+<em>classification</em> and a continuous underlying risk measurement.
+Provide a labeled mathematical example.</p></li>
+<li><p>Critique this claim: “The computer evaluated the function at
+<span class="math inline">\(x=2.000001\)</span>, so the limit at <span class="math inline">\(2\)</span> has been proved.”</p></li>
+<li><p>Design a real-world model with a removable discontinuity caused
+by a formula’s representation rather than a physical jump. Explain how
+to repair it.</p></li>
+<li><p>Describe a setting in which a horizontal asymptote has a
+meaningful physical interpretation and one in which extrapolating to
+infinity would be unreasonable.</p></li>
+</ol>
+<h2 id="concluding-project-threshold-behavior-and-long-run-concentration">Concluding
+project: threshold behavior and long-run concentration</h2>
+<p><strong>Project question.</strong> How can a smooth physical process
+produce a discontinuous reported classification, and how can limits and
+continuity help us interpret both models?</p>
+<h3 class="unnumbered" id="scenario">Scenario</h3>
+<p>An environmental monitoring system reports a modeled concentration
+<span class="math display">\[C(t)=2+18e^{-0.3t},\qquad t\ge0,\]</span>
+where <span class="math inline">\(t\)</span> is measured in hours and
+<span class="math inline">\(C\)</span> in mg/L. A reporting rule assigns
+a category <span class="math display">\[K(C)=\begin{cases}0,&amp;C&lt;5,\\1,&amp;5\le
+C&lt;10,\\2,&amp;C\ge10.\end{cases}\]</span> The concentration model is
+idealized; the categories are administrative thresholds rather than
+biological claims.</p>
+<h3 class="unnumbered" id="required-deliverables">Required
+deliverables</h3>
+<ol type="1">
+<li><p><strong>Mathematical analysis (25 points).</strong> Find <span class="math inline">\(C(0)\)</span>, <span class="math inline">\(\lim_{t\to\infty}C(t)\)</span>, and the times at
+which <span class="math inline">\(C(t)\)</span> crosses <span class="math inline">\(10\)</span> and <span class="math inline">\(5\)</span> mg/L. Show all logarithmic steps and
+verify units.</p></li>
+<li><p><strong>Continuity analysis (20 points).</strong> Prove that
+<span class="math inline">\(C\)</span> is continuous for <span class="math inline">\(t\ge0\)</span>. Explain why <span class="math inline">\(K(C(t))\)</span> has jumps and determine the
+one-sided category limits at each crossing time.</p></li>
+<li><p><strong>R implementation (15 points).</strong> Plot <span class="math inline">\(C(t)\)</span> on <span class="math inline">\(0\le
+t\le15\)</span> with horizontal threshold lines; plot the category
+function as a step graph without falsely connecting jumps.</p></li>
+<li><p><strong>Python implementation (15 points).</strong> Reproduce the
+same calculations and plots using NumPy and Matplotlib; compare the
+threshold times numerically.</p></li>
+<li><p><strong>Numerical investigation (10 points).</strong> Approximate
+one threshold crossing by bisection and report a justified error
+bound.</p></li>
+<li><p><strong>Interpretation and limitations (15 points).</strong>
+Write 400–600 words explaining what the model predicts, what the
+threshold categories do and do not mean, and how measurement noise might
+affect category changes.</p></li>
+</ol>
+<p><strong>Extension.</strong> Replace the exponential model with <span class="math inline">\(C(t)=2+18/(1+0.4t)\)</span> and compare how
+quickly the two models approach the same long-run level. Discuss the
+limits of extrapolation.</p>
+<h2 id="chapter-summary-and-self-check">Chapter summary and
+self-check</h2>
+<p>A limit describes nearby behavior independently of the function’s
+assigned value at the point. One-sided limits must agree for a finite
+two-sided limit to exist. Algebraic simplification, trigonometric
+identities, and the squeeze theorem provide tools for evaluation; the
+epsilon–delta definition supplies mathematical precision. Continuity
+links the limit to the function value. The intermediate value theorem
+guarantees that a continuous function attains intermediate outputs, and
+bisection turns this existence principle into a numerical approximation.
+Computer plots and tables are useful for exploration but do not replace
+proofs. <strong>Before proceeding to Chapter 3, check that you
+can:</strong> explain <span class="math inline">\(0/0\)</span> as
+indeterminate; distinguish limits from values; construct an
+epsilon–delta proof for a linear function; recognize a jump and a
+removable discontinuity; and implement a reliable bisection algorithm in
+R and Python.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_02_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter01.html">← Functions, Graphs, and Mathematical Models</a><a href="chapter03.html">Differentiation →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: One-sided limits</a></li><li><a href="#approaching-a-value-the-idea-of-a-limit">Approaching a value:
+the idea of a limit</a></li><li><a href="#limit-laws-and-algebraic-techniques">Limit laws and algebraic
+techniques</a></li><li><a href="#the-squeeze-theorem-and-oscillation">The squeeze theorem and
+oscillation</a></li><li><a href="#a-precise-definition-epsilon-and-delta">A precise definition:
+epsilon and delta</a></li><li><a href="#infinite-limits-and-vertical-asymptotes">Infinite limits and
+vertical asymptotes</a></li><li><a href="#limits-at-infinity-and-horizontal-asymptotes">Limits at infinity
+and horizontal asymptotes</a></li><li><a href="#continuity-and-types-of-discontinuities">Continuity and types of
+discontinuities</a></li><li><a href="#the-intermediate-value-theorem-and-existence-of-roots">The
+intermediate value theorem and existence of roots</a></li><li><a href="#computational-laboratories-paired-r-and-python">Computational
+laboratories: paired R and Python</a></li><li><a href="#real-world-applications">Real-world applications</a></li><li><a href="#chapter-exercises">Chapter exercises</a></li><li><a href="#concluding-project-threshold-behavior-and-long-run-concentration">Concluding
+project: threshold behavior and long-run concentration</a></li><li><a href="#chapter-summary-and-self-check">Chapter summary and
+self-check</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

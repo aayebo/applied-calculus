@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Integrals and Transcendental Functions | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a aria-current="page" class="active" href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="integrals-and-transcendental-functions">Integrals and
+Transcendental Functions</h1>
+<p><strong>Guiding question.</strong> How can an integral define a new
+function, and how can that function explain growth, decay, and curved
+geometric relationships? This chapter builds logarithms from accumulated
+area, connects exponential functions to differential equations, and
+introduces hyperbolic functions through the same mathematical ideas.</p>
+<p><strong>Learning outcomes.</strong> By the end of the chapter
+students should be able to (i) define and differentiate the natural
+logarithm; (ii) integrate logarithmic and exponential expressions; (iii)
+solve separable differential equations and interpret initial conditions;
+(iv) derive and use exponential growth, decay, and Newton cooling
+models; (v) differentiate and integrate hyperbolic functions; and (vi)
+verify analytical results numerically in R and Python.</p>
+<p><strong>Prerequisites.</strong> Chain rule, inverse functions, the
+Fundamental Theorem of Calculus, and substitution.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="interpreting-exponential-parameters">Interpreting exponential
+parameters</h3>
+<p>In <span class="math inline">\(y(t)=y_0e^{kt}\)</span>, the parameter
+<span class="math inline">\(k\)</span> has units of inverse time.
+Positive <span class="math inline">\(k\)</span> models growth; negative
+<span class="math inline">\(k\)</span> models decay. A fitted
+exponential curve may describe observed behavior over a limited interval
+without remaining realistic indefinitely. Always distinguish a
+mathematical solution from an empirically justified forecast.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 7." src="figures/chapter_07_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 7.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> For <span class="math inline">\(y(t)=20e^{-0.4t}\)</span>, compute the initial
+value and half-life. Explain why the derivative is proportional to the
+current amount.</p>
+<h2 id="interactive-investigation">Interactive investigation: Exponential change</h2><div class="calc-widget" data-calc="7"><p>Explore how the sign and magnitude of k affect the model y = e^(kt).</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="the-natural-logarithm-and-exponential-integrals">The natural
+logarithm and exponential integrals</h2>
+<h3 id="constructing-a-logarithm-from-area">Constructing a logarithm
+from area</h3>
+<p>For <span class="math inline">\(x&gt;0\)</span>, the reciprocal
+function <span class="math inline">\(1/x\)</span> is positive and
+continuous. We may therefore define a function by accumulating its area
+from <span class="math inline">\(1\)</span> to <span class="math inline">\(x\)</span>.</p>
+<p><strong>Definition — Natural logarithm.</strong> <span id="def:ln" label="def:ln"></span> For <span class="math inline">\(x&gt;0\)</span>,
+define <span class="math display">\[\boxed{\ln
+x=\int_1^x\frac{1}{t}\,dt.}\]</span> When <span class="math inline">\(0&lt;x&lt;1\)</span>, the integral is negative
+because the limits of integration are reversed.</p>
+<figure>
+<img alt="The natural logarithm is accumulated signed area under 1/t." src="figures/chapter07-diagram-01.svg"/>
+<figcaption>
+The natural logarithm is accumulated signed area under <span class="math inline">1/<em>t</em></span>.
+</figcaption>
+</figure>
+<p><strong>Theorem — Derivative of the logarithm.</strong> <span id="thm:logder" label="thm:logder"></span> For every <span class="math inline">\(x&gt;0\)</span>, <span class="math inline">\(\displaystyle \frac{d}{dx}\ln
+x=\frac1x\)</span>.</p>
+<p><strong>Proof.</strong> Apply Part I of the Fundamental Theorem of
+Calculus to Definition <a data-reference="def:ln" data-reference-type="ref" href="#def:ln">[def:ln]</a>. Since <span class="math inline">\(1/t\)</span> is continuous for <span class="math inline">\(t&gt;0\)</span>, differentiating the
+accumulated-area function returns its integrand at <span class="math inline">\(t=x\)</span>.</p>
+<p><strong>Theorem — Monotonicity and concavity of the
+logarithm.</strong> The function <span class="math inline">\(\ln
+x\)</span> is strictly increasing and concave down on <span class="math inline">\((0,\infty)\)</span>.</p>
+<p><strong>Proof.</strong> The first derivative <span class="math inline">\(1/x\)</span> is positive. The second derivative
+<span class="math inline">\(-1/x^2\)</span> is negative.</p>
+<p><strong>Example — Estimating a logarithm without a
+calculator.</strong> Show that <span class="math inline">\(1/2&lt;\ln
+2&lt;1\)</span>.</p>
+<p><strong>Solution.</strong> On <span class="math inline">\([1,2]\)</span>, the graph <span class="math inline">\(1/t\)</span> lies between the horizontal lines
+<span class="math inline">\(1/2\)</span> and <span class="math inline">\(1\)</span>. Integrating gives <span class="math inline">\(\int_1^2\frac12\,dt&lt;\int_1^2\frac1t\,dt&lt;\int_1^2
+1\,dt\)</span>, proving the claim.</p>
+<p><strong>Theorem — Logarithm laws.</strong> For positive <span class="math inline">\(a,b\)</span> and real <span class="math inline">\(r\)</span>, <span class="math display">\[\ln(ab)=\ln a+\ln b,\qquad\ln(a/b)=\ln a-\ln
+b,\qquad\ln(a^r)=r\ln a.\]</span></p>
+<p><strong>Proof.</strong> Fix <span class="math inline">\(a&gt;0\)</span> and let <span class="math inline">\(F(x)=\ln(ax)-\ln x\)</span> for <span class="math inline">\(x&gt;0\)</span>. Then <span class="math inline">\(F'(x)=a/(ax)-1/x=0\)</span>, so <span class="math inline">\(F\)</span> is constant. At <span class="math inline">\(x=1\)</span>, <span class="math inline">\(F(1)=\ln
+a\)</span>. Hence <span class="math inline">\(\ln(ax)=\ln a+\ln
+x\)</span>. The quotient law follows by taking <span class="math inline">\(b^{-1}\)</span>, and the power law follows by
+differentiating <span class="math inline">\(\ln(x^r)-r\ln x\)</span> and
+evaluating at <span class="math inline">\(x=1\)</span>.</p>
+<p><strong>Remark.</strong> The law <span class="math inline">\(\ln(a+b)=\ln a+\ln b\)</span> is <em>false</em>.
+Logarithms convert products, not sums, into sums.</p>
+<h3 id="general-logarithmic-derivatives">General logarithmic
+derivatives</h3>
+<p><strong>Theorem — Logarithmic chain rule.</strong> If <span class="math inline">\(u\)</span> is differentiable and <span class="math inline">\(u(x)\ne0\)</span>, then <span class="math display">\[\boxed{\frac{d}{dx}\ln|u(x)|=\frac{u'(x)}{u(x)}.}\]</span></p>
+<p><strong>Proof.</strong> On any interval where <span class="math inline">\(u&gt;0\)</span>, apply the chain rule to <span class="math inline">\(\ln u\)</span>. Where <span class="math inline">\(u&lt;0\)</span>, write <span class="math inline">\(\ln|u|=\ln(-u)\)</span> and differentiate.</p>
+<p><strong>Example — Recognizing a logarithmic integral.</strong>
+Evaluate <span class="math inline">\(\int\frac{6x}{3x^2+5}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> The denominator has derivative <span class="math inline">\(6x\)</span>. Set <span class="math inline">\(u=3x^2+5\)</span>, <span class="math inline">\(du=6x\,dx\)</span>. Then the integral is <span class="math inline">\(\ln|u|+C=\ln(3x^2+5)+C\)</span>. Here the absolute
+value may be omitted because <span class="math inline">\(3x^2+5&gt;0\)</span>.</p>
+<p><strong>Example — An integral with a restricted domain.</strong> Find
+<span class="math inline">\(\int\frac{2x+1}{x^2+x-6}\,dx\)</span> and
+identify where the result is valid.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\((x^2+x-6)'=2x+1\)</span>, the antiderivative
+is <span class="math inline">\(\ln|x^2+x-6|+C\)</span>. The integrand is
+undefined at <span class="math inline">\(x=-3\)</span> and <span class="math inline">\(x=2\)</span>, so the constant of integration may
+differ on the three separate intervals.</p>
+<h3 id="defining-the-exponential-function">Defining the exponential
+function</h3>
+<p>Since <span class="math inline">\(\ln x\)</span> is continuous,
+strictly increasing, and has range <span class="math inline">\(\mathbb
+R\)</span>, it has an inverse.</p>
+<p><strong>Definition — Natural exponential.</strong> The function <span class="math inline">\(e^x\)</span> is the inverse of <span class="math inline">\(\ln x\)</span>. Thus <span class="math inline">\(\ln(e^x)=x\)</span> for all real <span class="math inline">\(x\)</span> and <span class="math inline">\(e^{\ln
+x}=x\)</span> for <span class="math inline">\(x&gt;0\)</span>.</p>
+<p><strong>Theorem — Derivative of the natural exponential.</strong> For
+all real <span class="math inline">\(x\)</span>, <span class="math inline">\(\displaystyle\frac{d}{dx}e^x=e^x\)</span>.</p>
+<p><strong>Proof.</strong> Let <span class="math inline">\(y=e^x\)</span>, so <span class="math inline">\(x=\ln y\)</span>. Implicit differentiation gives
+<span class="math inline">\(1=(1/y)y'\)</span>, hence <span class="math inline">\(y'=y=e^x\)</span>.</p>
+<p><strong>Theorem — Exponential chain rule.</strong> For differentiable
+<span class="math inline">\(u\)</span>, <span class="math inline">\(\displaystyle\frac{d}{dx}e^{u(x)}=e^{u(x)}u'(x)\)</span>.</p>
+<p><strong>Theorem — Exponential antiderivative.</strong> For
+differentiable <span class="math inline">\(u\)</span>, <span class="math inline">\(\displaystyle\int
+e^{u(x)}u'(x)\,dx=e^{u(x)}+C\)</span>.</p>
+<p><strong>Example — Exponential substitution.</strong> Evaluate <span class="math inline">\(\int_0^2 3xe^{\frac32x^2}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Set <span class="math inline">\(u=\frac32x^2\)</span> so <span class="math inline">\(du=3x\,dx\)</span>. The bounds become <span class="math inline">\(0\)</span> and <span class="math inline">\(6\)</span>. Therefore <span class="math inline">\(\int_0^6e^u\,du=e^6-1\)</span>. Differentiation of
+<span class="math inline">\(e^{3x^2/2}\)</span> confirms the
+antiderivative.</p>
+<p><strong>Theorem — General base.</strong> For <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(a\ne1\)</span>, define <span class="math inline">\(a^x=e^{x\ln a}\)</span>. Then <span class="math display">\[\frac{d}{dx}a^x=a^x\ln a,\qquad\int
+a^x\,dx=\frac{a^x}{\ln a}+C.\]</span></p>
+<p><strong>Example — An exponential integral with units.</strong> A
+sensor’s background-corrected signal is <span class="math inline">\(S(t)=12(0.8)^t\)</span> units/hour. Compute its
+total signal from <span class="math inline">\(t=0\)</span> to <span class="math inline">\(t=5\)</span> hours.</p>
+<p><strong>Solution.</strong> The accumulation is <span class="math inline">\(\int_0^5
+12(0.8)^t\,dt=12[(0.8)^t/\ln(0.8)]_0^5=12((0.8)^5-1)/\ln(0.8)\)</span>
+signal units. Both numerator and denominator are negative, so the result
+is positive.</p>
+<h3 id="logarithmic-differentiation-and-inverse-trigonometric-review">Logarithmic
+differentiation and inverse trigonometric review</h3>
+<p>Products, quotients, and variable exponents sometimes simplify after
+taking logarithms.</p>
+<p><strong>Example — A variable exponent.</strong> Differentiate <span class="math inline">\(y=x^{\sqrt{x}}\)</span> for <span class="math inline">\(x&gt;0\)</span>.</p>
+<p><strong>Solution.</strong> Take logs: <span class="math inline">\(\ln
+y=\sqrt{x}\ln x\)</span>. Differentiate: <span class="math inline">\(y'/y=(\ln x)/(2\sqrt{x})+1/\sqrt{x}\)</span>.
+Thus <span class="math display">\[\boxed{y'=x^{\sqrt{x}}\left(\frac{\ln
+x+2}{2\sqrt{x}}\right).}\]</span> The restriction <span class="math inline">\(x&gt;0\)</span> is essential to the real-valued
+logarithmic method.</p>
+<p><strong>Remark.</strong> Recall that <span class="math inline">\(\int\frac{1}{1+x^2}\,dx=\arctan x+C\)</span> and
+<span class="math inline">\(\int\frac{1}{\sqrt{1-x^2}}\,dx=\arcsin
+x+C\)</span>. These formulas complement logarithmic and exponential
+antiderivatives; they are not consequences of the logarithm laws.</p>
+<h2 id="exponential-change-and-separable-differential-equations">Exponential
+change and separable differential equations</h2>
+<h3 id="from-proportional-change-to-an-equation">From proportional
+change to an equation</h3>
+<p>A quantity may grow at a rate proportional to its current amount. The
+proportionality constant encodes the speed and direction of change.</p>
+<p><strong>Definition — Exponential change model.</strong> A
+differentiable quantity <span class="math inline">\(Q(t)\)</span>
+follows exponential change if <span class="math inline">\(Q'(t)=kQ(t)\)</span> for a constant <span class="math inline">\(k\)</span>. The initial value <span class="math inline">\(Q(0)=Q_0\)</span> specifies the particular
+model.</p>
+<p><strong>Theorem — Solution of exponential change.</strong> If <span class="math inline">\(Q'=kQ\)</span> and <span class="math inline">\(Q(0)=Q_0\)</span>, then <span class="math inline">\(Q(t)=Q_0e^{kt}\)</span>.</p>
+<p><strong>Proof.</strong> The proposed function satisfies <span class="math inline">\(Q'=kQ_0e^{kt}=kQ\)</span> and <span class="math inline">\(Q(0)=Q_0\)</span>. For nonzero solutions,
+separation gives <span class="math inline">\(dQ/Q=k\,dt\)</span> and
+<span class="math inline">\(\ln|Q|=kt+C\)</span>, yielding the same
+family. The zero solution corresponds to <span class="math inline">\(Q_0=0\)</span>.</p>
+<p><strong>Example — Estimating a decay constant.</strong> A medication
+amount decreases from <span class="math inline">\(120\)</span> mg to
+<span class="math inline">\(72\)</span> mg over <span class="math inline">\(4\)</span> hours under exponential decay.
+Determine the model and its half-life.</p>
+<p><strong>Solution.</strong> Write <span class="math inline">\(Q(t)=120e^{kt}\)</span>. Then <span class="math inline">\(72=120e^{4k}\)</span>, so <span class="math inline">\(k=\frac14\ln(0.6)\approx-0.127706\)</span> per
+hour. The half-life satisfies <span class="math inline">\(1/2=e^{kt_{1/2}}\)</span>, hence <span class="math inline">\(t_{1/2}=\ln(1/2)/k\approx5.43\)</span> hours. The
+negative sign of <span class="math inline">\(k\)</span> confirms
+decay.</p>
+<p><strong>Theorem — Doubling time and half-life.</strong> For <span class="math inline">\(Q(t)=Q_0e^{kt}\)</span>, the doubling time for
+<span class="math inline">\(k&gt;0\)</span> is <span class="math inline">\(\ln 2/k\)</span> and the half-life for <span class="math inline">\(k&lt;0\)</span> is <span class="math inline">\(\ln(1/2)/k\)</span>.</p>
+<p><strong>Proof.</strong> Divide <span class="math inline">\(Q(t+T)\)</span> by <span class="math inline">\(Q(t)\)</span> to obtain <span class="math inline">\(e^{kT}\)</span>. Set the ratio equal to <span class="math inline">\(2\)</span> or <span class="math inline">\(1/2\)</span> and solve.</p>
+<h3 id="separation-of-variables">Separation of variables</h3>
+<p><strong>Definition — Separable differential equation.</strong> An
+equation of the form <span class="math inline">\(y'=g(t)h(y)\)</span> is separable when its
+variables can be rearranged as <span class="math inline">\(dy/h(y)=g(t)\,dt\)</span> wherever <span class="math inline">\(h(y)\ne0\)</span>.</p>
+<p><strong>Remark.</strong> Dividing by <span class="math inline">\(h(y)\)</span> may discard equilibrium solutions
+satisfying <span class="math inline">\(h(y)=0\)</span>. Check these
+solutions before dividing.</p>
+<p><strong>Example — A nonlinear saturation model.</strong> Solve <span class="math inline">\(y'=0.4y(1-y/50)\)</span> with <span class="math inline">\(y(0)=10\)</span>.</p>
+<p><strong>Solution.</strong> For <span class="math inline">\(y\ne0,50\)</span>, separation yields <span class="math display">\[\int\frac{dy}{y(1-y/50)}=\int0.4\,dt.\]</span>
+Since <span class="math inline">\(1/[y(1-y/50)]=1/y+1/(50-y)\)</span>,
+integration gives <span class="math inline">\(\ln|y|-\ln|50-y|=0.4t+C\)</span>. Hence <span class="math inline">\(y/(50-y)=Ae^{0.4t}\)</span> and <span class="math display">\[y(t)=\frac{50}{1+Be^{-0.4t}}.\]</span> Using
+<span class="math inline">\(y(0)=10\)</span> gives <span class="math inline">\(B=4\)</span>. The solution increases toward <span class="math inline">\(50\)</span> without exceeding it. The equilibrium
+solutions <span class="math inline">\(y\equiv0\)</span> and <span class="math inline">\(y\equiv50\)</span> should be checked
+separately.</p>
+<figure>
+<img alt="Original logistic-response plot: nonlinear growth approaches a finite capacity." src="figures/chapter07-diagram-02.svg"/>
+<figcaption>
+Original logistic-response plot: nonlinear growth approaches a finite
+capacity.
+</figcaption>
+</figure>
+<h3 id="newtons-law-of-cooling">Newton’s law of cooling</h3>
+<p>A common model assumes that temperature changes at a rate
+proportional to its difference from the surrounding temperature <span class="math inline">\(T_a\)</span>.</p>
+<p><strong>Theorem — Cooling model.</strong> If <span class="math inline">\(T_a\)</span> is constant and <span class="math inline">\(T'=-k(T-T_a)\)</span> for <span class="math inline">\(k&gt;0\)</span>, then <span class="math display">\[\boxed{T(t)=T_a+(T_0-T_a)e^{-kt}.}\]</span></p>
+<p><strong>Proof.</strong> Let <span class="math inline">\(U=T-T_a\)</span>. Since <span class="math inline">\(T_a\)</span> is constant, <span class="math inline">\(U'=-kU\)</span>, so <span class="math inline">\(U=(T_0-T_a)e^{-kt}\)</span>.</p>
+<p><strong>Example — When does a sample reach a threshold?.</strong> A
+sample cools from <span class="math inline">\(82^\circ\)</span>C in a
+room at <span class="math inline">\(22^\circ\)</span>C with <span class="math inline">\(k=0.12\)</span> per minute. When will it reach
+<span class="math inline">\(40^\circ\)</span>C?</p>
+<p><strong>Solution.</strong> The model is <span class="math inline">\(T(t)=22+60e^{-0.12t}\)</span>. Set <span class="math inline">\(40=22+60e^{-0.12t}\)</span>, giving <span class="math inline">\(e^{-0.12t}=0.3\)</span> and <span class="math inline">\(t=-\ln(0.3)/0.12\approx10.03\)</span> minutes. The
+temperature remains above room temperature for every finite time.</p>
+<h3 id="model-limitations-and-interpretation">Model limitations and
+interpretation</h3>
+<p>Exponential change assumes a constant proportional rate; logistic
+growth assumes a stable carrying capacity; and the cooling model assumes
+a constant ambient temperature and a single effective cooling
+coefficient. Data can challenge these assumptions. A numerical fit does
+not establish causation, and extrapolating beyond observed times can be
+unreliable.</p>
+<h2 id="hyperbolic-functions">Hyperbolic functions</h2>
+<h3 id="definitions-and-identities">Definitions and identities</h3>
+<p><strong>Definition — Hyperbolic sine and cosine.</strong> For real
+<span class="math inline">\(x\)</span>, <span class="math display">\[\boxed{\sinh x=\frac{e^x-e^{-x}}2,\qquad\cosh
+x=\frac{e^x+e^{-x}}2.}\]</span> Define <span class="math inline">\(\tanh
+x=\sinh x/\cosh x\)</span>. The names reflect a connection with the unit
+hyperbola, not the unit circle.</p>
+<p><strong>Theorem — Fundamental hyperbolic identity.</strong> For every
+real <span class="math inline">\(x\)</span>, <span class="math inline">\(\cosh^2x-\sinh^2x=1\)</span>.</p>
+<p><strong>Proof.</strong> Subtract the squares of the defining
+exponential expressions: <span class="math inline">\([(e^x+e^{-x})^2-(e^x-e^{-x})^2]/4=1\)</span>.</p>
+<p><strong>Theorem — Derivatives of hyperbolic functions.</strong> <span class="math display">\[\frac{d}{dx}\sinh x=\cosh x,\qquad
+\frac{d}{dx}\cosh x=\sinh x,\qquad\frac{d}{dx}\tanh
+x=\operatorname{sech}^2x.\]</span></p>
+<p><strong>Proof.</strong> Differentiate the exponential definitions.
+For <span class="math inline">\(\tanh x\)</span>, use the quotient rule
+and <span class="math inline">\(\cosh^2x-\sinh^2x=1\)</span>.</p>
+<p><strong>Theorem — Basic hyperbolic antiderivatives.</strong> <span class="math display">\[\int\cosh x\,dx=\sinh x+C,\qquad\int\sinh
+x\,dx=\cosh x+C,\qquad\int\operatorname{sech}^2x\,dx=\tanh
+x+C.\]</span></p>
+<p><strong>Example — A hyperbolic integral.</strong> Evaluate <span class="math inline">\(\int_0^1 2\cosh(2x)\,dx\)</span>.</p>
+<p><strong>Solution.</strong> With <span class="math inline">\(u=2x\)</span>, <span class="math inline">\(du=2\,dx\)</span>, so the integral is <span class="math inline">\([\sinh(2x)]_0^1=\sinh2\)</span>.</p>
+<h3 id="inverse-hyperbolic-functions">Inverse hyperbolic functions</h3>
+<p>The function <span class="math inline">\(\sinh x\)</span> is strictly
+increasing on <span class="math inline">\(\mathbb R\)</span> and has an
+inverse. The function <span class="math inline">\(\cosh x\)</span> is
+one-to-one only after restricting its domain, conventionally to <span class="math inline">\(x\ge0\)</span>.</p>
+<p><strong>Theorem — Inverse hyperbolic sine.</strong> For every real
+<span class="math inline">\(x\)</span>, <span class="math display">\[\boxed{\operatorname{arsinh}x=\ln\left(x+\sqrt{x^2+1}\right),\qquad\frac{d}{dx}\operatorname{arsinh}x=\frac1{\sqrt{x^2+1}}.}\]</span></p>
+<p><strong>Proof.</strong> Let <span class="math inline">\(x=\sinh
+y=(e^y-e^{-y})/2\)</span> and put <span class="math inline">\(z=e^y&gt;0\)</span>. Then <span class="math inline">\(z^2-2xz-1=0\)</span>, so <span class="math inline">\(z=x+\sqrt{x^2+1}\)</span>; the other root is
+negative. Taking logs gives the inverse formula. Differentiate it to
+obtain the derivative.</p>
+<p><strong>Theorem — Inverse hyperbolic cosine.</strong> For <span class="math inline">\(x&gt;1\)</span>, <span class="math inline">\(\displaystyle\frac{d}{dx}\operatorname{arcosh}x=\frac1{\sqrt{x^2-1}}\)</span>,
+with <span class="math inline">\(\operatorname{arcosh}x=\ln(x+\sqrt{x^2-1})\)</span>
+for <span class="math inline">\(x\ge1\)</span>.</p>
+<p><strong>Example — An inverse hyperbolic antiderivative.</strong>
+Evaluate <span class="math inline">\(\int\frac{dx}{\sqrt{x^2+9}}\)</span>.</p>
+<p><strong>Solution.</strong> Set <span class="math inline">\(u=x/3\)</span>, so <span class="math inline">\(dx=3\,du\)</span> and <span class="math inline">\(\sqrt{x^2+9}=3\sqrt{u^2+1}\)</span>. The result is
+<span class="math inline">\(\operatorname{arsinh}(x/3)+C\)</span>.
+Equivalently it is <span class="math inline">\(\ln(x+\sqrt{x^2+9})+C\)</span>; the two forms
+differ by a constant.</p>
+<h3 id="why-hyperbolic-functions-matter-a-hanging-cable">Why hyperbolic
+functions matter: a hanging cable</h3>
+<p>A flexible uniform cable hanging under its own weight takes a
+catenary shape. With a suitable choice of origin, its height may be
+written <span class="math inline">\(y=a\cosh(x/a)\)</span>, where <span class="math inline">\(a&gt;0\)</span> controls the scale.</p>
+<p><strong>Example — Slope and length of a catenary.</strong> For <span class="math inline">\(y=3\cosh(x/3)\)</span> on <span class="math inline">\(-3\le x\le3\)</span>, determine the slopes at the
+endpoints and the cable length.</p>
+<p><strong>Solution.</strong> Differentiation gives <span class="math inline">\(y'=\sinh(x/3)\)</span>, so the endpoint slopes
+are <span class="math inline">\(\pm\sinh1\)</span>. The arc length is
+<span class="math display">\[L=\int_{-3}^{3}\sqrt{1+\sinh^2(x/3)}\,dx=\int_{-3}^{3}\cosh(x/3)\,dx=6\sinh1,\]</span>
+using <span class="math inline">\(1+\sinh^2u=\cosh^2u\)</span> and <span class="math inline">\(\cosh u&gt;0\)</span>.</p>
+<figure>
+<img alt="Original catenary illustration. The minimum occurs at the center, where the slope is zero." src="figures/chapter07-diagram-03.svg"/>
+<figcaption>
+Original catenary illustration. The minimum occurs at the center, where
+the slope is zero.
+</figcaption>
+</figure>
+<h2 id="synthesis-choosing-a-mathematical-strategy">Synthesis: choosing
+a mathematical strategy</h2>
+<p>Before computing, identify whether the task concerns accumulated
+reciprocal change, exponential growth or decay, separation of variables,
+or a hyperbolic identity. Then write down the domain, relevant units,
+and initial condition. After solving, differentiate your answer to
+verify it. Computational checks are valuable, but they complement rather
+than replace the reasoning.</p>
+<p><strong>Example — Connecting three ideas.</strong> Let <span class="math inline">\(Q(t)=40e^{-0.2t}\)</span>. Compute (a) <span class="math inline">\(Q'(t)\)</span>, (b) <span class="math inline">\(\int_0^5Q(t)\,dt\)</span>, and (c) the time at
+which <span class="math inline">\(Q(t)=10\)</span>.</p>
+<p><strong>Solution.</strong> (a) <span class="math inline">\(Q'=-8e^{-0.2t}=-0.2Q\)</span>. (b) The
+accumulation is <span class="math inline">\([-200e^{-0.2t}]_0^5=200(1-e^{-1})\)</span>. (c)
+<span class="math inline">\(10=40e^{-0.2t}\)</span> implies <span class="math inline">\(t=\ln4/0.2=5\ln4\)</span>. The three answers
+describe rate, total, and threshold time, respectively.</p>
+<h2 id="r-computational-laboratories">R computational laboratories</h2>
+<p>These laboratories appear together before the Python laboratories.
+Each script is self-contained and uses base R. Run the code, inspect the
+plot or numerical output, and explain how it connects to the preceding
+mathematical derivation.</p>
+<h3 class="unnumbered" id="r-laboratory-1-logarithm-as-area">R
+Laboratory 1: logarithm as area</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(t) 1/t
+for (x in c(0.5, 1, 2, 4)) {
+  numerical &lt;- integrate(f, lower=1, upper=x)$value
+  cat('x =', x, 'area =', round(numerical, 7),
+      'log(x) =', round(log(x), 7), '\n')
+}
+curve(1/x, from=0.25, to=4, lwd=2,
+      xlab='t', ylab='1/t', main='Reciprocal curve')</code></pre></div>
+<p><strong>Investigate.</strong> Explain why the integral is negative
+for <span class="math inline">\(x=0.5\)</span>. Compare the numerical
+and exact values and describe why the computation does not prove the
+identity.</p>
+<h3 class="unnumbered" id="r-laboratory-2-exponential-accumulation">R
+Laboratory 2: exponential accumulation</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(t) 12 * 0.8^t
+numeric_total &lt;- integrate(f, 0, 5)$value
+exact_total &lt;- 12 * (0.8^5 - 1)/log(0.8)
+cat('Numerical =', numeric_total, '\n')
+cat('Analytical =', exact_total, '\n')
+curve(f(x), from=0, to=5, lwd=2,
+      xlab='Time (hours)', ylab='Signal per hour')</code></pre></div>
+<p><strong>Investigate.</strong> Explain why the total has units of
+signal, not signal per hour.</p>
+<h3 class="unnumbered" id="r-laboratory-3-half-life-and-parameter-sensitivity">R Laboratory 3:
+half-life and parameter sensitivity</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>Q0 &lt;- 120
+k &lt;- log(0.6)/4
+t &lt;- seq(0, 16, length.out=250)
+plot(t, Q0*exp(k*t), type='l', lwd=2,
+     xlab='Hours', ylab='Amount (mg)')
+abline(h=Q0/2, lty=2)
+cat('Decay constant:', k, '\n')
+cat('Half-life:', log(0.5)/k, '\n')</code></pre></div>
+<p><strong>Investigate.</strong> Repeat with <span class="math inline">\(k\)</span> multiplied by <span class="math inline">\(1.2\)</span>. What happens to half-life?</p>
+<h3 class="unnumbered" id="r-laboratory-4-logistic-saturation">R
+Laboratory 4: logistic saturation</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0, 20, length.out=300)
+y &lt;- 50/(1 + 4*exp(-0.4*t))
+plot(t, y, type='l', lwd=2,
+     xlab='Time', ylab='Population')
+abline(h=50, lty=2)
+cat('At t=10:', 50/(1 + 4*exp(-4)), '\n')</code></pre></div>
+<p><strong>Investigate.</strong> Compare <span class="math inline">\(y'(t)=0.4y(1-y/50)\)</span> at early and late
+times.</p>
+<h3 class="unnumbered" id="r-laboratory-5-cooling-threshold">R
+Laboratory 5: cooling threshold</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>Tfun &lt;- function(t) 22 + 60*exp(-0.12*t)
+threshold_time &lt;- -log(0.3)/0.12
+cat('Threshold time:', threshold_time, '\n')
+cat('Temperature check:', Tfun(threshold_time), '\n')
+curve(Tfun(x), from=0, to=30, lwd=2,
+      xlab='Minutes', ylab='Temperature (C)')
+abline(h=c(22, 40), lty=2)</code></pre></div>
+<p><strong>Investigate.</strong> What assumption about ambient
+temperature is encoded in the model?</p>
+<h3 class="unnumbered" id="r-laboratory-6-hyperbolic-geometry">R
+Laboratory 6: hyperbolic geometry</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter07-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>a &lt;- 3
+x &lt;- seq(-4, 4, length.out=250)
+y &lt;- a*cosh(x/a)
+plot(x, y, type='l', lwd=2,
+     xlab='x', ylab='Cable height')
+length_num &lt;- integrate(function(x) cosh(x/a), -3, 3)$value
+length_exact &lt;- 6*sinh(1)
+cat('Numerical length:', length_num, '\n')
+cat('Exact length:', length_exact, '\n')</code></pre></div>
+<p><strong>Investigate.</strong> Verify <span class="math inline">\(\cosh^2u-\sinh^2u=1\)</span> numerically on a
+grid. Does that constitute a proof?</p>
+<h2 id="python-computational-laboratories">Python computational
+laboratories</h2>
+<p>The Python activities mirror the mathematical goals of the R
+laboratories but are presented independently. They require NumPy, SciPy,
+and Matplotlib.</p>
+<h3 class="unnumbered" id="python-laboratory-1-logarithm-as-area">Python
+Laboratory 1: logarithm as area</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+for x in [0.5, 1, 2, 4]:
+    numerical = quad(lambda t: 1/t, 1, x)[0]
+    print(x, round(numerical, 7), round(np.log(x), 7))
+t = np.linspace(0.25, 4, 300)
+plt.plot(t, 1/t)
+plt.xlabel('t'); plt.ylabel('1/t')
+plt.show()</code></pre></div>
+<p><strong>Investigate.</strong> Compare the signs and values with the R
+output.</p>
+<h3 class="unnumbered" id="python-laboratory-2-exponential-accumulation">Python Laboratory 2:
+exponential accumulation</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+f = lambda t: 12 * 0.8**t
+numerical = quad(f, 0, 5)[0]
+exact = 12 * (0.8**5 - 1)/np.log(0.8)
+print('Numerical:', numerical, 'Analytical:', exact)
+t = np.linspace(0, 5, 200)
+plt.plot(t, f(t))
+plt.xlabel('Time (hours)'); plt.ylabel('Signal per hour')
+plt.show()</code></pre></div>
+<p><strong>Investigate.</strong> Explain the meaning of the shaded area
+you would draw under the curve.</p>
+<h3 class="unnumbered" id="python-laboratory-3-half-life">Python
+Laboratory 3: half-life</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+Q0 = 120
+k = np.log(0.6)/4
+t = np.linspace(0, 16, 250)
+plt.plot(t, Q0*np.exp(k*t))
+plt.axhline(Q0/2, linestyle='--')
+plt.xlabel('Hours'); plt.ylabel('Amount (mg)')
+plt.show()
+print('k:', k, 'half-life:', np.log(0.5)/k)</code></pre></div>
+<p><strong>Investigate.</strong> Confirm that the half-life does not
+depend on <span class="math inline">\(Q_0\)</span>.</p>
+<h3 class="unnumbered" id="python-laboratory-4-logistic-saturation">Python Laboratory 4:
+logistic saturation</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+t = np.linspace(0, 20, 300)
+y = 50/(1 + 4*np.exp(-0.4*t))
+plt.plot(t, y)
+plt.axhline(50, linestyle='--')
+plt.xlabel('Time'); plt.ylabel('Population')
+plt.show()
+print('At t=10:', 50/(1 + 4*np.exp(-4)))</code></pre></div>
+<p><strong>Investigate.</strong> Find the time when the model reaches
+half its carrying capacity.</p>
+<h3 class="unnumbered" id="python-laboratory-5-cooling-threshold">Python
+Laboratory 5: cooling threshold</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+T = lambda t: 22 + 60*np.exp(-0.12*t)
+t_star = -np.log(0.3)/0.12
+print('Threshold time:', t_star)
+print('Check:', T(t_star))
+t = np.linspace(0, 30, 300)
+plt.plot(t, T(t))
+plt.axhline(40, linestyle='--')
+plt.axhline(22, linestyle=':')
+plt.xlabel('Minutes'); plt.ylabel('Temperature (C)')
+plt.show()</code></pre></div>
+<p><strong>Investigate.</strong> Predict what happens if the initial
+temperature increases by <span class="math inline">\(10^\circ\)</span>C.</p>
+<h3 class="unnumbered" id="python-laboratory-6-hyperbolic-geometry">Python Laboratory 6:
+hyperbolic geometry</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter07-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+a = 3
+x = np.linspace(-4, 4, 250)
+plt.plot(x, a*np.cosh(x/a))
+plt.xlabel('x'); plt.ylabel('Cable height')
+plt.show()
+length_num = quad(lambda x: np.cosh(x/a), -3, 3)[0]
+length_exact = 6*np.sinh(1)
+print('Numerical:', length_num, 'Exact:', length_exact)</code></pre></div>
+<p><strong>Investigate.</strong> Why does the arc-length integrand
+simplify to <span class="math inline">\(\cosh(x/a)\)</span>?</p>
+<h2 id="chapter-exercises">Chapter exercises</h2>
+<p><strong>Instructions.</strong> Show mathematical reasoning before
+using software. Give domains, units, and interpretation when
+appropriate. Problems marked <span class="math inline">\(\star\)</span>
+require extended justification.</p>
+<h3 class="unnumbered" id="foundations-and-logarithmic-integrals">Foundations and logarithmic
+integrals</h3>
+<ol type="1">
+<li><p>Use the area definition to explain why <span class="math inline">\(\ln 1=0\)</span>.</p></li>
+<li><p>Explain geometrically why <span class="math inline">\(\ln
+x\)</span> is negative for <span class="math inline">\(0&lt;x&lt;1\)</span>.</p></li>
+<li><p>Prove that <span class="math inline">\(\ln x\)</span> is
+increasing using a derivative argument.</p></li>
+<li><p>Show that <span class="math inline">\(\ln 4=2\ln2\)</span> using
+logarithm laws.</p></li>
+<li><p>Explain why <span class="math inline">\(\ln(-2)\)</span> is not
+defined as a real number.</p></li>
+<li><p>Differentiate <span class="math inline">\(\ln(5x^2+1)\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(\ln|x^3-8|\)</span> and
+state the domain.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int\frac{4x^3}{x^4+7}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_1^3\frac{2x}{x^2+1}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int\frac{dx}{7x-2}\)</span>.</p></li>
+<li><p>Explain the difference between <span class="math inline">\(\ln(x^2)\)</span> and <span class="math inline">\((\ln x)^2\)</span>.</p></li>
+<li><p><span class="math inline">\(\star\)</span> Prove the product law
+for logarithms by differentiating a suitable function.</p></li>
+<li><p>Differentiate <span class="math inline">\(e^{2x^2-x}\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^1
+2xe^{x^2}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int
+5^{3x}\,dx\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(y=x^{2x}\)</span> for
+<span class="math inline">\(x&gt;0\)</span> using logarithmic
+differentiation.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^4
+9(0.7)^t\,dt\)</span> and state its units if the integrand is measured
+in liters/hour.</p></li>
+<li><p><span class="math inline">\(\star\)</span> Compare <span class="math inline">\(\ln(1+x)\)</span> and <span class="math inline">\(x\)</span> for <span class="math inline">\(x&gt;0\)</span> using derivatives.</p></li>
+</ol>
+<h3 class="unnumbered" id="differential-equations-and-models">Differential equations and
+models</h3>
+<ol type="1">
+<li><p>Verify by differentiation that <span class="math inline">\(Q=7e^{0.3t}\)</span> solves <span class="math inline">\(Q'=0.3Q\)</span>.</p></li>
+<li><p>Solve <span class="math inline">\(y'=5y\)</span> with <span class="math inline">\(y(0)=2\)</span>.</p></li>
+<li><p>Solve <span class="math inline">\(y'=-0.4y\)</span> with
+<span class="math inline">\(y(3)=10\)</span>.</p></li>
+<li><p>Find the doubling time for a model with <span class="math inline">\(k=0.08\)</span> per day.</p></li>
+<li><p>Find the half-life for a model with <span class="math inline">\(k=-0.15\)</span> per hour.</p></li>
+<li><p>A population doubles in 6 years. Determine its exponential growth
+constant.</p></li>
+<li><p>A pollutant decreases by 30% over 5 days. Determine its
+exponential decay constant.</p></li>
+<li><p>Explain why an exponential decay model cannot reach zero at a
+finite time.</p></li>
+<li><p>Solve <span class="math inline">\(y'=ty\)</span> with <span class="math inline">\(y(0)=3\)</span>.</p></li>
+<li><p>Solve <span class="math inline">\(y'=2t(1+y^2)\)</span> with
+<span class="math inline">\(y(0)=0\)</span> on its maximal interval
+around <span class="math inline">\(0\)</span>.</p></li>
+<li><p>Find all equilibrium solutions of <span class="math inline">\(y'=y(4-y)\)</span>.</p></li>
+<li><p>Solve <span class="math inline">\(y'=0.2y(1-y/100)\)</span>
+with <span class="math inline">\(y(0)=20\)</span>.</p></li>
+<li><p>Determine when the logistic model in Exercise 30 reaches <span class="math inline">\(80\)</span>.</p></li>
+<li><p>A liquid cools from <span class="math inline">\(90^\circ\)</span>C toward <span class="math inline">\(20^\circ\)</span>C with <span class="math inline">\(k=0.09\)</span> min<span class="math inline">\(^{-1}\)</span>. Find its temperature after 12
+minutes.</p></li>
+<li><p>Find the time at which the liquid in Exercise 32 reaches <span class="math inline">\(35^\circ\)</span>C.</p></li>
+<li><p><span class="math inline">\(\star\)</span> Explain why a changing
+room temperature violates the assumptions of the constant-ambient
+cooling formula.</p></li>
+</ol>
+<h3 class="unnumbered" id="hyperbolic-functions-and-synthesis">Hyperbolic functions and
+synthesis</h3>
+<ol type="1">
+<li><p>Prove from the definitions that <span class="math inline">\(\sinh(-x)=-\sinh x\)</span>.</p></li>
+<li><p>Prove from the definitions that <span class="math inline">\(\cosh(-x)=\cosh x\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(\cosh^2x-\sinh^2x=1\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(\sinh(3x^2)\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(\cosh(4x-1)\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^2\cosh(3x)\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int\frac{dx}{\sqrt{x^2+16}}\)</span>.</p></li>
+<li><p>Verify the formula for <span class="math inline">\(\operatorname{arsinh}x\)</span> by
+differentiation.</p></li>
+<li><p>Find the slope of <span class="math inline">\(y=5\cosh(x/5)\)</span> at <span class="math inline">\(x=5\)</span>.</p></li>
+<li><p>Find the arc length of <span class="math inline">\(y=2\cosh(x/2)\)</span> for <span class="math inline">\(-2\le x\le2\)</span>.</p></li>
+<li><p><span class="math inline">\(\star\)</span> Explain why a catenary
+is not generally a parabola, even though their graphs can look similar
+near the minimum.</p></li>
+<li><p>Compare <span class="math inline">\(e^x\)</span>, <span class="math inline">\(\sinh x\)</span>, and <span class="math inline">\(\cosh x\)</span> as <span class="math inline">\(x\to\infty\)</span>.</p></li>
+<li><p>Design a numerical test for the identity <span class="math inline">\(\cosh^2x-\sinh^2x=1\)</span>. Discuss
+floating-point limitations.</p></li>
+<li><p><span class="math inline">\(\star\)</span> Construct an original
+growth or cooling problem, derive a model, and specify how data could
+test its assumptions.</p></li>
+</ol>
+<h2 id="conceptual-review">Conceptual review</h2>
+<ol type="1">
+<li><p>How can an integral define a function rather than just a
+number?</p></li>
+<li><p>What is the mathematical difference between an initial condition
+and a differential equation?</p></li>
+<li><p>Why must equilibrium solutions be checked when separating
+variables?</p></li>
+<li><p>How does a decay constant differ from a half-life?</p></li>
+<li><p>Why do numerical agreement and graphical agreement not constitute
+a proof?</p></li>
+<li><p>Which features of a cooling model are assumptions, and which are
+consequences?</p></li>
+<li><p>How are hyperbolic identities different from trigonometric
+identities?</p></li>
+<li><p>How can checking units reveal an incorrect integral or
+differential equation?</p></li>
+</ol>
+<h2 id="chapter-project-temperature-recovery-and-model-assessment">Chapter
+project: temperature recovery and model assessment</h2>
+<h3 class="unnumbered" id="scenario">Scenario</h3>
+<p>A laboratory vessel contains a warm solution. Its temperature is
+recorded in a room maintained near <span class="math inline">\(21^\circ\)</span>C. The following <em>synthetic
+teaching dataset</em> represents a plausible cooling trajectory with
+measurement variation; it is not experimental evidence.</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Time (min)</th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">4</th>
+<th style="text-align: right;">8</th>
+<th style="text-align: right;">12</th>
+<th style="text-align: right;">16</th>
+<th style="text-align: right;">20</th>
+<th style="text-align: right;">24</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Temperature (<span class="math inline">\(^\circ\)</span>C)</td>
+<td style="text-align: right;">78.0</td>
+<td style="text-align: right;">64.1</td>
+<td style="text-align: right;">53.9</td>
+<td style="text-align: right;">45.5</td>
+<td style="text-align: right;">39.7</td>
+<td style="text-align: right;">35.4</td>
+<td style="text-align: right;">31.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 class="unnumbered" id="part-a-analytical-foundation-25-points">Part
+A: analytical foundation (25 points)</h3>
+<p>Assume <span class="math inline">\(T'(t)=-k(T(t)-21)\)</span>,
+<span class="math inline">\(k&gt;0\)</span>. Derive the solution using
+separation of variables, explain the role of the initial condition, and
+identify the units of <span class="math inline">\(k\)</span>. Derive an
+expression for the time at which the temperature reaches a specified
+threshold <span class="math inline">\(T_*\)</span> between <span class="math inline">\(21\)</span> and the initial temperature.</p>
+<h3 class="unnumbered" id="part-b-estimating-the-parameter-20-points">Part B: estimating the
+parameter (20 points)</h3>
+<p>Use the first and last measurements to obtain a preliminary estimate
+of <span class="math inline">\(k\)</span>. Then linearize the model by
+plotting <span class="math inline">\(\ln(T-21)\)</span> against time and
+fit a straight line using all observations. Explain why the logarithm
+requires <span class="math inline">\(T&gt;21\)</span> and why
+transformed-scale fitting is not identical to minimizing errors on the
+original temperature scale.</p>
+<h3 class="unnumbered" id="part-c-r-investigation-20-points">Part C: R
+investigation (20 points)</h3>
+<p>In R, enter the data, fit the linearized model, calculate predicted
+temperatures and residuals, and produce clearly labeled
+observed-versus-predicted and residual plots. Report the fitted <span class="math inline">\(k\)</span>, the estimated time to reach <span class="math inline">\(35^\circ\)</span>C, and at least one quantitative
+error summary. Interpret rather than merely display each output.</p>
+<h3 class="unnumbered" id="part-d-python-replication-20-points">Part D:
+Python replication (20 points)</h3>
+<p>Repeat Part C independently in Python with NumPy and Matplotlib.
+Compare the fitted parameter and predictions with R, accounting for
+rounding. Explain any meaningful discrepancy and verify your threshold
+calculation by substitution into the fitted temperature function.</p>
+<h3 class="unnumbered" id="part-e-critique-and-communication-15-points">Part E: critique and
+communication (15 points)</h3>
+<p>Write a short technical report explaining the mathematical model,
+numerical method, parameter estimate, residual pattern, and two reasons
+why predictions might fail outside the observed time range. Propose one
+improved data-collection strategy.</p>
+<h3 class="unnumbered" id="project-rubric">Project rubric</h3>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Criterion</th>
+<th style="text-align: right;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Analytical derivation and
+interpretation</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Parameter estimation and
+transformations</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">R analysis, figures, and explanations</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Python replication and comparison</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Critical assessment and written
+communication</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Instructor note.</strong> Encourage students to distinguish a
+parameter estimated from two observations from one estimated using all
+observations. Reward transparent assumptions, reproducible code, and
+interpretation rather than excessive numerical precision.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_07_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter06.html">← Applications of Definite Integrals</a><a href="chapter08.html">Techniques of Integration →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Exponential change</a></li><li><a href="#the-natural-logarithm-and-exponential-integrals">The natural
+logarithm and exponential integrals</a></li><li><a href="#exponential-change-and-separable-differential-equations">Exponential
+change and separable differential equations</a></li><li><a href="#hyperbolic-functions">Hyperbolic functions</a></li><li><a href="#synthesis-choosing-a-mathematical-strategy">Synthesis: choosing
+a mathematical strategy</a></li><li><a href="#r-computational-laboratories">R computational laboratories</a></li><li><a href="#python-computational-laboratories">Python computational
+laboratories</a></li><li><a href="#chapter-exercises">Chapter exercises</a></li><li><a href="#conceptual-review">Conceptual review</a></li><li><a href="#chapter-project-temperature-recovery-and-model-assessment">Chapter
+project: temperature recovery and model assessment</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

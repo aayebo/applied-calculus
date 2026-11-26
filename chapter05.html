@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Integration | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a aria-current="page" class="active" href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="integration">Integration</h1>
+<p><strong>The central question.</strong> If a function describes a
+<em>rate</em>, how can we reconstruct the <em>total change</em>? If a
+curve bounds a region, how can we find its area without treating a
+curved boundary as straight? Both questions lead to a limit of sums, the
+definite integral. The surprising connection to antiderivatives is the
+Fundamental Theorem of Calculus.</p>
+<p><strong>Learning outcomes.</strong> By the end of this chapter,
+students should be able to construct and interpret left, right,
+midpoint, upper, and lower sums; express finite sums with sigma
+notation; define and evaluate definite integrals; distinguish signed
+area, geometric area, displacement, and distance; explain both parts of
+the Fundamental Theorem; evaluate indefinite integrals; use substitution
+with and without changed bounds; and calculate area between curves.
+Students will also use R and Python to investigate convergence and
+verify analytical results.</p>
+<p><strong>Prerequisites.</strong> Function notation, graphs, limits,
+continuity, derivatives, and basic antiderivatives (Chapters 1–4).</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="from-rectangular-approximations-to-exact-accumulation">From
+rectangular approximations to exact accumulation</h3>
+<p>Each rectangle contributes height times width. As the partition
+becomes finer, the sum may approach a definite limit, the integral. For
+increasing nonnegative functions, left sums underestimate and right sums
+overestimate area; for general functions neither conclusion is
+automatic. The integral measures signed accumulation, so regions below
+the axis contribute negatively.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 5." src="figures/chapter_05_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 5.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> For <span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([0,2]\)</span>, compare left sums with five and
+ten rectangles. Predict whether the error decreases, and distinguish the
+numerical pattern from a proof of convergence.</p>
+<h2 id="interactive-investigation">Interactive investigation: Riemann sums</h2><div class="calc-widget" data-calc="5"><p>Compare midpoint rectangles with the exact integral of x² from 0 to 2.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="area-and-estimating-with-finite-sums">Area and estimating with
+finite sums</h2>
+<h3 id="why-approximation-comes-first">Why approximation comes
+first</h3>
+<p>A rectangle has area equal to width times height. A curved region
+does not usually have a single height, but it can be approximated by
+many narrow rectangles. Let <span class="math inline">\(f\)</span> be
+nonnegative on <span class="math inline">\([a,b]\)</span>. Divide the
+interval into <span class="math inline">\(n\)</span> equal pieces of
+width <span class="math display">\[\Delta x=\frac{b-a}{n},\qquad
+x_i=a+i\Delta x\quad (i=0,1,\ldots,n).\]</span> Each rectangle has base
+<span class="math inline">\(\Delta x\)</span> and height chosen from the
+function on its subinterval. The resulting area estimate is the sum of
+the rectangle areas.</p>
+<p><strong>Definition — Left, right, and midpoint sums.</strong> For a
+function <span class="math inline">\(f\)</span> on <span class="math inline">\([a,b]\)</span> and a uniform partition of width
+<span class="math inline">\(\Delta x\)</span>, define <span class="math display">\[\begin{aligned}
+L_n&amp;=\Delta x\sum_{i=0}^{n-1}f(x_i),\\ R_n&amp;=\Delta
+x\sum_{i=1}^{n}f(x_i),\\ M_n&amp;=\Delta
+x\sum_{i=1}^{n}f\left(\frac{x_{i-1}+x_i}{2}\right).
+\end{aligned}\]</span> These quantities estimate <em>signed
+accumulation</em>; for <span class="math inline">\(f\ge0\)</span> they
+estimate the area beneath the curve.</p>
+<figure>
+<img alt="Original diagram: eight left-endpoint rectangles for f(x) = x2 on [0, 2]. Because the function increases, each rectangle lies below the graph." src="figures/chapter05-diagram-01.svg"/>
+<figcaption>
+Original diagram: eight left-endpoint rectangles for <span class="math inline"><em>f</em>(<em>x</em>) = <em>x</em><sup>2</sup></span>
+on <span class="math inline">[0, 2]</span>. Because the function
+increases, each rectangle lies below the graph.
+</figcaption>
+</figure>
+<p><strong>Example — A first comparison.</strong> Estimate the area
+beneath <span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([0,2]\)</span> with four rectangles using left and
+right endpoints.</p>
+<p><strong>Solution.</strong> Here <span class="math inline">\(\Delta
+x=1/2\)</span>. The left heights are <span class="math inline">\(0,1/4,1,9/4\)</span> and the right heights are
+<span class="math inline">\(1/4,1,9/4,4\)</span>. Thus <span class="math display">\[L_4=\tfrac12(0+\tfrac14+1+\tfrac94)=\tfrac74=1.75,\qquad
+R_4=\tfrac12(\tfrac14+1+\tfrac94+4)=\tfrac{15}{4}=3.75.\]</span> The
+true integral will be <span class="math inline">\(8/3\approx2.667\)</span>. The left sum
+underestimates and the right sum overestimates because <span class="math inline">\(x^2\)</span> is increasing on this interval.</p>
+<p><strong>Remark.</strong> An endpoint sum is not inherently an upper
+or lower sum. The direction depends on whether the function increases or
+decreases. Midpoint sums often improve accuracy but are not
+automatically exact.</p>
+<h3 id="upper-and-lower-sums">Upper and lower sums</h3>
+<p><strong>Definition — Upper and lower sums.</strong> For a partition
+<span class="math inline">\(P\)</span> with subinterval widths <span class="math inline">\(\Delta x_i\)</span>, let <span class="math inline">\(m_i\)</span> and <span class="math inline">\(M_i\)</span> be the infimum and supremum of <span class="math inline">\(f\)</span> on the <span class="math inline">\(i\)</span>th subinterval. Then <span class="math display">\[\underline S(f,P)=\sum_{i=1}^n m_i\Delta
+x_i,\qquad \overline S(f,P)=\sum_{i=1}^n M_i\Delta x_i.\]</span> For a
+bounded function, every sample-point sum lies between the corresponding
+lower and upper sums.</p>
+<p>If <span class="math inline">\(f\)</span> is continuous, finer
+partitions allow these two estimates to approach the same value. The
+difference between them quantifies how much uncertainty remains from
+replacing the curve with rectangles.</p>
+<p><strong>Example — Error bracket for an increasing function.</strong>
+Let <span class="math inline">\(f(x)=1+x\)</span> on <span class="math inline">\([0,3]\)</span> with <span class="math inline">\(n\)</span> equal subintervals.</p>
+<p><strong>Solution.</strong> The width is <span class="math inline">\(3/n\)</span>. As <span class="math inline">\(f\)</span> increases, the left sum is a lower sum
+and the right sum is an upper sum. Their difference telescopes: <span class="math display">\[R_n-L_n=\frac3n\bigl(f(3)-f(0)\bigr)=\frac9n.\]</span>
+With <span class="math inline">\(n=90\)</span>, the true area is trapped
+in an interval of width <span class="math inline">\(0.1\)</span>. This
+gives an <em>a priori</em> error bracket without knowing the exact
+integral.</p>
+<h3 id="accumulation-from-a-rate">Accumulation from a rate</h3>
+<p>Suppose <span class="math inline">\(r(t)\)</span> measures liters of
+water entering a tank per minute. On a short interval of duration <span class="math inline">\(\Delta t\)</span>, the added volume is
+approximately <span class="math inline">\(r(t_i^*)\Delta t\)</span>.
+Summing over the intervals estimates the total volume. The units confirm
+the reasoning: <span class="math display">\[(\text{liters/minute})(\text{minutes})=\text{liters}.\]</span>
+The same logic applies to electric energy from power, medication
+exposure from concentration, and displacement from velocity.</p>
+<p><strong>Example — Variable infusion rate.</strong> A device delivers
+fluid at <span class="math inline">\(r(t)=2+0.5t\)</span> liters per
+hour during the first four hours. Approximate the total with four left
+rectangles and four right rectangles.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(\Delta
+t=1\)</span>, the left estimate is <span class="math inline">\(r(0)+r(1)+r(2)+r(3)=2+2.5+3+3.5=11\)</span>
+liters. The right estimate is <span class="math inline">\(r(1)+r(2)+r(3)+r(4)=2.5+3+3.5+4=13\)</span>
+liters. The exact accumulation is <span class="math inline">\(12\)</span> liters, as we will confirm with
+integration.</p>
+<h3 id="displacement-versus-distance">Displacement versus distance</h3>
+<p>A negative velocity contributes negative displacement but positive
+distance. If <span class="math inline">\(v(t)\)</span> changes sign, the
+signed sum estimates the net change in position, whereas sums of <span class="math inline">\(|v(t)|\)</span> estimate the total distance
+traveled. This distinction will remain essential throughout applied
+calculus.</p>
+<p><strong>Example — A direction change.</strong> Let <span class="math inline">\(v(t)=t-2\)</span> meters per second for <span class="math inline">\(0\le t\le4\)</span>.</p>
+<p><strong>Solution.</strong> The velocity is negative until <span class="math inline">\(t=2\)</span> and positive afterward. The net
+displacement is <span class="math inline">\(0\)</span> meters because
+the two triangular signed areas cancel. The total distance is <span class="math inline">\(2+2=4\)</span> meters. A zero displacement does
+not mean that the object remained stationary.</p>
+<h2 id="sigma-notation-and-limits-of-finite-sums">Sigma notation and
+limits of finite sums</h2>
+<h3 id="a-language-for-accumulation">A language for accumulation</h3>
+<p>The symbol <span class="math inline">\(\sum\)</span> condenses
+repeated addition: <span class="math display">\[\sum_{i=1}^n
+a_i=a_1+a_2+\cdots+a_n.\]</span> For constants <span class="math inline">\(c\)</span> and sequences <span class="math inline">\(a_i,b_i\)</span>, finite sums obey <span class="math display">\[\sum_{i=1}^n(ca_i+b_i)=c\sum_{i=1}^n
+a_i+\sum_{i=1}^n b_i.\]</span></p>
+<p><strong>Theorem — Basic power sums.</strong> For positive integers
+<span class="math inline">\(n\)</span>, <span class="math display">\[\sum_{i=1}^n i=\frac{n(n+1)}2,\qquad \sum_{i=1}^n
+i^2=\frac{n(n+1)(2n+1)}6,\qquad \sum_{i=1}^n
+i^3=\left(\frac{n(n+1)}2\right)^2.\]</span></p>
+<p><strong>Proof — Proof of the first formula.</strong> Pair the terms
+<span class="math inline">\(1+n\)</span>, <span class="math inline">\(2+(n-1)\)</span>, and so forth, or add the sum to
+its reverse. Then <span class="math inline">\(2\sum_{i=1}^n
+i=n(n+1)\)</span>. The remaining identities can be proved by
+induction.</p>
+<p><strong>Example — A limit of sums.</strong> Compute <span class="math inline">\(\lim_{n\to\infty}\sum_{i=1}^n\frac{3i^2}{n^3}\)</span>.</p>
+<p><strong>Solution.</strong> Using the square-sum formula, <span class="math display">\[\sum_{i=1}^n\frac{3i^2}{n^3}=\frac{3}{n^3}\frac{n(n+1)(2n+1)}6=\frac{(n+1)(2n+1)}{2n^2}\longrightarrow1.\]</span>
+This is also the right-endpoint Riemann sum for <span class="math inline">\(\int_0^1 3x^2\,dx\)</span>.</p>
+<p><strong>Example — Nonunit interval.</strong> Express the right sum
+for <span class="math inline">\(f(x)=2x+1\)</span> on <span class="math inline">\([1,4]\)</span> using <span class="math inline">\(n\)</span> equal rectangles.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(\Delta
+x=3/n\)</span> and <span class="math inline">\(x_i=1+3i/n\)</span>,
+hence <span class="math display">\[R_n=\frac3n\sum_{i=1}^n\left(3+\frac{6i}{n}\right)=9+\frac{18}{n^2}\frac{n(n+1)}2=18+\frac9n.\]</span>
+The limiting accumulation is <span class="math inline">\(18\)</span>.</p>
+<p><strong>Remark.</strong> The limit concerns the <em>entire sum</em>,
+not an individual rectangle. Each rectangle becomes thin while the
+number of rectangles increases; the total can approach a nonzero finite
+quantity.</p>
+<h2 id="the-definite-integral">The definite integral</h2>
+<h3 id="definition-and-integrability">Definition and integrability</h3>
+<p><strong>Definition — Definite integral.</strong> Let <span class="math inline">\(f\)</span> be defined on <span class="math inline">\([a,b]\)</span>. For a partition <span class="math inline">\(a=x_0&lt;x_1&lt;\cdots&lt;x_n=b\)</span> and
+sample points <span class="math inline">\(x_i^*\in[x_{i-1},x_i]\)</span>, the Riemann sum is
+<span class="math inline">\(\sum_{i=1}^n f(x_i^*)\Delta x_i\)</span>. If
+these sums approach the same finite number <span class="math inline">\(I\)</span> as the maximum subinterval width tends
+to zero, independently of the chosen partitions and sample points, then
+<span class="math inline">\(f\)</span> is Riemann integrable and <span class="math display">\[\boxed{\int_a^b f(x)\,dx=I.}\]</span></p>
+<p><strong>Theorem — Continuity implies integrability.</strong> Every
+continuous function on a closed bounded interval <span class="math inline">\([a,b]\)</span> is Riemann integrable.</p>
+<p><strong>Remark.</strong> Some discontinuous functions are integrable
+as well. A bounded function with finitely many jump discontinuities is
+integrable. But a function that equals <span class="math inline">\(1\)</span> at rational inputs and <span class="math inline">\(0\)</span> at irrational inputs on <span class="math inline">\([0,1]\)</span> is not Riemann integrable: every
+interval has both kinds of inputs, so its lower sums are <span class="math inline">\(0\)</span> and upper sums are <span class="math inline">\(1\)</span>.</p>
+<h3 id="signed-area-and-orientation">Signed area and orientation</h3>
+<p>If <span class="math inline">\(f\)</span> is positive, its integral
+contributes positive area; if negative, it contributes negative signed
+area. The geometric area between a graph and the horizontal axis is
+<span class="math inline">\(\int_a^b|f(x)|\,dx\)</span> when <span class="math inline">\(f\)</span> is integrable.</p>
+<figure>
+<img alt="The integral of f(x) = x on [−2, 2] is zero because equal negative and positive signed areas cancel. Geometric area is four square units." src="figures/chapter05-diagram-02.svg"/>
+<figcaption>
+The integral of <span class="math inline"><em>f</em>(<em>x</em>) = <em>x</em></span> on <span class="math inline">[−2, 2]</span> is zero because equal negative and
+positive signed areas cancel. Geometric area is four square units.
+</figcaption>
+</figure>
+<p><strong>Theorem — Linearity of the integral.</strong> If <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are integrable and <span class="math inline">\(c\)</span> is constant, then <span class="math display">\[\int_a^b(f+g)\,dx=\int_a^b f\,dx+\int_a^b
+g\,dx,\qquad\int_a^b cf\,dx=c\int_a^b f\,dx.\]</span></p>
+<p><strong>Theorem — Additivity across intervals.</strong> If <span class="math inline">\(f\)</span> is integrable on the relevant
+intervals, then for any <span class="math inline">\(a,b,c\)</span>,
+<span class="math display">\[\int_a^b f(x)\,dx+\int_b^c
+f(x)\,dx=\int_a^c f(x)\,dx.\]</span></p>
+<p><strong>Theorem — Reversing bounds.</strong> For an integrable
+function, <span class="math display">\[\int_b^a f(x)\,dx=-\int_a^b
+f(x)\,dx,\qquad \int_a^a f(x)\,dx=0.\]</span></p>
+<p><strong>Theorem — Comparison property.</strong> If <span class="math inline">\(f(x)\le g(x)\)</span> on <span class="math inline">\([a,b]\)</span>, where <span class="math inline">\(a&lt;b\)</span>, then <span class="math display">\[\int_a^b f(x)\,dx\le\int_a^b
+g(x)\,dx.\]</span></p>
+<p><strong>Theorem — Integral bounds.</strong> If <span class="math inline">\(m\le f(x)\le M\)</span> on <span class="math inline">\([a,b]\)</span>, then <span class="math display">\[m(b-a)\le\int_a^b f(x)\,dx\le
+M(b-a).\]</span></p>
+<p><strong>Example — Use geometry before algebra.</strong> Evaluate
+<span class="math inline">\(\int_{-3}^3\sqrt{9-x^2}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> The graph is the upper semicircle of
+radius <span class="math inline">\(3\)</span>. Its area is half the area
+of a circle: <span class="math inline">\(\frac12\pi(3)^2=\frac{9\pi}{2}\)</span>. No
+antiderivative is needed.</p>
+<p><strong>Example — Symmetry.</strong> Explain why <span class="math inline">\(\int_{-2}^2 x^5\,dx=0\)</span> and find <span class="math inline">\(\int_{-2}^2 x^4\,dx\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(x^5\)</span>
+is odd, so the signed contributions cancel. Since <span class="math inline">\(x^4\)</span> is even, the second integral is twice
+<span class="math inline">\(\int_0^2 x^4\,dx=2(2^5/5)=64/5\)</span>.</p>
+<p><strong>Theorem — Even and odd integrands.</strong> For integrable
+<span class="math inline">\(f\)</span> on <span class="math inline">\([-a,a]\)</span>, if <span class="math inline">\(f(-x)=f(x)\)</span> then <span class="math inline">\(\int_{-a}^a f=2\int_0^a f\)</span>; if <span class="math inline">\(f(-x)=-f(x)\)</span> then <span class="math inline">\(\int_{-a}^a f=0\)</span>.</p>
+<h3 id="average-value-of-a-continuous-function">Average value of a
+continuous function</h3>
+<p><strong>Definition — Average value.</strong> For an integrable
+function <span class="math inline">\(f\)</span> on <span class="math inline">\([a,b]\)</span> with <span class="math inline">\(a&lt;b\)</span>, its average value is <span class="math display">\[f_{\mathrm{avg}}=\frac{1}{b-a}\int_a^b
+f(x)\,dx.\]</span></p>
+<p><strong>Example — Average concentration.</strong> Suppose <span class="math inline">\(C(t)=4+t\)</span> mg/L over <span class="math inline">\(0\le t\le6\)</span> hours. Find the average
+concentration.</p>
+<p><strong>Solution.</strong> The total concentration-time area is <span class="math inline">\(\int_0^6(4+t)\,dt=24+18=42\)</span> mg<span class="math inline">\(\cdot\)</span>h/L. Divide by six hours to obtain
+<span class="math inline">\(7\)</span> mg/L. The integral and the
+average have different units.</p>
+<h2 id="the-fundamental-theorem-of-calculus">The Fundamental Theorem of
+Calculus</h2>
+<h3 id="accumulation-as-a-new-function">Accumulation as a new
+function</h3>
+<p>For a continuous function <span class="math inline">\(f\)</span>,
+define an accumulation function <span class="math display">\[A(x)=\int_a^x f(t)\,dt.\]</span> The variable
+<span class="math inline">\(t\)</span> is a <em>dummy variable</em> of
+integration; the upper limit <span class="math inline">\(x\)</span> is
+the input to <span class="math inline">\(A\)</span>. An increase in
+<span class="math inline">\(x\)</span> by a small amount <span class="math inline">\(h\)</span> changes the accumulation by
+approximately <span class="math inline">\(f(x)h\)</span>. Therefore the
+derivative of the accumulated amount should equal the current rate.</p>
+<p><strong>Theorem — Fundamental Theorem of Calculus, Part I.</strong>
+If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and <span class="math inline">\(A(x)=\int_a^x f(t)\,dt\)</span>, then <span class="math inline">\(A\)</span> is differentiable on <span class="math inline">\((a,b)\)</span> and <span class="math display">\[\boxed{A'(x)=f(x).}\]</span></p>
+<p><strong>Proof.</strong> By additivity, <span class="math inline">\(A(x+h)-A(x)=\int_x^{x+h}f(t)\,dt\)</span>.
+Continuity ensures that the average value of <span class="math inline">\(f\)</span> over the short interval approaches
+<span class="math inline">\(f(x)\)</span> as <span class="math inline">\(h\to0\)</span>. Dividing by <span class="math inline">\(h\)</span> gives <span class="math inline">\(A'(x)=f(x)\)</span>. The same argument works
+for positive and negative <span class="math inline">\(h\)</span>
+sufficiently small.</p>
+<p><strong>Example — Derivative of an accumulation.</strong> Let <span class="math inline">\(G(x)=\int_1^{x^2}(1+t^4)\,dt\)</span>. Find <span class="math inline">\(G'(x)\)</span>.</p>
+<p><strong>Solution.</strong> The upper limit is <span class="math inline">\(u(x)=x^2\)</span>. Apply Part I and the chain
+rule: <span class="math display">\[G'(x)=(1+(x^2)^4)(2x)=2x(1+x^8).\]</span> Do
+not replace the integration variable <span class="math inline">\(t\)</span> with <span class="math inline">\(x\)</span> before applying the chain rule.</p>
+<p><strong>Theorem — Fundamental Theorem of Calculus, Part II.</strong>
+If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and <span class="math inline">\(F\)</span> is any antiderivative of <span class="math inline">\(f\)</span>, then <span class="math display">\[\boxed{\int_a^b f(x)\,dx=F(b)-F(a).}\]</span></p>
+<p><strong>Proof.</strong> Part I shows that <span class="math inline">\(A(x)=\int_a^x f(t)\,dt\)</span> is an
+antiderivative of <span class="math inline">\(f\)</span>. Since any two
+antiderivatives differ by a constant, <span class="math inline">\(A(x)=F(x)+C\)</span>. Evaluate at <span class="math inline">\(x=a\)</span> to find <span class="math inline">\(C=-F(a)\)</span>; then <span class="math inline">\(A(b)=F(b)-F(a)\)</span>.</p>
+<p><strong>Example — Evaluate a definite integral.</strong> Compute
+<span class="math inline">\(\int_1^3(4x^3-2x)\,dx\)</span>.</p>
+<p><strong>Solution.</strong> An antiderivative is <span class="math inline">\(F(x)=x^4-x^2\)</span>. Hence <span class="math display">\[\int_1^3(4x^3-2x)\,dx=(81-9)-(1-1)=72.\]</span>
+Check the sign: the integrand is positive on <span class="math inline">\([1,3]\)</span>, so a positive result is
+plausible.</p>
+<p><strong>Example — Net change theorem.</strong> If a population
+changes at rate <span class="math inline">\(P'(t)=12e^{-0.2t}\)</span> individuals per
+year, how much does the population increase in five years?</p>
+<p><strong>Solution.</strong> The net change is <span class="math inline">\(\int_0^5
+12e^{-0.2t}\,dt=[-60e^{-0.2t}]_0^5=60(1-e^{-1})\approx37.93\)</span>
+individuals. This is a change, not the final population: an initial
+population is needed to determine the final size.</p>
+<h3 id="the-integral-mean-value-theorem">The integral mean value
+theorem</h3>
+<p><strong>Theorem — Mean value theorem for integrals.</strong> If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span>, then some <span class="math inline">\(c\in[a,b]\)</span> satisfies <span class="math display">\[\int_a^b f(x)\,dx=f(c)(b-a).\]</span></p>
+<p><strong>Proof.</strong> By the extreme value theorem, <span class="math inline">\(m\le f\le M\)</span>. The integral bounds imply
+<span class="math inline">\(m\le f_{\rm avg}\le M\)</span>. Continuity
+and the intermediate value theorem guarantee an input <span class="math inline">\(c\)</span> with <span class="math inline">\(f(c)=f_{\rm avg}\)</span>.</p>
+<p><strong>Remark.</strong> This theorem does not say that <span class="math inline">\(c\)</span> must be the midpoint. It says the
+continuous function attains its average height somewhere in the
+interval.</p>
+<h2 id="indefinite-integrals-and-the-substitution-method">Indefinite
+integrals and the substitution method</h2>
+<h3 id="antiderivatives-as-families">Antiderivatives as families</h3>
+<p><strong>Definition — Indefinite integral.</strong> If <span class="math inline">\(F'(x)=f(x)\)</span> on an interval, then <span class="math display">\[\int f(x)\,dx=F(x)+C,\]</span> where <span class="math inline">\(C\)</span> is an arbitrary constant. The
+indefinite integral is a <em>family of functions</em>, not a number.</p>
+<p><strong>Theorem — Basic antiderivative rules.</strong> For <span class="math inline">\(p\ne-1\)</span>, <span class="math display">\[\int
+x^p\,dx=\frac{x^{p+1}}{p+1}+C,\quad \int e^x\,dx=e^x+C,\quad\int\cos
+x\,dx=\sin x+C,\quad\int\sin x\,dx=-\cos x+C.\]</span> On intervals not
+crossing zero, <span class="math inline">\(\int\frac1x\,dx=\ln|x|+C\)</span>.</p>
+<p><strong>Example — Recognizing an inner derivative.</strong> Find
+<span class="math inline">\(\int 6x(3x^2+5)^4\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Let <span class="math inline">\(u=3x^2+5\)</span>. Then <span class="math inline">\(du=6x\,dx\)</span> and the integral becomes <span class="math inline">\(\int u^4\,du=u^5/5+C\)</span>. Substitute back:
+<span class="math display">\[\frac{(3x^2+5)^5}{5}+C.\]</span>
+Differentiating verifies the answer exactly.</p>
+<p><strong>Theorem — Substitution rule for indefinite
+integrals.</strong> If <span class="math inline">\(F'(u)=f(u)\)</span> and <span class="math inline">\(u=g(x)\)</span> is differentiable, then <span class="math display">\[\int f(g(x))g'(x)\,dx=F(g(x))+C.\]</span></p>
+<p><strong>Proof.</strong> By the chain rule, <span class="math inline">\(\frac{d}{dx}F(g(x))=F'(g(x))g'(x)=f(g(x))g'(x)\)</span>.</p>
+<p><strong>Example — A logarithmic substitution.</strong> Evaluate <span class="math inline">\(\int \frac{2x}{x^2+4}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Set <span class="math inline">\(u=x^2+4\)</span>, so <span class="math inline">\(du=2x\,dx\)</span>. Then <span class="math inline">\(\int du/u=\ln|u|+C=\ln(x^2+4)+C\)</span>, because
+<span class="math inline">\(x^2+4&gt;0\)</span>.</p>
+<p><strong>Example — A common trap.</strong> Why is <span class="math inline">\(\int e^{x^2}\,dx\)</span> not equal to <span class="math inline">\(e^{x^2}+C\)</span>?</p>
+<p><strong>Solution.</strong> Differentiating <span class="math inline">\(e^{x^2}\)</span> gives <span class="math inline">\(2xe^{x^2}\)</span>, not <span class="math inline">\(e^{x^2}\)</span>. Substitution works immediately
+for <span class="math inline">\(\int 2xe^{x^2}\,dx\)</span>, but not for
+the displayed integral. Not every elementary-looking integrand has an
+elementary antiderivative.</p>
+<h3 id="definite-integrals-and-changed-bounds">Definite integrals and
+changed bounds</h3>
+<p><strong>Theorem — Substitution rule for definite integrals.</strong>
+If <span class="math inline">\(g\)</span> is continuously differentiable
+and <span class="math inline">\(f\)</span> is continuous on the relevant
+range, then <span class="math display">\[\int_a^b
+f(g(x))g'(x)\,dx=\int_{g(a)}^{g(b)} f(u)\,du.\]</span></p>
+<p><strong>Example — Change the limits.</strong> Evaluate <span class="math inline">\(\int_0^2 x\sqrt{x^2+1}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Set <span class="math inline">\(u=x^2+1\)</span>, so <span class="math inline">\(du=2x\,dx\)</span>. When <span class="math inline">\(x=0\)</span>, <span class="math inline">\(u=1\)</span>; when <span class="math inline">\(x=2\)</span>, <span class="math inline">\(u=5\)</span>. Thus <span class="math display">\[\int_0^2 x\sqrt{x^2+1}\,dx=\frac12\int_1^5
+u^{1/2}\,du=\frac13\bigl(5^{3/2}-1\bigr).\]</span> The bounds have
+already changed, so do not substitute the original <span class="math inline">\(x\)</span>-bounds into the <span class="math inline">\(u\)</span>-antiderivative.</p>
+<p><strong>Remark.</strong> Two correct strategies: (i) change the
+bounds to <span class="math inline">\(u\)</span>-values and finish in
+<span class="math inline">\(u\)</span>; or (ii) find the antiderivative
+in <span class="math inline">\(u\)</span>, return to <span class="math inline">\(x\)</span>, and use the original bounds. Mixing
+these strategies causes frequent errors.</p>
+<h2 id="substitution-and-area-between-curves">Substitution and area
+between curves</h2>
+<h3 id="from-one-curve-to-two">From one curve to two</h3>
+<p>If <span class="math inline">\(f(x)\ge g(x)\)</span> on <span class="math inline">\([a,b]\)</span>, the area of the region between the
+graphs is <span class="math display">\[\boxed{A=\int_a^b\bigl(f(x)-g(x)\bigr)\,dx.}\]</span>
+This formula comes from summing narrow vertical strips of height <span class="math inline">\(f(x)-g(x)\)</span> and width <span class="math inline">\(\Delta x\)</span>. If the graphs cross, split the
+interval at each crossing or integrate <span class="math inline">\(|f-g|\)</span>.</p>
+<figure>
+<img alt="An area-between-curves problem: the shaded region lies between y = 4 − x2 (upper curve) and y = x (lower curve) from x = 0 to their positive intersection." src="figures/chapter05-diagram-03.svg"/>
+<figcaption>
+An area-between-curves problem: the shaded region lies between <span class="math inline"><em>y</em> = 4 − <em>x</em><sup>2</sup></span>
+(upper curve) and <span class="math inline"><em>y</em> = <em>x</em></span> (lower curve) from
+<span class="math inline"><em>x</em> = 0</span> to their positive
+intersection.
+</figcaption>
+</figure>
+<p><strong>Example — A bounded region.</strong> Find the area between
+<span class="math inline">\(y=4-x^2\)</span> and <span class="math inline">\(y=x\)</span> from <span class="math inline">\(x=0\)</span> to their positive intersection.</p>
+<p><strong>Solution.</strong> Solve <span class="math inline">\(4-x^2=x\)</span>, giving <span class="math inline">\(x=\alpha=(-1+\sqrt{17})/2\)</span>. On <span class="math inline">\([0,\alpha]\)</span> the parabola is above the
+line, so <span class="math display">\[A=\int_0^\alpha(4-x^2-x)\,dx=\left[4x-\frac{x^3}{3}-\frac{x^2}{2}\right]_0^\alpha.\]</span>
+The expression is exact; numerically <span class="math inline">\(\alpha\approx1.56155\)</span> and <span class="math inline">\(A\approx3.7577\)</span> square units.</p>
+<p><strong>Example — Two crossings require splitting.</strong> Find the
+area between <span class="math inline">\(y=x\)</span> and <span class="math inline">\(y=x^3\)</span> for <span class="math inline">\(-1\le x\le1\)</span>.</p>
+<p><strong>Solution.</strong> The curves meet at <span class="math inline">\(x=-1,0,1\)</span>. On <span class="math inline">\((-1,0)\)</span>, <span class="math inline">\(x^3&gt;x\)</span>; on <span class="math inline">\((0,1)\)</span>, <span class="math inline">\(x&gt;x^3\)</span>. Hence <span class="math display">\[A=\int_{-1}^0(x^3-x)\,dx+\int_0^1(x-x^3)\,dx=\frac14+\frac14=\frac12.\]</span>
+A single signed integral from <span class="math inline">\(-1\)</span> to
+<span class="math inline">\(1\)</span> would give zero, which is not the
+geometric area.</p>
+<p><strong>Example — A substituted area integral.</strong> The region
+between <span class="math inline">\(y=2x\sqrt{1+x^2}\)</span> and the
+<span class="math inline">\(x\)</span>-axis extends from <span class="math inline">\(x=0\)</span> to <span class="math inline">\(x=1\)</span>. Find its area.</p>
+<p><strong>Solution.</strong> The function is nonnegative. With <span class="math inline">\(u=1+x^2\)</span> and <span class="math inline">\(du=2x\,dx\)</span>, <span class="math display">\[A=\int_0^1 2x\sqrt{1+x^2}\,dx=\int_1^2
+u^{1/2}\,du=\frac23(2^{3/2}-1).\]</span></p>
+<h3 id="a-complete-modeling-workflow">A complete modeling workflow</h3>
+<p>For any applied integral: (1) identify the accumulating quantity and
+its units; (2) define the independent variable and interval; (3) check
+the sign of the integrand; (4) draw or reason about the graph; (5)
+select a mathematical or numerical method; (6) check magnitude and
+units; (7) state the result in context. Software helps with steps (4)
+and (5), but does not replace the others.</p>
+<h2 id="r-computational-laboratories">R computational laboratories</h2>
+<p><strong>Before running the code:</strong> predict the result using
+the mathematics above. Afterward, explain whether the numerical result
+is plausible and what the units mean. All R laboratories appear before
+the Python laboratories. Base R is sufficient; no additional packages
+are required.</p>
+<h3 id="r-laboratory-1-left-right-and-midpoint-sums">R Laboratory 1:
+Left, right, and midpoint sums</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^2
+riemann &lt;- function(f, a, b, n, method = "left") {
+  h &lt;- (b - a)/n
+  i &lt;- 0:(n - 1)
+  x &lt;- if (method == "left") a + i*h else
+       if (method == "right") a + (i + 1)*h else
+       a + (i + 0.5)*h
+  h * sum(f(x))
+}
+for (n in c(4, 8, 16, 64)) {
+  cat(n, riemann(f, 0, 2, n, "left"),
+      riemann(f, 0, 2, n, "right"),
+      riemann(f, 0, 2, n, "midpoint"), "\n")
+}
+cat("Exact:", 8/3, "\n")</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h3 id="r-laboratory-2-signed-area-and-distance">R Laboratory 2: Signed
+area and distance</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>v &lt;- function(t) t - 2
+net &lt;- integrate(v, 0, 4)$value
+distance &lt;- integrate(function(t) abs(v(t)), 0, 4)$value
+cat("Displacement:", net, "m\n")
+cat("Distance:", distance, "m\n")
+curve(v(x), from=0, to=4, xlab="Time (s)", ylab="Velocity (m/s)")
+abline(h=0, lty=2)</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h3 id="r-laboratory-3-accumulation-and-the-fundamental-theorem">R
+Laboratory 3: Accumulation and the Fundamental Theorem</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>rate &lt;- function(t) 2 + 0.5*t
+A &lt;- function(x) integrate(rate, 0, x)$value
+x &lt;- seq(0, 4, length.out=101)
+plot(x, vapply(x, A, numeric(1)), type="l", lwd=2,
+     xlab="Time (hours)", ylab="Accumulated volume (L)")
+cat("Volume after 4 hours:", A(4), "L\n")
+h &lt;- 1e-4
+cat("Approx derivative at t=2:", (A(2+h)-A(2-h))/(2*h), "\n")
+cat("Rate at t=2:", rate(2), "L/hour\n")</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h3 id="r-laboratory-4-numerical-integration-accuracy">R Laboratory 4:
+Numerical integration accuracy</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) exp(-x^2)
+for (n in c(10, 20, 40, 80)) {
+  h &lt;- 2/n
+  mid &lt;- (0:(n-1)+0.5)*h
+  midpoint &lt;- h*sum(f(mid))
+  cat("n =", n, " midpoint =", midpoint, "\n")
+}
+cat("Adaptive quadrature:", integrate(f, 0, 2)$value, "\n")</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h3 id="r-laboratory-5-area-between-two-curves">R Laboratory 5: Area
+between two curves</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>top &lt;- function(x) 4-x^2
+bottom &lt;- function(x) x
+alpha &lt;- (-1+sqrt(17))/2
+area &lt;- integrate(function(x) top(x)-bottom(x), 0, alpha)$value
+cat("Intersection:", alpha, "Area:", area, "\n")
+x &lt;- seq(0, alpha, length.out=200)
+plot(x, top(x), type="l", lwd=2, ylim=c(0,4),
+     xlab="x", ylab="y")
+lines(x, bottom(x), lwd=2, lty=2)</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h3 id="r-laboratory-6-a-concentration-time-model">R Laboratory 6: A
+concentration-time model</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter05-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>C &lt;- function(t) 3 + 12*exp(-0.4*t)
+auc &lt;- integrate(C, 0, 8)$value
+average &lt;- auc/8
+cat("AUC:", auc, "mg*h/L\n")
+cat("Mean concentration:", average, "mg/L\n")
+curve(C(x), from=0, to=8, lwd=2,
+      xlab="Time (h)", ylab="Concentration (mg/L)")</code></pre></div>
+<p><strong>Interpretation task.</strong> Compare the computed output
+with a mathematical prediction. Explain the effect of approximation,
+sign, and units where relevant.</p>
+<h2 id="python-computational-laboratories">Python computational
+laboratories</h2>
+<p><strong>Setup.</strong> Use Python 3 with NumPy, Matplotlib, and
+SciPy installed. The Python experiments revisit the same mathematical
+questions as the R experiments. Run them independently, then compare
+results to at least six significant digits where appropriate.</p>
+<h3 id="python-laboratory-1-left-right-and-midpoint-sums">Python
+Laboratory 1: Left, right, and midpoint sums</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def riemann(f, a, b, n, method="left"):
+    h = (b-a)/n
+    offsets = {"left": 0, "right": 1, "midpoint": 0.5}
+    shift = offsets[method]
+    return h * sum(f(a+(i+shift)*h) for i in range(n))
+
+f = lambda x: x*x
+for n in (4, 8, 16, 64):
+    print(n, *(round(riemann(f, 0, 2, n, method), 8)
+               for method in ("left", "right", "midpoint")))
+print("Exact:", 8/3)</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h3 id="python-laboratory-2-signed-area-and-distance">Python Laboratory
+2: Signed area and distance</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from scipy.integrate import quad
+import numpy as np
+import matplotlib.pyplot as plt
+v = lambda t: t - 2
+print("Displacement:", quad(v, 0, 4)[0], "m")
+print("Distance:", quad(lambda t: abs(v(t)), 0, 4)[0], "m")
+t = np.linspace(0, 4, 301)
+plt.plot(t, v(t)); plt.axhline(0, linestyle="--")
+plt.xlabel("Time (s)"); plt.ylabel("Velocity (m/s)")
+plt.show()</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h3 id="python-laboratory-3-accumulation-and-the-fundamental-theorem">Python
+Laboratory 3: Accumulation and the Fundamental Theorem</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from scipy.integrate import quad
+import numpy as np
+import matplotlib.pyplot as plt
+rate = lambda t: 2 + 0.5*t
+A = lambda x: quad(rate, 0, x)[0]
+x = np.linspace(0, 4, 101)
+plt.plot(x, [A(z) for z in x])
+plt.xlabel("Time (hours)"); plt.ylabel("Volume (L)")
+plt.show()
+h = 1e-4
+print("Volume:", A(4), "L")
+print("Derivative estimate:", (A(2+h)-A(2-h))/(2*h))
+print("Rate:", rate(2), "L/hour")</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h3 id="python-laboratory-4-numerical-integration-accuracy">Python
+Laboratory 4: Numerical integration accuracy</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+from scipy.integrate import quad
+f = lambda x: math.exp(-x*x)
+for n in (10, 20, 40, 80):
+    h = 2/n
+    midpoint = h*sum(f((i+0.5)*h) for i in range(n))
+    print("n =", n, "midpoint =", midpoint)
+print("Adaptive quadrature:", quad(f, 0, 2)[0])</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h3 id="python-laboratory-5-area-between-two-curves">Python Laboratory
+5: Area between two curves</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+alpha = (-1+math.sqrt(17))/2
+top = lambda x: 4-x*x
+bottom = lambda x: x
+area = quad(lambda x: top(x)-bottom(x), 0, alpha)[0]
+print("Intersection:", alpha, "Area:", area)
+x = np.linspace(0, alpha, 200)
+plt.plot(x, top(x)); plt.plot(x, bottom(x), linestyle="--")
+plt.fill_between(x, bottom(x), top(x), alpha=0.2)
+plt.xlabel("x"); plt.ylabel("y"); plt.show()</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h3 id="python-laboratory-6-a-concentration-time-model">Python
+Laboratory 6: A concentration-time model</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter05-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+import numpy as np
+from scipy.integrate import quad
+import matplotlib.pyplot as plt
+C = lambda t: 3 + 12*math.exp(-0.4*t)
+auc = quad(C, 0, 8)[0]
+print("AUC:", auc, "mg*h/L")
+print("Mean concentration:", auc/8, "mg/L")
+t = np.linspace(0, 8, 200)
+plt.plot(t, [C(z) for z in t])
+plt.xlabel("Time (h)"); plt.ylabel("Concentration (mg/L)")
+plt.show()</code></pre></div>
+<p><strong>Reflection.</strong> Identify which part of the result
+follows from a theorem and which part depends on a numerical algorithm
+or plot.</p>
+<h2 id="concept-checks-and-common-misconceptions">Concept checks and
+common misconceptions</h2>
+<ol type="1">
+<li><p>Does <span class="math inline">\(\int_0^4 v(t)\,dt=0\)</span>
+imply the object did not move? Explain using a sketch.</p></li>
+<li><p>Why is <span class="math inline">\(\int_0^2 f(x)\,dx\)</span> a
+number while <span class="math inline">\(\int f(x)\,dx\)</span> is a
+family of functions?</p></li>
+<li><p>A student claims the left sum always underestimates. Give a
+counterexample.</p></li>
+<li><p>Why does <span class="math inline">\(\int_0^1 x^{-1}\,dx\)</span>
+require care even though <span class="math inline">\(\ln|x|\)</span> is
+an antiderivative on <span class="math inline">\((0,1]\)</span>?</p></li>
+<li><p>A student writes <span class="math inline">\(\int_0^2
+2x\cos(x^2)\,dx=\int_0^2\cos u\,du\)</span>. Identify and correct the
+error.</p></li>
+<li><p>If two functions cross, why can integrating <span class="math inline">\(f-g\)</span> over the entire interval fail to give
+the area between them?</p></li>
+<li><p>If the measured rate is in milligrams per hour, what are the
+units of its integral over time?</p></li>
+<li><p>What is the conceptual difference between computing a Riemann sum
+and evaluating an antiderivative?</p></li>
+</ol>
+<h2 id="exercises">Exercises</h2>
+<p><strong>Instructions.</strong> Show mathematical reasoning before
+using software. Use exact answers when possible. For numerical problems,
+report units and explain the method used. Problems are grouped to build
+from definitions to modeling.</p>
+<h3 class="unnumbered" id="a.-finite-sums-and-notation">A. Finite sums
+and notation</h3>
+<ol type="1">
+<li><p>Write <span class="math inline">\(3+6+9+\cdots+3n\)</span> in
+sigma notation and simplify.</p></li>
+<li><p>Compute <span class="math inline">\(\sum_{i=1}^{12}(2i-1)\)</span> without adding each
+term separately.</p></li>
+<li><p>Express the left, right, and midpoint sums for <span class="math inline">\(f(x)=x^2+1\)</span> on <span class="math inline">\([0,3]\)</span> using <span class="math inline">\(n\)</span> rectangles.</p></li>
+<li><p>Find <span class="math inline">\(L_6\)</span> and <span class="math inline">\(R_6\)</span> for <span class="math inline">\(f(x)=2x+3\)</span> on <span class="math inline">\([1,4]\)</span>. Which is larger? Why?</p></li>
+<li><p>For <span class="math inline">\(f(x)=e^{-x}\)</span> on <span class="math inline">\([0,2]\)</span>, predict which endpoint sum is
+larger and justify using monotonicity.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{n\to\infty}\frac1{n^2}\sum_{i=1}^n
+i\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{n\to\infty}\frac1{n^3}\sum_{i=1}^n
+i^2\)</span>.</p></li>
+<li><p>Express <span class="math inline">\(\int_2^5(x^2-1)\,dx\)</span>
+as a limit of right-endpoint sums without evaluating it.</p></li>
+<li><p>Explain why the widths <span class="math inline">\(\Delta
+x_i\)</span> need not be equal in the general Riemann integral
+definition.</p></li>
+<li><p>Show that <span class="math inline">\(R_n-L_n=(b-a)[f(b)-f(a)]/n\)</span> for a monotone
+function with uniform partitions, and state the relevant sign.</p></li>
+</ol>
+<h3 class="unnumbered" id="b.-definite-integrals-and-geometry">B.
+Definite integrals and geometry</h3>
+<ol type="1">
+<li><p>Evaluate <span class="math inline">\(\int_{-4}^4\sqrt{16-x^2}\,dx\)</span>
+geometrically.</p></li>
+<li><p>Compute <span class="math inline">\(\int_{-3}^3(x^3+2x^2)\,dx\)</span> using
+symmetry.</p></li>
+<li><p>If <span class="math inline">\(\int_0^2 f=5\)</span> and <span class="math inline">\(\int_2^7 f=-3\)</span>, find <span class="math inline">\(\int_0^7 f\)</span> and <span class="math inline">\(\int_7^0 f\)</span>.</p></li>
+<li><p>If <span class="math inline">\(1\le f(x)\le4\)</span> on <span class="math inline">\([2,5]\)</span>, give lower and upper bounds for
+<span class="math inline">\(\int_2^5 f\)</span>.</p></li>
+<li><p>Find the average value of <span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([0,3]\)</span>.</p></li>
+<li><p>A velocity is <span class="math inline">\(v(t)=3-t\)</span> for
+<span class="math inline">\(0\le t\le5\)</span>. Find displacement and
+total distance traveled.</p></li>
+<li><p>Sketch a function whose definite integral is negative but whose
+geometric area above/below the axis is positive.</p></li>
+<li><p>Determine whether the function <span class="math inline">\(f(x)=0\)</span> for <span class="math inline">\(x&lt;1\)</span> and <span class="math inline">\(f(x)=2\)</span> for <span class="math inline">\(x\ge1\)</span> is integrable on <span class="math inline">\([0,2]\)</span>, and compute its integral.</p></li>
+<li><p>State and explain the geometric meaning of <span class="math inline">\(\int_1^4 5\,dx\)</span>.</p></li>
+<li><p>Give an example of a bounded function on <span class="math inline">\([0,1]\)</span> that is not Riemann integrable and
+explain why.</p></li>
+</ol>
+<h3 class="unnumbered" id="c.-fundamental-theorem-and-antiderivatives">C. Fundamental Theorem
+and antiderivatives</h3>
+<ol type="1">
+<li><p>Differentiate <span class="math inline">\(F(x)=\int_0^x\sqrt{1+t^4}\,dt\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(G(x)=\int_2^{3x}\cos(t^2)\,dt\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(H(x)=\int_x^5
+e^{-t^2}\,dt\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^2(3x^2+4x)\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_1^e\frac1x\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^{\pi/2}\cos
+x\,dx\)</span>.</p></li>
+<li><p>Find all antiderivatives of <span class="math inline">\(f(x)=4x^3-6x+2\)</span>.</p></li>
+<li><p>Find <span class="math inline">\(F\)</span> if <span class="math inline">\(F'(x)=2x+e^x\)</span> and <span class="math inline">\(F(0)=7\)</span>.</p></li>
+<li><p>A flow rate is <span class="math inline">\(r(t)=5+2t\)</span>
+L/min. Find the volume added from <span class="math inline">\(t=0\)</span> to <span class="math inline">\(t=3\)</span> minutes.</p></li>
+<li><p>Explain why <span class="math inline">\(\int_0^1\frac1x\,dx\)</span> is not a proper
+Riemann integral.</p></li>
+</ol>
+<h3 class="unnumbered" id="d.-substitution-and-areas-between-curves">D.
+Substitution and areas between curves</h3>
+<ol type="1">
+<li><p>Evaluate <span class="math inline">\(\int
+4x(x^2+3)^5\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int\frac{3x^2}{x^3+7}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int
+e^{2x+1}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^1
+2xe^{x^2}\,dx\)</span> using changed bounds.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^1\frac{x}{1+x^2}\,dx\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\int_0^{\pi/4}\sin(2x)\,dx\)</span>.</p></li>
+<li><p>Find the area between <span class="math inline">\(y=x\)</span>
+and <span class="math inline">\(y=x^2\)</span> on <span class="math inline">\([0,1]\)</span>.</p></li>
+<li><p>Find the area between <span class="math inline">\(y=4\)</span>
+and <span class="math inline">\(y=x^2\)</span> on <span class="math inline">\([-2,2]\)</span>.</p></li>
+<li><p>Find the area between <span class="math inline">\(y=x^3\)</span>
+and <span class="math inline">\(y=x\)</span> on <span class="math inline">\([-1,1]\)</span>.</p></li>
+<li><p>Find the area between <span class="math inline">\(y=2x\)</span>
+and <span class="math inline">\(y=x^2\)</span> in the first
+quadrant.</p></li>
+</ol>
+<h3 class="unnumbered" id="e.-computation-interpretation-and-modeling">E. Computation,
+interpretation, and modeling</h3>
+<ol type="1">
+<li><p>Use R to compute <span class="math inline">\(L_n,R_n,M_n\)</span>
+for <span class="math inline">\(f(x)=\sin x\)</span> on <span class="math inline">\([0,\pi]\)</span> with <span class="math inline">\(n=10,20,40,80\)</span>. Compare with the exact
+integral.</p></li>
+<li><p>Repeat Exercise 41 in Python. Explain the observed
+convergence.</p></li>
+<li><p>A power demand curve is <span class="math inline">\(P(t)=100+20\sin(\pi t/12)\)</span> kilowatts for
+<span class="math inline">\(0\le t\le12\)</span> hours. Find the total
+energy in kWh.</p></li>
+<li><p>A sensor reports <span class="math inline">\(C(t)=5+8e^{-0.5t}\)</span> mg/L. Compute its
+eight-hour average concentration and interpret it.</p></li>
+<li><p>Use midpoint sums to estimate <span class="math inline">\(\int_0^2 e^{-x^2}\,dx\)</span> for <span class="math inline">\(n=10,20,40,80\)</span> and compare with numerical
+quadrature.</p></li>
+<li><p>Construct a function with positive net accumulation but at least
+one negative-rate interval; explain its graph.</p></li>
+<li><p>A particle has <span class="math inline">\(v(t)=t^2-4t+3\)</span>
+m/s on <span class="math inline">\([0,4]\)</span>. Find the exact
+displacement and total distance, accounting for direction
+changes.</p></li>
+<li><p>Find a value <span class="math inline">\(c\)</span> satisfying
+the integral mean value theorem for <span class="math inline">\(f(x)=2x+1\)</span> on <span class="math inline">\([1,5]\)</span>.</p></li>
+<li><p>Explain why an integral of concentration with respect to time is
+an exposure measure rather than a total mass of a substance.</p></li>
+<li><p>Write a short paragraph explaining when numerical integration is
+preferable to symbolic integration.</p></li>
+</ol>
+<h2 id="capstone-project-exposure-accumulation-and-numerical-evidence">Capstone
+project: Exposure, accumulation, and numerical evidence</h2>
+<p><strong>Scenario.</strong> A simplified environmental monitoring
+station records an estimated pollutant concentration over an eight-hour
+period. The concentration model is <span class="math display">\[C(t)=3+12e^{-0.4t}\quad\text{mg/L},\qquad 0\le
+t\le8\ \text{hours}.\]</span> The quantity <span class="math inline">\(\int_0^8 C(t)\,dt\)</span> is the <em>area under
+the concentration–time curve</em> (AUC), measured in mg<span class="math inline">\(\cdot\)</span>h/L. It is an exposure summary,
+<em>not</em> a pollutant mass and not by itself a clinical risk
+estimate.</p>
+<h3 class="unnumbered" id="part-i-mathematical-modeling-25-points">Part
+I: Mathematical modeling (25 points)</h3>
+<ol type="1">
+<li><p>Sketch <span class="math inline">\(C(t)\)</span>, label its
+initial value and limiting concentration, and explain the model’s
+qualitative behavior.</p></li>
+<li><p>Derive an exact expression for <span class="math inline">\(A(T)=\int_0^T C(t)\,dt\)</span> for <span class="math inline">\(0\le T\le8\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(A(T)\)</span> and
+interpret <span class="math inline">\(A'(T)\)</span> using the
+Fundamental Theorem of Calculus.</p></li>
+<li><p>Compute the exact eight-hour AUC and average concentration, with
+units.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-ii-numerical-approximation-25-points">Part II: Numerical
+approximation (25 points)</h3>
+<ol type="1">
+<li><p>Implement left, right, and midpoint sums for <span class="math inline">\(n=8,16,32,64\)</span> in <em>R</em>.</p></li>
+<li><p>Report absolute errors against the analytical AUC and explain
+which sums bound the result.</p></li>
+<li><p>Create a convergence graph with <span class="math inline">\(n\)</span> on the horizontal axis and the
+estimates on the vertical axis.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iii-independent-python-replication-20-points">Part III:
+Independent Python replication (20 points)</h3>
+<ol type="1">
+<li><p>Independently implement the three sums in
+<em>Python</em>.</p></li>
+<li><p>Compare R and Python results to at least six significant
+digits.</p></li>
+<li><p>Use SciPy quadrature to estimate the AUC and explain how
+numerical quadrature differs from the antiderivative method.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iv-sensitivity-and-communication-30-points">Part IV:
+Sensitivity and communication (30 points)</h3>
+<ol type="1">
+<li><p>Replace the decay constant <span class="math inline">\(0.4\)</span> with <span class="math inline">\(0.25\)</span> and <span class="math inline">\(0.6\)</span>. Recompute the AUC and explain the
+direction of change.</p></li>
+<li><p>Identify two assumptions or limitations of the model and describe
+what data would be needed to validate it.</p></li>
+<li><p>Submit a 2–3 page report with equations, two figures, a
+comparison table, code appendices, and a short interpretation for a
+nontechnical reader.</p></li>
+</ol>
+<p><strong>Rubric:</strong> mathematical derivation and units (25);
+numerical approximations and errors (25); independent Python replication
+(20); sensitivity analysis and communication (30). Clear explanations
+and reproducible code are required.</p>
+<h2 id="chapter-synthesis">Chapter synthesis</h2>
+<ul>
+<li><p><strong>Finite sums</strong> approximate accumulation by adding
+rate <span class="math inline">\(\times\)</span> interval
+width.</p></li>
+<li><p><strong>Definite integrals</strong> are limits of Riemann sums
+and represent signed accumulation.</p></li>
+<li><p><strong>The Fundamental Theorem</strong> connects rates,
+accumulation functions, and antiderivatives.</p></li>
+<li><p><strong>Substitution</strong> reverses the chain rule;
+definite-integral bounds must change consistently.</p></li>
+<li><p><strong>Geometric area</strong> between curves uses upper minus
+lower, with splitting at crossings.</p></li>
+<li><p><strong>R and Python</strong> support visualization and numerical
+verification, not a substitute for mathematical reasoning.</p></li>
+</ul>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_05_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter04.html">← Applications of Derivatives</a><a href="chapter06.html">Applications of Definite Integrals →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Riemann sums</a></li><li><a href="#area-and-estimating-with-finite-sums">Area and estimating with
+finite sums</a></li><li><a href="#sigma-notation-and-limits-of-finite-sums">Sigma notation and
+limits of finite sums</a></li><li><a href="#the-definite-integral">The definite integral</a></li><li><a href="#the-fundamental-theorem-of-calculus">The Fundamental Theorem of
+Calculus</a></li><li><a href="#indefinite-integrals-and-the-substitution-method">Indefinite
+integrals and the substitution method</a></li><li><a href="#substitution-and-area-between-curves">Substitution and area
+between curves</a></li><li><a href="#r-computational-laboratories">R computational laboratories</a></li><li><a href="#python-computational-laboratories">Python computational
+laboratories</a></li><li><a href="#concept-checks-and-common-misconceptions">Concept checks and
+common misconceptions</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#capstone-project-exposure-accumulation-and-numerical-evidence">Capstone
+project: Exposure, accumulation, and numerical evidence</a></li><li><a href="#chapter-synthesis">Chapter synthesis</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

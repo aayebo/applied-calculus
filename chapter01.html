@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Functions, Graphs, and Mathematical Models | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a aria-current="page" class="active" href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="functions-graphs-and-mathematical-models">Functions, Graphs, and
+Mathematical Models</h1>
+<p><strong>Chapter overview.</strong> Calculus studies change and
+accumulation. Before studying either, we need a precise language for
+relationships between quantities. A function connects an input to an
+output; its equation, table, graph, and verbal description each reveal
+different features. This chapter develops the mathematical language
+first, then introduces R and Python as tools for investigating and
+checking mathematical models.</p>
+<p><strong>Learning outcomes.</strong> By the end of this chapter,
+students should be able to (i) distinguish functions from relations;
+(ii) find and interpret domains and ranges; (iii) use multiple
+representations and classify function families; (iv) combine, compose,
+and transform functions; (v) work with trigonometric, exponential,
+logarithmic, and inverse functions; (vi) diagnose misleading
+computer-generated graphs; and (vii) develop, visualize, and critique a
+model using R and Python.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="reading-a-function-graph-before-calculating">Reading a function
+graph before calculating</h3>
+<p>A graph encodes a relationship, not merely a shape. Before using
+algebra or software, identify the units on each axis, the admissible
+inputs, the scale, and whether the displayed domain matches the modeled
+situation. An intercept describes a zero or an initial value; it is not
+automatically a physically meaningful prediction.</p>
+<p><strong>Guided investigation.</strong> Compare <span class="math inline">\(f(x)=x^2-1\)</span> and <span class="math inline">\(g(x)=2x+1\)</span>. Solve <span class="math inline">\(f(x)=g(x)\)</span> algebraically, then use the
+figure to explain why a plot provides evidence of intersections but not
+an exact proof.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 1." src="figures/chapter_01_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 1.</figcaption>
+</figure>
+<p><strong>Check your understanding.</strong> If the horizontal axis
+measures hours and the vertical axis measures milligrams per liter, what
+are the units of <span class="math inline">\(f(2)\)</span>? Explain why
+the range depends on the domain chosen.</p>
+<h2 id="interactive-investigation">Interactive investigation: Function transformations</h2><div class="calc-widget" data-calc="1"><p>Compare the shifted parabola with the original. Predict the vertex before moving each slider.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="functions-and-their-graphs">Functions and their graphs</h2>
+<h3 id="a-rule-that-assigns-one-output-to-each-input">A rule that
+assigns one output to each input</h3>
+<p>A medication concentration changes with time, a reservoir’s volume
+depends on its water level, and the cost of manufacturing an item
+depends on production volume. In each situation, we choose an input
+variable and measure an associated output.</p>
+<p><strong>Definition.</strong> A <em>function</em> <span class="math inline">\(f:D\to Y\)</span> assigns exactly one output <span class="math inline">\(f(x)\in Y\)</span> to every input <span class="math inline">\(x\in D\)</span>. The <em>domain</em> is <span class="math inline">\(D\)</span>, the <em>codomain</em> is <span class="math inline">\(Y\)</span>, and the <em>range</em> is <span class="math inline">\(\{f(x):x\in D\}\)</span>.</p>
+<p>The codomain need not equal the range. For example, <span class="math inline">\(f:\mathbb R\to\mathbb R\)</span>, <span class="math inline">\(f(x)=x^2\)</span>, has range <span class="math inline">\([0,\infty)\)</span>, although its codomain is all
+real numbers. This distinction matters when defining inverse
+functions.</p>
+<p><strong>Example — A restricted quadratic.</strong> Consider <span class="math inline">\(A(r)=\pi r^2\)</span> for the area of a circular
+patch with radius <span class="math inline">\(r\)</span> in centimeters.
+State the physically meaningful domain and range, and evaluate <span class="math inline">\(A(3)\)</span>.</p>
+<p><strong>Solution.</strong> A radius cannot be negative, so <span class="math inline">\(r\in[0,\infty)\)</span>. Every nonnegative area is
+attained by <span class="math inline">\(r=\sqrt{A/\pi}\)</span>, so the
+range is <span class="math inline">\([0,\infty)\)</span>. Finally <span class="math inline">\(A(3)=9\pi\approx28.27\ \mathrm{cm}^2\)</span>. If
+the patch must have positive radius, both intervals exclude zero.</p>
+<p><strong>Example — Domains from algebraic constraints.</strong> Find
+the natural domain of <span class="math inline">\(f(x)=\sqrt{5-2x}/(x+1)\)</span>.</p>
+<p><strong>Solution.</strong> For a real square root, <span class="math inline">\(5-2x\geq0\)</span>, hence <span class="math inline">\(x\leq5/2\)</span>. The denominator requires <span class="math inline">\(x\ne-1\)</span>. Thus <span class="math inline">\(D=(-\infty,-1)\cup(-1,5/2]\)</span>. Checking the
+square root alone would miss the excluded point.</p>
+<h3 id="four-complementary-representations">Four complementary
+representations</h3>
+<p>A verbal description communicates context and units; a table gives
+observed or computed values; a formula allows algebraic reasoning; a
+graph displays overall behavior. None is automatically complete. A
+finite table does not uniquely determine a function between measured
+inputs. A plot does not prove continuity or monotonicity.</p>
+<figure>
+<img alt="A function assigns one output to each admissible input." src="figures/chapter01-diagram-01.svg"/>
+<figcaption>
+A function assigns one output to each admissible input.
+</figcaption>
+</figure>
+<p><strong>Example — From a table to a model.</strong> A tank is filled
+at a constant rate. Measurements are <span class="math inline">\((t,V)=(0,12),(2,19),(4,26)\)</span>, with time in
+minutes and volume in liters. Find a linear model and predict the volume
+at <span class="math inline">\(t=7\)</span>.</p>
+<p><strong>Solution.</strong> The volume rises <span class="math inline">\(7\)</span> L every <span class="math inline">\(2\)</span> min, giving slope <span class="math inline">\(3.5\)</span> L/min. Since <span class="math inline">\(V(0)=12\)</span>, <span class="math inline">\(V(t)=12+3.5t\)</span> and <span class="math inline">\(V(7)=36.5\)</span> L. The model is plausible only
+while the filling rate stays constant and the tank has capacity.</p>
+<h3 id="graphs-the-vertical-line-test-and-piecewise-definitions">Graphs,
+the vertical line test, and piecewise definitions</h3>
+<p>The graph of <span class="math inline">\(f\)</span> is the set <span class="math inline">\(\{(x,f(x)):x\in D\}\)</span>. A curve represents
+<span class="math inline">\(y=f(x)\)</span> precisely when every
+vertical line meets it at most once. The circle <span class="math inline">\(x^2+y^2=4\)</span> fails this test, but its upper
+semicircle <span class="math inline">\(y=\sqrt{4-x^2}\)</span> defines a
+function on <span class="math inline">\([-2,2]\)</span>.</p>
+<figure>
+<img alt="The two semicircles are functions separately; the complete circle is not a function of x." src="figures/chapter01-diagram-02.svg"/>
+<figcaption>
+The two semicircles are functions separately; the complete circle is not
+a function of <span class="math inline"><em>x</em></span>.
+</figcaption>
+</figure>
+<p>A piecewise function can have different rules in different regions.
+Consider the tiered cost function <span class="math inline">\(C(q)=\begin{cases}8q,&amp;0\leq
+q\leq10,\\80+6(q-10),&amp;q&gt;10.\end{cases}\)</span> The rule is
+continuous at <span class="math inline">\(q=10\)</span>, since both
+expressions give <span class="math inline">\(80\)</span>. But the rate
+of increase changes there, foreshadowing a derivative that does not
+exist at the breakpoint.</p>
+<p><strong>Example — Continuity is not assumed.</strong> Consider <span class="math inline">\(g(x)=\begin{cases}x+1,&amp;x&lt;2,\\5,&amp;x=2,\\x^2-1,&amp;x&gt;2.\end{cases}\)</span>
+Evaluate <span class="math inline">\(g(2)\)</span> and describe what the
+graph does near <span class="math inline">\(x=2\)</span>.</p>
+<p><strong>Solution.</strong> The defined value is <span class="math inline">\(g(2)=5\)</span>. Approaching from the left gives
+values near <span class="math inline">\(3\)</span>; approaching from the
+right also gives values near <span class="math inline">\(3\)</span>. The
+graph has a hole at <span class="math inline">\((2,3)\)</span> and a
+filled point at <span class="math inline">\((2,5)\)</span>. This example
+anticipates limits and continuity in Chapter 2.</p>
+<h3 id="increasing-decreasing-symmetry-and-function-families">Increasing,
+decreasing, symmetry, and function families</h3>
+<p>A function is strictly increasing on an interval if <span class="math inline">\(x_1&lt;x_2\)</span> implies <span class="math inline">\(f(x_1)&lt;f(x_2)\)</span>; it is strictly
+decreasing when the output inequality reverses. An even function
+satisfies <span class="math inline">\(f(-x)=f(x)\)</span>, and an odd
+function satisfies <span class="math inline">\(f(-x)=-f(x)\)</span>,
+provided the domain is symmetric about zero.</p>
+<p><strong>Example — Classifying functions.</strong> Classify <span class="math inline">\(f(x)=x^4-3x^2\)</span>, <span class="math inline">\(g(x)=x^3-2x\)</span>, and <span class="math inline">\(h(x)=x^2+x\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f(-x)=f(x)\)</span>, so <span class="math inline">\(f\)</span> is even. <span class="math inline">\(g(-x)=-g(x)\)</span>, so <span class="math inline">\(g\)</span> is odd. The function <span class="math inline">\(h\)</span> is neither because <span class="math inline">\(h(-x)=x^2-x\)</span> differs from both <span class="math inline">\(h(x)\)</span> and <span class="math inline">\(-h(x)\)</span> in general.</p>
+<p>Common families include constant and linear functions, polynomials,
+rational functions, radical functions, trigonometric functions,
+exponentials, and logarithms. Their domains, growth patterns, symmetry,
+and asymptotes are more informative than memorized shapes alone.</p>
+<figure>
+<img alt="Even and odd symmetry, and the corner in the absolute-value graph." src="figures/chapter01-diagram-03.svg"/>
+<figcaption>
+Even and odd symmetry, and the corner in the absolute-value graph.
+</figcaption>
+</figure>
+<h2 id="combining-functions-and-transforming-graphs">Combining functions
+and transforming graphs</h2>
+<h3 id="algebraic-combinations-and-their-domains">Algebraic combinations
+and their domains</h3>
+<p>For functions <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span>, define <span class="math inline">\((f+g)(x)=f(x)+g(x)\)</span>, <span class="math inline">\((fg)(x)=f(x)g(x)\)</span>, and <span class="math inline">\((f/g)(x)=f(x)/g(x)\)</span> when the inputs lie in
+both domains and <span class="math inline">\(g(x)\ne0\)</span>. The
+domain restriction is part of the mathematical answer, not a
+technicality.</p>
+<p><strong>Example — Combining functions.</strong> Let <span class="math inline">\(f(x)=\sqrt{x+2}\)</span> and <span class="math inline">\(g(x)=x-1\)</span>. Find the domain of <span class="math inline">\((f/g)(x)\)</span>.</p>
+<p><strong>Solution.</strong> The radical requires <span class="math inline">\(x\geq-2\)</span>. The denominator excludes <span class="math inline">\(x=1\)</span>. Hence <span class="math inline">\(D=[-2,1)\cup(1,\infty)\)</span>.</p>
+<h3 id="composition-one-process-after-another">Composition: one process
+after another</h3>
+<p><strong>Definition.</strong> The composite <span class="math inline">\(f\circ g\)</span> is <span class="math inline">\((f\circ g)(x)=f(g(x))\)</span>. Its domain
+consists of those <span class="math inline">\(x\)</span> in the domain
+of <span class="math inline">\(g\)</span> for which <span class="math inline">\(g(x)\)</span> belongs to the domain of <span class="math inline">\(f\)</span>.</p>
+<p><strong>Example — Temperature conversion and a sensor.</strong> A
+sensor converts temperature <span class="math inline">\(T\)</span> in
+Celsius to voltage <span class="math inline">\(g(T)=0.02T+0.5\)</span>
+V. A display maps voltage to a reading <span class="math inline">\(f(v)=100v^2\)</span>. Find <span class="math inline">\((f\circ g)(T)\)</span> and interpret the
+order.</p>
+<p><strong>Solution.</strong> The display receives voltage, not
+temperature. Thus <span class="math inline">\((f\circ
+g)(T)=100(0.02T+0.5)^2\)</span>. Reversing the composition would
+describe a different process and generally a different numerical
+result.</p>
+<h3 id="shifts-reflections-and-scaling">Shifts, reflections, and
+scaling</h3>
+<p>Starting with <span class="math inline">\(y=f(x)\)</span>, the
+function <span class="math inline">\(f(x-h)+k\)</span> shifts the graph
+right by <span class="math inline">\(h\)</span> and up by <span class="math inline">\(k\)</span>. The function <span class="math inline">\(af(x)\)</span> scales vertically; <span class="math inline">\(f(bx)\)</span> scales horizontally by a factor
+<span class="math inline">\(1/|b|\)</span> when <span class="math inline">\(b\ne0\)</span>. Negative factors also reflect the
+graph. The inside transformation acts on inputs, explaining why
+horizontal shifts have a seemingly reversed sign.</p>
+<p><strong>Example — Transform a parabola.</strong> Describe the graph
+of <span class="math inline">\(y=-2(x-3)^2+4\)</span> using <span class="math inline">\(y=x^2\)</span>.</p>
+<p><strong>Solution.</strong> Shift right 3, stretch vertically by
+factor 2, reflect across the horizontal axis, then shift up 4. Its
+vertex is <span class="math inline">\((3,4)\)</span>, its range is <span class="math inline">\((-\infty,4]\)</span>, and its axis of symmetry is
+<span class="math inline">\(x=3\)</span>.</p>
+<figure>
+<img alt="A transformed quadratic; the vertex and concavity can be read directly from the formula." src="figures/chapter01-diagram-04.svg"/>
+<figcaption>
+A transformed quadratic; the vertex and concavity can be read directly
+from the formula.
+</figcaption>
+</figure>
+<h2 id="trigonometric-functions-and-periodic-models">Trigonometric
+functions and periodic models</h2>
+<h3 id="radian-measure-and-the-unit-circle">Radian measure and the unit
+circle</h3>
+<p>An angle of <span class="math inline">\(\theta\)</span> radians
+subtends arc length <span class="math inline">\(s=r\theta\)</span> on a
+circle of radius <span class="math inline">\(r\)</span>. On the unit
+circle, the point reached by rotating through <span class="math inline">\(\theta\)</span> has coordinates <span class="math inline">\((\cos\theta,\sin\theta)\)</span>. The identity
+<span class="math inline">\(\sin^2\theta+\cos^2\theta=1\)</span> follows
+from the Pythagorean theorem. Radians are the natural units of calculus
+because derivatives of sine and cosine take their simplest forms when
+angles are measured in radians.</p>
+<figure>
+<img alt="Sine and cosine as coordinates of a point on the unit circle." src="figures/chapter01-diagram-05.svg"/>
+<figcaption>
+Sine and cosine as coordinates of a point on the unit circle.
+</figcaption>
+</figure>
+<h3 id="amplitude-period-phase-and-vertical-offset">Amplitude, period,
+phase, and vertical offset</h3>
+<p>A sinusoidal model can be written <span class="math inline">\(y(t)=M+A\sin(\omega(t-t_0))\)</span>. Here <span class="math inline">\(|A|\)</span> is the amplitude, <span class="math inline">\(M\)</span> is the midline, <span class="math inline">\(2\pi/|\omega|\)</span> is the period, and <span class="math inline">\(t_0\)</span> is a phase shift. Physical
+interpretation requires units: if <span class="math inline">\(t\)</span>
+is in hours, <span class="math inline">\(\omega\)</span> is in radians
+per hour.</p>
+<p><strong>Example — Daily temperature cycle.</strong> Suppose
+temperature is modeled by <span class="math inline">\(T(t)=18+6\sin\!\left(\frac{\pi}{12}(t-9)\right)\)</span>
+degrees Celsius, with <span class="math inline">\(t\)</span> in hours.
+Identify the period and predicted extremes.</p>
+<p><strong>Solution.</strong> The period is <span class="math inline">\(2\pi/(\pi/12)=24\)</span> hours. The midline is
+<span class="math inline">\(18^\circ\)</span>C and the amplitude is
+<span class="math inline">\(6^\circ\)</span>C, giving a maximum of <span class="math inline">\(24^\circ\)</span>C and a minimum of <span class="math inline">\(12^\circ\)</span>C. This idealized model does not
+account for weather changes.</p>
+<h3 id="trigonometric-identities-and-inverse-trigonometric-functions">Trigonometric
+identities and inverse trigonometric functions</h3>
+<p>The angle-addition formulas <span class="math inline">\(\sin(a+b)=\sin a\cos b+\cos a\sin b\)</span> and
+<span class="math inline">\(\cos(a+b)=\cos a\cos b-\sin a\sin b\)</span>
+describe phase shifts. To define <span class="math inline">\(\arcsin\)</span>, we restrict sine to <span class="math inline">\([-\pi/2,\pi/2]\)</span>; to define <span class="math inline">\(\arccos\)</span>, we restrict cosine to <span class="math inline">\([0,\pi]\)</span>. The inverse of a periodic
+function requires such a restriction because periodic functions are not
+one-to-one on all real numbers.</p>
+<h2 id="graphing-with-computers-opportunities-and-traps">Graphing with
+computers: opportunities and traps</h2>
+<p>Software plots evaluate a function at finitely many points and join
+them according to a plotting algorithm. A displayed line is therefore an
+approximation to a mathematical graph. Poor sampling may conceal narrow
+peaks or suggest a false discontinuity; connecting points across an
+asymptote can invent a line segment that is not part of the graph.</p>
+<p><strong>Example — A removable discontinuity.</strong> For <span class="math inline">\(x\ne1\)</span>, let <span class="math inline">\(q(x)=(x^2-1)/(x-1)\)</span>. Simplify and explain
+why a naive plot may be misleading.</p>
+<p><strong>Solution.</strong> Factoring gives <span class="math inline">\(q(x)=x+1\)</span> for <span class="math inline">\(x\ne1\)</span>. Its graph is the line <span class="math inline">\(y=x+1\)</span> with the point <span class="math inline">\((1,2)\)</span> removed. A plotting routine that
+simplifies the expression and ignores its original domain may draw the
+missing point as if it were present.</p>
+<p><strong>Example — Aliasing of oscillations.</strong> Compare the
+values of <span class="math inline">\(f(x)=\sin(20\pi x)\)</span> at
+<span class="math inline">\(x=0,0.1,\ldots,1\)</span> with its values
+between those points.</p>
+<p><strong>Solution.</strong> At every sampled point <span class="math inline">\(x=k/10\)</span>, <span class="math inline">\(f(x)=\sin(2\pi k)=0\)</span>. A graph made from
+these eleven points looks like the zero function even though the true
+function oscillates ten times over <span class="math inline">\([0,1]\)</span>. Increasing the sampling density
+reveals the oscillation.</p>
+<figure>
+<img alt="Sampling at multiples of 0.1 entirely misses the oscillation of sin (20πx)." src="figures/chapter01-diagram-06.svg"/>
+<figcaption>
+Sampling at multiples of <span class="math inline">0.1</span> entirely
+misses the oscillation of <span class="math inline">sin (20<em>π</em><em>x</em>)</span>.
+</figcaption>
+</figure>
+<h2 id="exponential-functions-and-growth-models">Exponential functions
+and growth models</h2>
+<h3 id="exponential-functions">Exponential functions</h3>
+<p>For <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(a\ne1\)</span>, the function <span class="math inline">\(a^x\)</span> is positive for all real <span class="math inline">\(x\)</span>. It increases when <span class="math inline">\(a&gt;1\)</span> and decreases when <span class="math inline">\(0&lt;a&lt;1\)</span>. The base <span class="math inline">\(e\approx2.71828\)</span> is especially important
+in calculus. A continuous growth model has the form <span class="math inline">\(Q(t)=Q_0e^{kt}\)</span>; <span class="math inline">\(k&gt;0\)</span> indicates growth and <span class="math inline">\(k&lt;0\)</span> decay.</p>
+<p><strong>Example — Population growth.</strong> A bacterial culture
+begins with 500 cells and follows <span class="math inline">\(N(t)=500e^{0.18t}\)</span>, where <span class="math inline">\(t\)</span> is measured in hours. Find the
+predicted count at 4 hours and the doubling time.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(N(4)=500e^{0.72}\approx1027\)</span> cells.
+Doubling occurs when <span class="math inline">\(2=e^{0.18t}\)</span>,
+so <span class="math inline">\(t=\ln(2)/0.18\approx3.85\)</span> hours.
+The model assumes an unchanged relative growth rate and will eventually
+fail when resources become limited.</p>
+<h3 id="discrete-versus-continuous-compounding">Discrete versus
+continuous compounding</h3>
+<p>With annual nominal rate <span class="math inline">\(r\)</span>
+compounded <span class="math inline">\(n\)</span> times per year, an
+initial balance <span class="math inline">\(P\)</span> becomes <span class="math inline">\(A(t)=P(1+r/n)^{nt}\)</span>. The
+continuous-compounding limit is <span class="math inline">\(Pe^{rt}\)</span>. These formulas are different
+models; choosing one requires knowing the financial convention.</p>
+<p><strong>Example — Two compounding conventions.</strong> For <span class="math inline">\(P=2000\)</span>, <span class="math inline">\(r=0.05\)</span>, and <span class="math inline">\(t=3\)</span>, compute annual and continuous
+balances.</p>
+<p><strong>Solution.</strong> Annual compounding gives <span class="math inline">\(2000(1.05)^3=2315.25\)</span>. Continuous
+compounding gives <span class="math inline">\(2000e^{0.15}\approx2323.67\)</span>. The
+difference is approximately <span class="math inline">\(\$8.42\)</span>.</p>
+<h2 id="inverse-functions-and-logarithms">Inverse functions and
+logarithms</h2>
+<h3 id="when-can-a-function-be-reversed">When can a function be
+reversed?</h3>
+<p>A function is one-to-one if distinct inputs always produce distinct
+outputs. A strictly monotone function is one-to-one. If <span class="math inline">\(f\)</span> is one-to-one on its domain, its
+inverse <span class="math inline">\(f^{-1}\)</span> satisfies <span class="math inline">\(f^{-1}(f(x))=x\)</span> and <span class="math inline">\(f(f^{-1}(y))=y\)</span> for appropriate inputs.
+Its graph reflects the original graph across <span class="math inline">\(y=x\)</span>.</p>
+<p><strong>Example — Invert a calibration model.</strong> A calibration
+model is <span class="math inline">\(v=0.8+0.04T\)</span>, where <span class="math inline">\(T\)</span> is temperature in degrees Celsius and
+<span class="math inline">\(v\)</span> is voltage. Solve for <span class="math inline">\(T\)</span> as a function of <span class="math inline">\(v\)</span>.</p>
+<p><strong>Solution.</strong> Subtract <span class="math inline">\(0.8\)</span> and divide by <span class="math inline">\(0.04\)</span>: <span class="math inline">\(T(v)=(v-0.8)/0.04=25(v-0.8)\)</span>. This inverse
+converts a voltage reading into an estimated temperature.</p>
+<h3 id="logarithms-as-inverse-exponentials">Logarithms as inverse
+exponentials</h3>
+<p>For <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(a\ne1\)</span>, <span class="math inline">\(\log_a(x)\)</span> is defined for <span class="math inline">\(x&gt;0\)</span> and satisfies <span class="math inline">\(a^{\log_a x}=x\)</span>. In particular, <span class="math inline">\(\ln x\)</span> is the inverse of <span class="math inline">\(e^x\)</span>. The identities <span class="math inline">\(\ln(xy)=\ln x+\ln y\)</span>, <span class="math inline">\(\ln(x/y)=\ln x-\ln y\)</span>, and <span class="math inline">\(\ln(x^r)=r\ln x\)</span> hold when the real
+logarithms involved are defined.</p>
+<p><strong>Example — Recovering an exponential rate.</strong> An
+observed concentration declines from 80 to 50 units over 6 hours under
+<span class="math inline">\(C(t)=80e^{-kt}\)</span>. Determine <span class="math inline">\(k\)</span> and the half-life.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(50/80=e^{-6k}\)</span>, so <span class="math inline">\(k=-\ln(50/80)/6\approx0.07833\)</span> h<span class="math inline">\(^{-1}\)</span>. The half-life is <span class="math inline">\(\ln2/k\approx8.85\)</span> h. The estimated rate
+depends on the assumption of exponential decay.</p>
+<figure>
+<img alt="The exponential and natural logarithm are reflections across y = x." src="figures/chapter01-diagram-07.svg"/>
+<figcaption>
+The exponential and natural logarithm are reflections across <span class="math inline"><em>y</em> = <em>x</em></span>.
+</figcaption>
+</figure>
+<h2 id="computational-laboratories-the-same-mathematics-in-r-and-python">Computational
+laboratories: the same mathematics in R and Python</h2>
+<p>Each laboratory begins with a mathematical question. Code is used to
+inspect and verify the mathematical result, not to replace it. Students
+should run the code, annotate outputs with units, and explain what
+numerical evidence can and cannot establish.</p>
+<h3 id="laboratory-1-domain-restrictions-and-piecewise-functions">Laboratory
+1: domain restrictions and piecewise functions</h3>
+<p>Investigate <span class="math inline">\(f(x)=\sqrt{5-2x}/(x+1)\)</span>. The algebraic
+domain is <span class="math inline">\((-\infty,-1)\cup(-1,2.5]\)</span>.
+Plot only valid values and avoid connecting points across the vertical
+asymptote at <span class="math inline">\(x=-1\)</span>.</p>
+<h5 id="r">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter01-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) sqrt(5 - 2*x) / (x + 1)
+x_left  &lt;- seq(-4, -1.02, length.out = 400)
+x_right &lt;- seq(-0.98, 2.5, length.out = 400)
+plot(x_left, f(x_left), type = "l", col = "navy",
+     xlim = c(-4, 2.5), ylim = c(-12, 12),
+     xlab = "x", ylab = "f(x)")
+lines(x_right, f(x_right), col = "firebrick")
+abline(v = -1, lty = 2)</code></pre></div>
+<h5 id="python">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter01-02.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+def f(x):
+    return np.sqrt(5 - 2*x) / (x + 1)
+
+for left, right in [(-4, -1.02), (-0.98, 2.5)]:
+    x = np.linspace(left, right, 400)
+    plt.plot(x, f(x))
+plt.axvline(-1, linestyle="--", color="gray")
+plt.ylim(-12, 12)
+plt.xlabel("x")
+plt.ylabel("f(x)")
+plt.show()</code></pre></div>
+<p><strong>Interpretation.</strong> The dashed line marks a forbidden
+input. A plotted asymptote is not part of the function; the chosen
+vertical window also clips large values near <span class="math inline">\(-1\)</span>.</p>
+<h3 id="laboratory-2-transformations">Laboratory 2: transformations</h3>
+<p>Start with <span class="math inline">\(f(x)=x^2\)</span>. Compare
+<span class="math inline">\(f(x)\)</span> with <span class="math inline">\(g(x)=-2(x-3)^2+4\)</span> and verify the
+transformed vertex <span class="math inline">\((3,4)\)</span>.</p>
+<h5 id="r-1">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter01-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x &lt;- seq(-2, 5, length.out = 500)
+plot(x, x^2, type = "l", col = "navy",
+     ylim = c(-5, 10), xlab = "x", ylab = "y")
+lines(x, -2*(x - 3)^2 + 4, col = "firebrick")
+points(3, 4, pch = 19)
+legend("topleft", c("x^2", "-2(x-3)^2+4"),
+       col = c("navy", "firebrick"), lty = 1)</code></pre></div>
+<h5 id="python-1">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter01-04.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(-2, 5, 500)
+plt.plot(x, x**2, label="x^2")
+plt.plot(x, -2*(x-3)**2 + 4, label="-2(x-3)^2+4")
+plt.scatter([3], [4])
+plt.ylim(-5, 10)
+plt.legend()
+plt.show()</code></pre></div>
+<h3 id="laboratory-3-periodic-models-and-sampling">Laboratory 3:
+periodic models and sampling</h3>
+<p>Plot <span class="math inline">\(T(t)=18+6\sin(\pi(t-9)/12)\)</span>
+for <span class="math inline">\(0\leq t\leq48\)</span> hours, then
+compare dense and sparse sampling of <span class="math inline">\(\sin(20\pi x)\)</span>.</p>
+<h5 id="r-2">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter01-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0, 48, length.out = 1000)
+T &lt;- 18 + 6*sin(pi*(t - 9)/12)
+plot(t, T, type = "l", xlab = "Hours", ylab = "Temperature (C)")
+x &lt;- seq(0, 1, length.out = 1001)
+plot(x, sin(20*pi*x), type = "l", xlab = "x", ylab = "sin(20*pi*x)")
+coarse &lt;- seq(0, 1, by = 0.1)
+points(coarse, sin(20*pi*coarse), pch = 19, col = "red")</code></pre></div>
+<h5 id="python-2">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter01-06.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+t = np.linspace(0, 48, 1000)
+T = 18 + 6*np.sin(np.pi*(t - 9)/12)
+plt.plot(t, T)
+plt.xlabel("Hours")
+plt.ylabel("Temperature (C)")
+plt.show()
+x = np.linspace(0, 1, 1001)
+coarse = np.linspace(0, 1, 11)
+plt.plot(x, np.sin(20*np.pi*x))
+plt.scatter(coarse, np.sin(20*np.pi*coarse), color="red")
+plt.show()</code></pre></div>
+<h3 id="laboratory-4-exponential-models-and-inverses">Laboratory 4:
+exponential models and inverses</h3>
+<p>Given <span class="math inline">\(C(t)=80e^{-kt}\)</span> and <span class="math inline">\(C(6)=50\)</span>, estimate <span class="math inline">\(k\)</span>, compute the half-life, and verify by
+substitution.</p>
+<h5 id="r-3">R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter01-07.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>k &lt;- -log(50/80)/6
+half_life &lt;- log(2)/k
+cat("Rate:", round(k, 5), "per hour\n")
+cat("Half-life:", round(half_life, 2), "hours\n")
+stopifnot(abs(80*exp(-k*6) - 50) &lt; 1e-10)</code></pre></div>
+<h5 id="python-3">Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter01-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import math
+k = -math.log(50/80)/6
+half_life = math.log(2)/k
+print(f"Rate: {k:.5f} per hour")
+print(f"Half-life: {half_life:.2f} hours")
+assert abs(80*math.exp(-k*6) - 50) &lt; 1e-10</code></pre></div>
+<h3 id="computational-comparison-and-responsible-use">Computational
+comparison and responsible use</h3>
+<p>Both languages can calculate numerical values and generate plots. R
+uses vectorized arithmetic on numeric vectors; NumPy provides
+corresponding vectorized operations in Python. In R, <code>^</code>
+denotes exponentiation, as it does in Python with <code>**</code>; in
+Python, <code>^</code> is a bitwise operator, not exponentiation. R’s
+<code>log()</code> and Python’s <code>math.log()</code> compute natural
+logarithms by default. Code should specify input units, meaningful
+domains, and expected outputs, and should test important calculations
+against independent algebraic results.</p>
+<h2 id="real-world-modeling-workshop">Real-world modeling workshop</h2>
+<h3 id="model-a-tiered-energy-charges">Model A: tiered energy
+charges</h3>
+<p>A household pays a fixed monthly service charge of <span class="math inline">\(\$12\)</span>, plus <span class="math inline">\(\$0.15\)</span> per kWh for the first 400 kWh and
+<span class="math inline">\(\$0.11\)</span> per kWh thereafter. For
+nonnegative consumption <span class="math inline">\(q\)</span>, a
+continuous cost model is <span class="math display">\[C(q)=\begin{cases}12+0.15q,&amp;0\le
+q\le400,\\72+0.11(q-400),&amp;q&gt;400.\end{cases}\]</span> The two
+formulas agree at <span class="math inline">\(q=400\)</span>: both give
+<span class="math inline">\(\$72\)</span>. The marginal charge changes
+after the threshold. Students should check whether taxes or other fees
+are excluded before using the model for actual billing.</p>
+<h3 id="model-b-medication-elimination">Model B: medication
+elimination</h3>
+<p>The concentration <span class="math inline">\(C(t)=C_0e^{-kt}\)</span> models first-order
+elimination under idealized conditions. The parameter <span class="math inline">\(k\)</span> has units of reciprocal time. Taking
+logarithms gives <span class="math inline">\(\ln C(t)=\ln
+C_0-kt\)</span>, which turns a multiplicative decay model into a linear
+relationship in log concentration. This is useful for exploratory
+visualization, but measurement error and clinical interpretation require
+more sophisticated analysis than the simple model supplies.</p>
+<h3 id="model-c-seasonal-or-daily-variation">Model C: seasonal or daily
+variation</h3>
+<p>The sinusoid <span class="math inline">\(T(t)=M+A\sin(\omega(t-t_0))\)</span> is suitable
+when a variable has a stable repeating cycle. Before fitting it, ask
+whether the data actually have a constant period and amplitude. A graph
+may reveal departures from the model that a single summary statistic
+conceals.</p>
+<h2 id="chapter-exercises">Chapter exercises</h2>
+<p><strong>Instructions.</strong> Show algebraic reasoning before using
+software. When a question requests a graph, label axes and units and
+explain domain restrictions. Computational exercises may be completed in
+R and Python, unless specified otherwise.</p>
+<h3 class="unnumbered" id="a.-concepts-and-representations">A. Concepts
+and representations</h3>
+<ol type="1">
+<li><p>Explain the difference between a domain, codomain, and range.
+Give an example where codomain and range differ.</p></li>
+<li><p>Determine whether the relation <span class="math inline">\(x=y^2-1\)</span> defines <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span>. Can it define <span class="math inline">\(x\)</span> as a function of <span class="math inline">\(y\)</span>?</p></li>
+<li><p>Find the natural domain of <span class="math inline">\(f(x)=\sqrt{9-x^2}/(x-2)\)</span> and express it
+using interval notation.</p></li>
+<li><p>Determine the range of <span class="math inline">\(f(x)=(x-1)^2+3\)</span> on (a) <span class="math inline">\(\mathbb R\)</span> and (b) <span class="math inline">\([2,5]\)</span>.</p></li>
+<li><p>A reservoir has initial volume 1000 L and loses 12 L per minute.
+Construct a verbal description, equation, table, and graph. State a
+physically meaningful domain.</p></li>
+<li><p>Give two different functions that agree at <span class="math inline">\(x=0,1,2\)</span> but differ elsewhere. Explain why
+a finite table does not determine a unique rule.</p></li>
+<li><p>Sketch <span class="math inline">\(f(x)=\begin{cases}-x,&amp;x&lt;0,\\x^2,&amp;0\le
+x\le1,\\1,&amp;x&gt;1.\end{cases}\)</span> Determine its domain and
+range.</p></li>
+<li><p>Determine whether <span class="math inline">\(f(x)=x^6-2x^2\)</span> and <span class="math inline">\(g(x)=x^5+3x\)</span> are even, odd, or neither.
+Prove your claims algebraically.</p></li>
+<li><p>Determine the intervals on which <span class="math inline">\(f(x)=|x-3|\)</span> is increasing or decreasing
+using the definition rather than differentiation.</p></li>
+<li><p>Explain why the vertical line test is sufficient to decide
+whether a plane curve is the graph of a function of <span class="math inline">\(x\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="b.-combining-and-transforming-functions">B.
+Combining and transforming functions</h3>
+<ol type="1">
+<li><p>For <span class="math inline">\(f(x)=\sqrt{x+1}\)</span> and
+<span class="math inline">\(g(x)=x-2\)</span>, determine the domains of
+<span class="math inline">\(f+g\)</span>, <span class="math inline">\(fg\)</span>, <span class="math inline">\(f/g\)</span>, and <span class="math inline">\(g/f\)</span>.</p></li>
+<li><p>For <span class="math inline">\(f(x)=1/(x-1)\)</span> and <span class="math inline">\(g(x)=\sqrt{x}\)</span>, determine formulas and
+domains for <span class="math inline">\(f\circ g\)</span> and <span class="math inline">\(g\circ f\)</span>.</p></li>
+<li><p>Construct a formula from <span class="math inline">\(y=\sqrt{x}\)</span> by shifting left 2, reflecting
+across the <span class="math inline">\(x\)</span>-axis, and shifting up
+5. State its domain and range.</p></li>
+<li><p>Identify the transformations of <span class="math inline">\(y=|x|\)</span> producing <span class="math inline">\(y=3|2x+4|-1\)</span>. Find the vertex.</p></li>
+<li><p>Prove that the composition of two odd functions is odd whenever
+the composition is defined on a symmetric domain.</p></li>
+<li><p>Show by counterexample that the sum of an even function and an
+odd function need not be even or odd.</p></li>
+<li><p>A sensor follows <span class="math inline">\(v(T)=0.6+0.03T\)</span> and a display follows
+<span class="math inline">\(R(v)=40v^2\)</span>. Find <span class="math inline">\(R\circ v\)</span>, and compute the display reading
+at <span class="math inline">\(T=20\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="c.-trigonometry-exponentials-and-logarithms">C. Trigonometry,
+exponentials, and logarithms</h3>
+<ol type="1">
+<li><p>Convert <span class="math inline">\(150^\circ\)</span> to
+radians. Find the arc length subtended by this angle on a circle of
+radius 8 cm.</p></li>
+<li><p>Find the amplitude, period, and midline of <span class="math inline">\(y=4-3\cos(\pi t/5)\)</span>. State the units
+needed to interpret its period.</p></li>
+<li><p>Solve <span class="math inline">\(2\sin x=1\)</span> on <span class="math inline">\([0,2\pi]\)</span> and justify your answers using
+the unit circle.</p></li>
+<li><p>Explain why <span class="math inline">\(\arcsin(\sin(5\pi/6))\ne5\pi/6\)</span>.</p></li>
+<li><p>A quantity grows from 300 to 450 in 5 years under <span class="math inline">\(Q(t)=300e^{kt}\)</span>. Determine <span class="math inline">\(k\)</span> and the doubling time.</p></li>
+<li><p>Compare annual and monthly compounding for <span class="math inline">\(P=\$5000\)</span>, <span class="math inline">\(r=0.04\)</span>, and <span class="math inline">\(t=6\)</span> years.</p></li>
+<li><p>Solve <span class="math inline">\(7e^{2x}=21\)</span> exactly.
+Then give a numerical approximation.</p></li>
+<li><p>Solve <span class="math inline">\(\ln(x-1)+\ln(x+2)=\ln(10)\)</span>, checking
+domain restrictions and extraneous roots.</p></li>
+<li><p>Find the inverse of <span class="math inline">\(f(x)=3e^{2x}-4\)</span> and specify the domains
+and ranges of <span class="math inline">\(f\)</span> and <span class="math inline">\(f^{-1}\)</span>.</p></li>
+</ol>
+<h3 class="unnumbered" id="d.-computation-interpretation-and-critique">D. Computation,
+interpretation, and critique</h3>
+<ol type="1">
+<li><p>In R and Python, graph <span class="math inline">\(1/(x-2)\)</span> on both sides of <span class="math inline">\(x=2\)</span> without joining points across the
+asymptote. Explain the role of domain splitting.</p></li>
+<li><p>In R and Python, compare plots of <span class="math inline">\(\sin(30\pi x)\)</span> on <span class="math inline">\([0,1]\)</span> using 11, 31, and 1001 equally
+spaced sample points. Which are misleading, and why?</p></li>
+<li><p>Construct a piecewise model for a parking garage charging <span class="math inline">\(\$3\)</span> for the first hour and <span class="math inline">\(\$2\)</span> for each additional hour or fraction
+thereof. Explain why a ceiling function is appropriate.</p></li>
+<li><p>A substance has a half-life of 9 hours. Construct its exponential
+decay model for initial quantity 120 mg. Calculate the quantity after 24
+hours and verify computationally.</p></li>
+<li><p>Use R and Python to graph <span class="math inline">\(y=e^x\)</span>, <span class="math inline">\(y=\ln
+x\)</span>, and <span class="math inline">\(y=x\)</span> on the same
+coordinate system. Explain their symmetry and the significance of domain
+restrictions.</p></li>
+<li><p>Propose a real-world context in which a linear model is more
+defensible than an exponential model. Explain what measurements would
+distinguish the models.</p></li>
+</ol>
+<h2 id="concluding-project-from-measurements-to-a-defensible-model">Concluding
+project: from measurements to a defensible model</h2>
+<p><strong>Project title: Modeling a cooling process.</strong> A sealed
+container of warm water is placed in a room maintained near <span class="math inline">\(22^\circ\)</span>C. The following <em>synthetic
+teaching data</em> record temperature after placement. The data are
+intentionally idealized and are not experimental observations.</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Time (min)</th>
+<th style="text-align: right;">0</th>
+<th style="text-align: right;">5</th>
+<th style="text-align: right;">10</th>
+<th style="text-align: right;">15</th>
+<th style="text-align: right;">20</th>
+<th style="text-align: right;">25</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">Temperature (<span class="math inline">\(^\circ\)</span>C)</td>
+<td style="text-align: right;">82.0</td>
+<td style="text-align: right;">69.0</td>
+<td style="text-align: right;">58.9</td>
+<td style="text-align: right;">51.0</td>
+<td style="text-align: right;">44.8</td>
+<td style="text-align: right;">39.8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 class="unnumbered" id="part-i-mathematical-modeling">Part I:
+Mathematical modeling</h3>
+<ol type="1">
+<li><p>Identify the independent and dependent variables and their units.
+State a reasonable domain for the observed data and a cautious domain
+for predictions.</p></li>
+<li><p>Use the model <span class="math inline">\(T(t)=22+60e^{-kt}\)</span>. Show how to estimate
+<span class="math inline">\(k\)</span> from the <span class="math inline">\(t=5\)</span> measurement. Then estimate <span class="math inline">\(k\)</span> from the <span class="math inline">\(t=10\)</span> measurement and compare the
+results.</p></li>
+<li><p>Derive a formula for the time at which the water reaches <span class="math inline">\(35^\circ\)</span>C. Discuss why the model never
+predicts a temperature below the ambient <span class="math inline">\(22^\circ\)</span>C.</p></li>
+<li><p>Describe the transformations taking <span class="math inline">\(y=e^{-kt}\)</span> to <span class="math inline">\(T(t)\)</span>, and sketch the graph without
+software.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-ii-r-and-python-analysis">Part II: R and
+Python analysis</h3>
+<ol type="1">
+<li><p>Enter the six observations into both R and Python. Make a labeled
+scatterplot and overlay the proposed exponential model.</p></li>
+<li><p>Compute model predictions at each observed time and a residual
+table: observed minus predicted. Discuss the pattern and units of the
+residuals.</p></li>
+<li><p>Use a logarithmic transformation, <span class="math inline">\(\ln(T-22)=\ln60-kt\)</span>, to estimate <span class="math inline">\(k\)</span> from all observations. Explain why
+observations must satisfy <span class="math inline">\(T&gt;22\)</span>.</p></li>
+<li><p>Verify that the two languages give the same estimated parameter
+and predictions within reasonable numerical tolerance.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iii-interpretation-and-communication">Part III: Interpretation
+and communication</h3>
+<ol type="1">
+<li><p>Compare the exponential model with a straight-line fit over the
+observed interval. Explain why a straight line may be locally useful but
+unreliable for long-term extrapolation.</p></li>
+<li><p>Write a 500–750 word report describing assumptions, domain,
+parameter meaning, model fit, uncertainty, and limitations. Include one
+mathematical derivation, one figure, one results table, and both
+reproducible programs.</p></li>
+</ol>
+<h5 id="starter-code-r">Starter code: R</h5>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter01-09.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>time &lt;- c(0, 5, 10, 15, 20, 25)
+temp &lt;- c(82.0, 69.0, 58.9, 51.0, 44.8, 39.8)
+fit &lt;- lm(log(temp - 22) ~ time)
+k &lt;- -unname(coef(fit)[2])
+pred &lt;- 22 + 60*exp(-k*time)
+print(data.frame(time, observed=temp, predicted=pred,
+                 residual=temp-pred))
+plot(time, temp, xlab="Time (min)", ylab="Temperature (C)")
+curve(22 + 60*exp(-k*x), from=0, to=30, add=TRUE)</code></pre></div>
+<h5 id="starter-code-python">Starter code: Python</h5>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter01-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+time = np.array([0, 5, 10, 15, 20, 25], dtype=float)
+temp = np.array([82, 69, 58.9, 51, 44.8, 39.8])
+slope, intercept = np.polyfit(time, np.log(temp - 22), 1)
+k = -slope
+pred = 22 + 60*np.exp(-k*time)
+for t, obs, p in zip(time, temp, pred):
+    print(f"{t:4.0f} min  observed={obs:5.1f}  "
+          f"predicted={p:6.2f}  residual={obs-p:6.2f}")
+plt.scatter(time, temp, label="Teaching data")
+t = np.linspace(0, 30, 301)
+plt.plot(t, 22 + 60*np.exp(-k*t), label="Exponential model")
+plt.xlabel("Time (min)")
+plt.ylabel("Temperature (C)")
+plt.legend()
+plt.show()</code></pre></div>
+<h5 id="suggested-assessment-rubric-100-points.">Suggested assessment
+rubric (100 points).</h5>
+<p>Mathematical derivations and domain reasoning: 30; correct and
+reproducible R/Python programs: 25; graphs and residual interpretation:
+20; model comparison and limitations: 15; communication and
+presentation: 10.</p>
+<h2 class="unnumbered" id="chapter-summary-and-readiness-check">Chapter
+summary and readiness check</h2>
+<p>A function is a rule with exactly one output per input. Domains
+encode algebraic and contextual constraints. Equations, tables, graphs,
+and verbal descriptions serve different purposes. Transformations,
+composition, and inverse functions connect models to each other.
+Trigonometric functions represent periodic phenomena; exponential and
+logarithmic functions model multiplicative change and recover unknown
+rates. Computer graphics support investigation but must be interpreted
+with attention to sampling, discontinuities, and units.</p>
+<p><strong>Before Chapter 2:</strong> Can you explain the domain of a
+composite function, identify a missing point in a graph, convert between
+radians and degrees, solve an exponential equation with logarithms, and
+describe why a computer plot is not a proof? If not, revisit the
+corresponding sections and exercises.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_01_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="index.html">← Welcome</a><a href="chapter02.html">Limits and Continuity →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Function transformations</a></li><li><a href="#functions-and-their-graphs">Functions and their graphs</a></li><li><a href="#combining-functions-and-transforming-graphs">Combining functions
+and transforming graphs</a></li><li><a href="#trigonometric-functions-and-periodic-models">Trigonometric
+functions and periodic models</a></li><li><a href="#graphing-with-computers-opportunities-and-traps">Graphing with
+computers: opportunities and traps</a></li><li><a href="#exponential-functions-and-growth-models">Exponential functions
+and growth models</a></li><li><a href="#inverse-functions-and-logarithms">Inverse functions and
+logarithms</a></li><li><a href="#computational-laboratories-the-same-mathematics-in-r-and-python">Computational
+laboratories: the same mathematics in R and Python</a></li><li><a href="#real-world-modeling-workshop">Real-world modeling workshop</a></li><li><a href="#chapter-exercises">Chapter exercises</a></li><li><a href="#concluding-project-from-measurements-to-a-defensible-model">Concluding
+project: from measurements to a defensible model</a></li><li><a href="#chapter-summary-and-readiness-check">Chapter
+summary and readiness check</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

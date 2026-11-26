@@ -1,0 +1,10 @@
+HTML pages: 15
+Local references checked: 1008
+Missing: []
+Unresolved fragments: []
+Search entries: 540
+JavaScript syntax: [('investigations.js', 0), ('search-index.js', 0), ('site.js', 0)]
+R scripts: 81
+Python scripts: 80
+Chapter investigation script references: 10
+Browser, academic, code execution and Quarto checks not performed in this phase.

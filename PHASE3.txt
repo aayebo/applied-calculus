@@ -1,0 +1,1 @@
+Phase 3: ten browser investigations, one per chapter. Author display: Abraham Ayebo. Original archival sources are unchanged. Quarto rendering and full academic review remain outstanding. The HTML edition uses MathJax from a CDN. The cross-section widget shows a profile and midpoint slices, not a 3D rendering. Simpson estimates use midpoint Simpson panels.

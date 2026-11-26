@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Techniques of Integration | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a aria-current="page" class="active" href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="techniques-of-integration">Techniques of Integration</h1>
+<p><strong>Central question.</strong> How do we select a reliable
+strategy when an integrand does not match a basic antiderivative
+formula? Integration is a problem of mathematical structure:
+different-looking expressions can often be reorganized into recognizable
+forms. This chapter develops analytical methods, tests their
+limitations, and explains when numerical methods are preferable.</p>
+<p><strong>Learning outcomes.</strong> Students will derive and apply
+integration by parts; classify and evaluate trigonometric integrals; use
+trigonometric substitutions and partial fractions; compare numerical
+quadrature rules; determine convergence of improper integrals; and
+defend a method choice using mathematical reasoning and computational
+evidence.</p>
+<p><strong>Prerequisites.</strong> The chain rule, substitution, the
+Fundamental Theorem of Calculus, trigonometric identities, polynomial
+division, and limits.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="analytical-and-numerical-integration-serve-different-purposes">Analytical
+and numerical integration serve different purposes</h3>
+<p>An antiderivative can give an exact symbolic answer, while quadrature
+approximates a definite integral numerically. Numerical agreement is
+valuable for detecting algebraic errors, but it is not a substitute for
+the hypotheses of an integration theorem or a justified error bound.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 8." src="figures/chapter_08_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 8.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> Explain why the trapezoidal
+rule becomes more accurate on many smooth functions as the step size
+decreases. Can a plot alone guarantee an error tolerance?</p>
+<h2 id="interactive-investigation">Interactive investigation: Numerical integration</h2><div class="calc-widget" data-calc="8"><p>Compare the composite trapezoid and Simpson approximations for x³ on [0,2].</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="integration-by-parts">Integration by parts</h2>
+<h3 id="the-product-rule-read-backward">The product rule, read
+backward</h3>
+<p>Substitution reverses the chain rule. A different technique is needed
+when an integrand resembles a product of functions whose derivatives and
+antiderivatives are individually manageable. Start with the product
+rule, <span class="math inline">\((uv)'=u'v+uv'\)</span>.
+Integrating both sides and rearranging yields the following theorem.</p>
+<p><strong>Theorem — Integration by parts.</strong> <span id="thm:parts" label="thm:parts"></span>If <span class="math inline">\(u\)</span> and
+<span class="math inline">\(v\)</span> are continuously differentiable,
+then <span class="math display">\[\boxed{\int u\,dv=uv-\int
+v\,du.}\]</span> For a definite integral, <span class="math inline">\(\displaystyle\int_a^b u\,dv=[uv]_a^b-\int_a^b
+v\,du\)</span>.</p>
+<p><strong>Proof.</strong> Integrate <span class="math inline">\(d(uv)=u\,dv+v\,du\)</span> and rearrange. For the
+definite form, apply the Fundamental Theorem of Calculus to the boundary
+term.</p>
+<p><strong>Remark — Selecting <span class="math inline">\(u\)</span> and
+<span class="math inline">\(dv\)</span>.</strong> A useful heuristic is
+to differentiate logarithmic or inverse-trigonometric factors and
+integrate exponential or trigonometric factors. This is not a theorem:
+always verify that the new integral is simpler. Record all four entries
+<span class="math inline">\(u\)</span>, <span class="math inline">\(du\)</span>, <span class="math inline">\(dv\)</span>, and <span class="math inline">\(v\)</span> before substituting.</p>
+<p><strong>Example — Polynomial times exponential.</strong> Evaluate
+<span class="math inline">\(\int x^2e^{2x}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Take <span class="math inline">\(u=x^2\)</span>, <span class="math inline">\(dv=e^{2x}\,dx\)</span>, giving <span class="math inline">\(du=2x\,dx\)</span> and <span class="math inline">\(v=e^{2x}/2\)</span>. Thus <span class="math display">\[\int x^2e^{2x}\,dx=\frac{x^2e^{2x}}2-\int
+xe^{2x}\,dx.\]</span> For the remaining integral use <span class="math inline">\(u=x\)</span>, <span class="math inline">\(dv=e^{2x}\,dx\)</span>: <span class="math display">\[\int
+xe^{2x}\,dx=\frac{xe^{2x}}2-\frac{e^{2x}}4+C.\]</span> Therefore <span class="math inline">\(\displaystyle\int
+x^2e^{2x}\,dx=e^{2x}\left(\frac{x^2}{2}-\frac{x}{2}+\frac14\right)+C\)</span>.
+Differentiating the result reproduces <span class="math inline">\(x^2e^{2x}\)</span>.</p>
+<p><strong>Example — A logarithm as a hidden product.</strong> Evaluate
+<span class="math inline">\(\int\ln x\,dx\)</span> for <span class="math inline">\(x&gt;0\)</span>.</p>
+<p><strong>Solution.</strong> Write <span class="math inline">\(\ln
+x=(\ln x)\cdot1\)</span>. Choose <span class="math inline">\(u=\ln
+x\)</span>, <span class="math inline">\(dv=dx\)</span>. Then <span class="math inline">\(du=dx/x\)</span>, <span class="math inline">\(v=x\)</span>, and <span class="math display">\[\int\ln x\,dx=x\ln x-\int 1\,dx=x\ln
+x-x+C.\]</span> This example illustrates why <span class="math inline">\(dv=dx\)</span> is sometimes a useful choice.</p>
+<p><strong>Example — A definite integral and a boundary term.</strong>
+Evaluate <span class="math inline">\(\int_0^1 xe^{-x}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> With <span class="math inline">\(u=x\)</span>, <span class="math inline">\(dv=e^{-x}dx\)</span>, we obtain <span class="math inline">\(du=dx\)</span>, <span class="math inline">\(v=-e^{-x}\)</span>. Hence <span class="math display">\[\int_0^1
+xe^{-x}dx=[-xe^{-x}]_0^1+\int_0^1e^{-x}dx=-e^{-1}+(1-e^{-1})=1-2e^{-1}.\]</span>
+The result is positive, as the integrand is positive on <span class="math inline">\((0,1)\)</span>.</p>
+<h3 id="cyclic-integrals-and-reduction-formulas">Cyclic integrals and
+reduction formulas</h3>
+<p>Some products return to the original integral after two integrations
+by parts. This is an algebraic opportunity, not a failure.</p>
+<p><strong>Example — A cyclic integral.</strong> Find <span class="math inline">\(I=\int e^x\cos x\,dx\)</span>.</p>
+<p><strong>Solution.</strong> First choose <span class="math inline">\(u=e^x\)</span>, <span class="math inline">\(dv=\cos x\,dx\)</span> to get <span class="math inline">\(I=e^x\sin x-\int e^x\sin x\,dx\)</span>. Apply
+parts again to <span class="math inline">\(J=\int e^x\sin
+x\,dx\)</span>: <span class="math inline">\(J=-e^x\cos x+I\)</span>.
+Thus <span class="math inline">\(I=e^x\sin x+e^x\cos x-I\)</span>, so
+<span class="math display">\[\boxed{I=\frac{e^x}{2}(\sin x+\cos
+x)+C.}\]</span> Differentiation checks both the sign and the factor
+<span class="math inline">\(1/2\)</span>.</p>
+<p><strong>Theorem — Exponential-polynomial reduction.</strong> For
+<span class="math inline">\(a\ne0\)</span> and integer <span class="math inline">\(n\ge1\)</span>, if <span class="math inline">\(I_n=\int x^ne^{ax}\,dx\)</span>, then <span class="math display">\[I_n=\frac{x^ne^{ax}}a-\frac na
+I_{n-1}.\]</span></p>
+<p><strong>Proof.</strong> Use <span class="math inline">\(u=x^n\)</span> and <span class="math inline">\(dv=e^{ax}\,dx\)</span> in Theorem <a data-reference="thm:parts" data-reference-type="ref" href="#thm:parts">[thm:parts]</a>. Repeating reduces the
+polynomial degree until <span class="math inline">\(I_0=e^{ax}/a\)</span>.</p>
+<figure>
+<img alt="An original illustration of a product integrand. The method depends on algebraic structure, not the appearance of the graph alone." src="figures/chapter08-diagram-01.svg"/>
+<figcaption>
+An original illustration of a product integrand. The method depends on
+algebraic structure, not the appearance of the graph alone.
+</figcaption>
+</figure>
+<h2 id="trigonometric-integrals">Trigonometric integrals</h2>
+<h3 id="odd-powers-and-even-powers-of-sine-and-cosine">Odd powers and
+even powers of sine and cosine</h3>
+<p>Consider <span class="math inline">\(\int\sin^m x\cos^n
+x\,dx\)</span> for nonnegative integers <span class="math inline">\(m,n\)</span>. If one exponent is odd, reserve one
+factor of that trigonometric function for a substitution. If both are
+even, power-reduction identities are usually more efficient.</p>
+<p><strong>Theorem — Power-reduction identities.</strong> <span class="math display">\[\sin^2x=\frac{1-\cos2x}{2},\qquad\cos^2x=\frac{1+\cos2x}{2},\qquad\sin
+x\cos x=\frac{\sin2x}{2}.\]</span></p>
+<p><strong>Proof.</strong> The first two identities follow from <span class="math inline">\(\cos2x=1-2\sin^2x=2\cos^2x-1\)</span>; the third
+is the double-angle identity.</p>
+<p><strong>Example — Odd sine power.</strong> Evaluate <span class="math inline">\(\int\sin^3x\cos^2x\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Write <span class="math inline">\(\sin^3x=(1-\cos^2x)\sin x\)</span>. Set <span class="math inline">\(u=\cos x\)</span> and <span class="math inline">\(du=-\sin x\,dx\)</span>. Then <span class="math display">\[\int\sin^3x\cos^2x\,dx=-\int(1-u^2)u^2\,du=-\frac{u^3}{3}+\frac{u^5}{5}+C.\]</span>
+Substitute back: <span class="math inline">\(-\cos^3x/3+\cos^5x/5+C\)</span>.</p>
+<p><strong>Example — Both powers even.</strong> Evaluate <span class="math inline">\(\int\sin^2x\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Use <span class="math inline">\(\sin^2x=(1-\cos2x)/2\)</span>. Therefore <span class="math inline">\(\int\sin^2x\,dx=x/2-\sin2x/4+C\)</span>.</p>
+<h3 id="powers-of-tangent-and-secant">Powers of tangent and secant</h3>
+<p>For <span class="math inline">\(\int\tan^m x\sec^n x\,dx\)</span>,
+reserve <span class="math inline">\(\sec^2x\,dx\)</span> when a positive
+even secant power is available, then use <span class="math inline">\(1+\tan^2x=\sec^2x\)</span>. Alternatively, reserve
+<span class="math inline">\(\sec x\tan x\,dx\)</span> when a secant
+substitution is convenient.</p>
+<p><strong>Example — A tangent substitution.</strong> Evaluate <span class="math inline">\(\int\tan^3x\sec^2x\,dx\)</span>.</p>
+<p><strong>Solution.</strong> With <span class="math inline">\(u=\tan
+x\)</span> and <span class="math inline">\(du=\sec^2x\,dx\)</span>, the
+integral becomes <span class="math inline">\(u^4/4+C=\tan^4x/4+C\)</span>.</p>
+<p><strong>Example — Secant substitution.</strong> Evaluate <span class="math inline">\(\int\sec^3x\tan x\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Rewrite as <span class="math inline">\(\sec^2x(\sec x\tan x\,dx)\)</span> and set <span class="math inline">\(u=\sec x\)</span>. Then <span class="math inline">\(\int u^2du=u^3/3+C=\sec^3x/3+C\)</span>.</p>
+<p><strong>Remark.</strong> Trigonometric identities are valid only
+where the expressions involved are defined. An antiderivative constant
+can differ across disconnected intervals separated by poles of tangent
+or secant.</p>
+<h2 id="trigonometric-substitution">Trigonometric substitution</h2>
+<h3 id="choosing-a-substitution-from-the-radical">Choosing a
+substitution from the radical</h3>
+<p>Expressions containing <span class="math inline">\(\sqrt{a^2-x^2}\)</span>, <span class="math inline">\(\sqrt{a^2+x^2}\)</span>, or <span class="math inline">\(\sqrt{x^2-a^2}\)</span> often simplify using a
+right-triangle identity. These substitutions are not arbitrary: they are
+chosen to convert a difference or sum of squares into a perfect
+square.</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Radical</th>
+<th style="text-align: left;">Suggested substitution</th>
+<th style="text-align: left;">Identity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sqrt{a^2-x^2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(x=a\sin\theta\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1-\sin^2\theta=\cos^2\theta\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\sqrt{a^2+x^2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(x=a\tan\theta\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(1+\tan^2\theta=\sec^2\theta\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\sqrt{x^2-a^2}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(x=a\sec\theta\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\sec^2\theta-1=\tan^2\theta\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Remark.</strong> Choose the interval for <span class="math inline">\(\theta\)</span> so the square-root sign is
+correct. For example, when <span class="math inline">\(x=a\sin\theta\)</span> and <span class="math inline">\(-\pi/2\le\theta\le\pi/2\)</span>, <span class="math inline">\(\cos\theta\ge0\)</span> and <span class="math inline">\(\sqrt{a^2-x^2}=a\cos\theta\)</span> for <span class="math inline">\(a&gt;0\)</span>.</p>
+<p><strong>Example — A semicircular cross-section.</strong> Evaluate
+<span class="math inline">\(\int\sqrt{9-x^2}\,dx\)</span> for <span class="math inline">\(-3&lt;x&lt;3\)</span>.</p>
+<p><strong>Solution.</strong> Let <span class="math inline">\(x=3\sin\theta\)</span> with <span class="math inline">\(-\pi/2&lt;\theta&lt;\pi/2\)</span>. Then <span class="math inline">\(dx=3\cos\theta\,d\theta\)</span> and <span class="math inline">\(\sqrt{9-x^2}=3\cos\theta\)</span>. Hence <span class="math display">\[\int\sqrt{9-x^2}\,dx=9\int\cos^2\theta\,d\theta=\frac92\theta+\frac94\sin2\theta+C.\]</span>
+Now <span class="math inline">\(\theta=\arcsin(x/3)\)</span> and <span class="math inline">\(\sin2\theta=2x\sqrt{9-x^2}/9\)</span>, giving
+<span class="math display">\[\boxed{\frac{x}{2}\sqrt{9-x^2}+\frac92\arcsin(x/3)+C.}\]</span>
+The two terms arise from geometry and angle recovery, respectively.</p>
+<p><strong>Example — A sum of squares.</strong> Evaluate <span class="math inline">\(\int dx/(x^2+4)^{3/2}\)</span>.</p>
+<p><strong>Solution.</strong> Let <span class="math inline">\(x=2\tan\theta\)</span>. Then <span class="math inline">\(dx=2\sec^2\theta\,d\theta\)</span> and <span class="math inline">\((x^2+4)^{3/2}=8\sec^3\theta\)</span>. The integral
+becomes <span class="math inline">\(\frac14\int\cos\theta\,d\theta=\frac14\sin\theta+C\)</span>.
+Since <span class="math inline">\(\sin\theta=x/\sqrt{x^2+4}\)</span>,
+the answer is <span class="math inline">\(x/[4\sqrt{x^2+4}]+C\)</span>.</p>
+<figure>
+<img alt="Original reference triangle for the substitution x = atan θ; labels indicate geometric relationships, not numerical lengths." src="figures/chapter08-diagram-02.svg"/>
+<figcaption>
+Original reference triangle for the substitution <span class="math inline"><em>x</em> = <em>a</em>tan <em>θ</em></span>; labels
+indicate geometric relationships, not numerical lengths.
+</figcaption>
+</figure>
+<h2 id="partial-fractions">Partial fractions</h2>
+<h3 id="why-rational-functions-can-be-decomposed">Why rational functions
+can be decomposed</h3>
+<p>A rational function is a quotient <span class="math inline">\(P(x)/Q(x)\)</span> of polynomials. If the degree
+of <span class="math inline">\(P\)</span> is at least the degree of
+<span class="math inline">\(Q\)</span>, first use polynomial division.
+Then factor <span class="math inline">\(Q\)</span> over the real numbers
+and express the proper rational function as simpler fractions.</p>
+<p><strong>Theorem — Simple distinct linear factors.</strong> If <span class="math inline">\(Q(x)=\prod_{j=1}^n(x-r_j)\)</span> has distinct
+real roots and <span class="math inline">\(\deg P&lt;n\)</span>, then
+constants <span class="math inline">\(A_j\)</span> exist such that <span class="math display">\[\frac{P(x)}{Q(x)}=\sum_{j=1}^n\frac{A_j}{x-r_j}\]</span>
+for all <span class="math inline">\(x\)</span> outside the poles.</p>
+<p><strong>Proof.</strong> For each <span class="math inline">\(j\)</span>, let <span class="math inline">\(A_j=P(r_j)/\prod_{k\ne j}(r_j-r_k)\)</span>. After
+multiplying the proposed identity by <span class="math inline">\(Q(x)\)</span>, both sides are polynomials of
+degree at most <span class="math inline">\(n-1\)</span> agreeing at the
+<span class="math inline">\(n\)</span> distinct roots <span class="math inline">\(r_j\)</span>, so they are identical.</p>
+<p><strong>Example — Two distinct linear factors.</strong> Evaluate
+<span class="math inline">\(\int\frac{5x+1}{x^2-x-2}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Factor <span class="math inline">\(x^2-x-2=(x-2)(x+1)\)</span>. Write <span class="math display">\[\frac{5x+1}{(x-2)(x+1)}=\frac{A}{x-2}+\frac{B}{x+1}.\]</span>
+Then <span class="math inline">\(5x+1=A(x+1)+B(x-2)\)</span>. At <span class="math inline">\(x=2\)</span>, <span class="math inline">\(11=3A\)</span> so <span class="math inline">\(A=11/3\)</span>; at <span class="math inline">\(x=-1\)</span>, <span class="math inline">\(-4=-3B\)</span> so <span class="math inline">\(B=4/3\)</span>. Thus <span class="math display">\[\boxed{\int\frac{5x+1}{x^2-x-2}\,dx=\frac{11}{3}\ln|x-2|+\frac43\ln|x+1|+C.}\]</span>
+The answer is valid separately on each interval determined by <span class="math inline">\(x=-1,2\)</span>.</p>
+<p><strong>Example — Repeated linear factor.</strong> Evaluate <span class="math inline">\(\int\frac{1}{x(x+1)^2}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Use <span class="math inline">\(\frac1{x(x+1)^2}=\frac Ax+\frac B{x+1}+\frac
+C{(x+1)^2}\)</span>. Multiplication by <span class="math inline">\(x(x+1)^2\)</span> gives <span class="math inline">\(1=A(x+1)^2+Bx(x+1)+Cx\)</span>. Setting <span class="math inline">\(x=0\)</span> gives <span class="math inline">\(A=1\)</span>, setting <span class="math inline">\(x=-1\)</span> gives <span class="math inline">\(C=-1\)</span>, and comparing <span class="math inline">\(x^2\)</span> terms gives <span class="math inline">\(B=-1\)</span>. Hence <span class="math display">\[\int\frac{1}{x(x+1)^2}\,dx=\ln|x|-\ln|x+1|+\frac1{x+1}+C.\]</span></p>
+<p><strong>Example — Irreducible quadratic factor.</strong> Evaluate
+<span class="math inline">\(\int\frac{2x+3}{x^2+2x+5}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\((x^2+2x+5)'=2x+2\)</span>, split <span class="math inline">\(2x+3=(2x+2)+1\)</span>. The first integral is
+<span class="math inline">\(\ln(x^2+2x+5)\)</span>. Completing the
+square in the second gives <span class="math inline">\(\int
+dx/[(x+1)^2+4]=\frac12\arctan((x+1)/2)\)</span>. Therefore the answer is
+<span class="math display">\[\boxed{\ln(x^2+2x+5)+\tfrac12\arctan((x+1)/2)+C.}\]</span></p>
+<p><strong>Remark — A systematic template.</strong> For a repeated
+factor <span class="math inline">\((x-r)^m\)</span>, include <span class="math inline">\(A_1/(x-r)+\cdots+A_m/(x-r)^m\)</span>. For an
+irreducible quadratic <span class="math inline">\(q(x)^m\)</span>,
+include <span class="math inline">\((B_kx+C_k)/q(x)^k\)</span> for each
+<span class="math inline">\(k=1,\dots,m\)</span>. Omitting terms can
+make a correct decomposition impossible.</p>
+<h2 id="numerical-integration">Numerical integration</h2>
+<h3 id="why-approximate-an-integral">Why approximate an integral?</h3>
+<p>An integrand may have no elementary antiderivative, or it may be
+known only through measurements. A numerical method replaces the
+integral with a weighted sum. The weights and sampling points determine
+the method’s accuracy.</p>
+<p><strong>Definition — Composite midpoint and trapezoidal
+rules.</strong> Let <span class="math inline">\(h=(b-a)/n\)</span>,
+<span class="math inline">\(x_i=a+ih\)</span>, and <span class="math inline">\(m_i=(x_{i-1}+x_i)/2\)</span>. Define <span class="math display">\[M_n=h\sum_{i=1}^nf(m_i),\qquad
+T_n=h\left(\frac{f(a)+f(b)}2+\sum_{i=1}^{n-1}f(x_i)\right).\]</span></p>
+<p><strong>Definition — Composite Simpson rule.</strong> For even <span class="math inline">\(n\)</span>, define <span class="math display">\[S_n=\frac
+h3\left[f(x_0)+f(x_n)+4\sum_{\substack{i=1\\i\text{
+odd}}}^{n-1}f(x_i)+2\sum_{\substack{i=2\\i\text{
+even}}}^{n-2}f(x_i)\right].\]</span></p>
+<p><strong>Theorem — Classical error bounds.</strong> If <span class="math inline">\(|f''(x)|\le K_2\)</span> on <span class="math inline">\([a,b]\)</span>, then <span class="math display">\[|E_M|\le\frac{K_2(b-a)^3}{24n^2},\qquad
+|E_T|\le\frac{K_2(b-a)^3}{12n^2}.\]</span> If <span class="math inline">\(|f^{(4)}(x)|\le K_4\)</span> and <span class="math inline">\(n\)</span> is even, then <span class="math inline">\(\displaystyle|E_S|\le\frac{K_4(b-a)^5}{180n^4}\)</span>.</p>
+<p><strong>Remark.</strong> These are worst-case bounds requiring
+smoothness assumptions. A small difference between two successive
+approximations is encouraging but does not by itself prove a small
+error. Discontinuities and sharp peaks can defeat naive step-size
+choices.</p>
+<p><strong>Example — Compare three rules.</strong> Approximate <span class="math inline">\(\int_0^1e^{-x^2}\,dx\)</span> using <span class="math inline">\(n=2\)</span>.</p>
+<p><strong>Solution.</strong> Here <span class="math inline">\(h=1/2\)</span>. The midpoint rule gives <span class="math inline">\(M_2=\frac12(e^{-1/16}+e^{-9/16})\)</span>. The
+trapezoidal rule gives <span class="math inline">\(T_2=\frac14(1+2e^{-1/4}+e^{-1})\)</span>.
+Simpson’s rule gives <span class="math inline">\(S_2=\frac16(1+4e^{-1/4}+e^{-1})\)</span>. The
+integral is positive and less than <span class="math inline">\(1\)</span>; all three approximations satisfy that
+elementary bound. We can improve confidence by refining <span class="math inline">\(n\)</span> and comparing with a high-accuracy
+numerical reference.</p>
+<figure>
+<img alt="Midpoint samples used to approximate the area under e−x2 on [0, 2]." src="figures/chapter08-diagram-03.svg"/>
+<figcaption>
+Midpoint samples used to approximate the area under <span class="math inline"><em>e</em><sup>−<em>x</em><sup>2</sup></sup></span>
+on <span class="math inline">[0, 2]</span>.
+</figcaption>
+</figure>
+<h3 id="units-and-sampled-observations">Units and sampled
+observations</h3>
+<p>If <span class="math inline">\(f(t)\)</span> is a flow rate in liters
+per minute, <span class="math inline">\(\int_a^b f(t)\,dt\)</span> has
+units of liters. When <span class="math inline">\(f\)</span> is observed
+at discrete times, trapezoidal integration is a reasonable starting
+point, but interpolation and measurement uncertainty must be discussed.
+Do not treat numerical precision as evidence of measurement
+precision.</p>
+<h2 id="improper-integrals">Improper integrals</h2>
+<h3 id="infinite-intervals">Infinite intervals</h3>
+<p>A definite integral over an unbounded interval is defined as a limit
+of ordinary definite integrals.</p>
+<p><strong>Definition — Improper integral on an infinite
+interval.</strong> If <span class="math inline">\(f\)</span> is
+integrable on every <span class="math inline">\([a,b]\)</span> with
+<span class="math inline">\(b&gt;a\)</span>, then <span class="math display">\[\int_a^{\infty}f(x)\,dx=\lim_{b\to\infty}\int_a^bf(x)\,dx,\]</span>
+provided the limit exists and is finite. Otherwise the improper integral
+diverges.</p>
+<p><strong>Theorem — <span class="math inline">\(p\)</span>-test at
+infinity.</strong> For real <span class="math inline">\(p\)</span>,
+<span class="math inline">\(\displaystyle\int_1^{\infty}x^{-p}\,dx\)</span>
+converges if and only if <span class="math inline">\(p&gt;1\)</span>.</p>
+<p><strong>Proof.</strong> For <span class="math inline">\(p\ne1\)</span>, <span class="math inline">\(\int_1^b x^{-p}dx=(b^{1-p}-1)/(1-p)\)</span>. The
+limit is finite exactly when <span class="math inline">\(1-p&lt;0\)</span>. For <span class="math inline">\(p=1\)</span>, the integral is <span class="math inline">\(\ln b\)</span>, which diverges.</p>
+<p><strong>Example — A finite accumulated tail.</strong> Evaluate <span class="math inline">\(\int_2^{\infty}x^{-3}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Integrate on <span class="math inline">\([2,b]\)</span> and take the limit: <span class="math inline">\(\lim_{b\to\infty}[-1/(2x^2)]_2^b=1/8\)</span>. An
+infinite domain need not produce an infinite integral.</p>
+<h3 id="singular-endpoints">Singular endpoints</h3>
+<p><strong>Definition — Improper integral at a singular
+endpoint.</strong> If <span class="math inline">\(f\)</span> is
+unbounded near <span class="math inline">\(a\)</span> but integrable on
+every <span class="math inline">\([c,b]\)</span> with <span class="math inline">\(c&gt;a\)</span>, define <span class="math display">\[\int_a^bf(x)dx=\lim_{c\to
+a^+}\int_c^bf(x)dx,\]</span> when the limit is finite. Similar one-sided
+definitions apply at <span class="math inline">\(b\)</span>.</p>
+<p><strong>Theorem — <span class="math inline">\(p\)</span>-test near
+zero.</strong> For real <span class="math inline">\(p\)</span>, <span class="math inline">\(\displaystyle\int_0^1x^{-p}\,dx\)</span> converges
+if and only if <span class="math inline">\(p&lt;1\)</span>.</p>
+<p><strong>Proof.</strong> For <span class="math inline">\(p\ne1\)</span>, evaluate on <span class="math inline">\([\varepsilon,1]\)</span> to obtain <span class="math inline">\((1-\varepsilon^{1-p})/(1-p)\)</span> and let <span class="math inline">\(\varepsilon\to0^+\)</span>. For <span class="math inline">\(p=1\)</span>, <span class="math inline">\(-\ln\varepsilon\to\infty\)</span>.</p>
+<p><strong>Example — Two types of singularity.</strong> Determine
+whether <span class="math inline">\(\int_0^{\infty}\frac{dx}{\sqrt{x}(1+x)}\)</span>
+converges, and evaluate it.</p>
+<p><strong>Solution.</strong> Split at <span class="math inline">\(x=1\)</span>. Near zero the integrand behaves like
+<span class="math inline">\(x^{-1/2}\)</span>; at infinity it behaves
+like <span class="math inline">\(x^{-3/2}\)</span>, so both pieces
+converge. For evaluation let <span class="math inline">\(x=t^2\)</span>
+with <span class="math inline">\(t&gt;0\)</span>, so <span class="math inline">\(dx=2t\,dt\)</span> and the integrand becomes <span class="math inline">\(2/(1+t^2)\,dt\)</span>. Thus the integral equals
+<span class="math inline">\(2[\arctan t]_0^{\infty}=\pi\)</span>. The
+substitution is applied on truncated intervals before taking limits.</p>
+<p><strong>Theorem — Comparison test.</strong> Suppose <span class="math inline">\(0\le f(x)\le g(x)\)</span> for all sufficiently
+large <span class="math inline">\(x\)</span>. If <span class="math inline">\(\int_a^{\infty}g(x)dx\)</span> converges, then
+<span class="math inline">\(\int_a^{\infty}f(x)dx\)</span> converges. If
+<span class="math inline">\(\int_a^{\infty}f(x)dx\)</span> diverges,
+then <span class="math inline">\(\int_a^{\infty}g(x)dx\)</span>
+diverges.</p>
+<p><strong>Proof.</strong> For nonnegative integrands, truncated
+integrals are nondecreasing as the upper limit increases. The inequality
+bounds one family of truncated integrals by the other, yielding the
+conclusions.</p>
+<p><strong>Remark — An interior singularity.</strong> If <span class="math inline">\(f\)</span> is singular at <span class="math inline">\(c\in(a,b)\)</span>, split <span class="math inline">\(\int_a^b f=\int_a^cf+\int_c^bf\)</span> and
+require both one-sided integrals to converge. Symmetric cancellation
+does not make a divergent improper integral convergent.</p>
+<h2 id="a-practical-strategy-for-selecting-a-method">A practical
+strategy for selecting a method</h2>
+<ol type="1">
+<li><p>Simplify algebraically and check the domain; use substitution
+when a composite function and its derivative are visible.</p></li>
+<li><p>For products involving a polynomial and an exponential,
+logarithm, or trigonometric factor, try integration by parts.</p></li>
+<li><p>For powers of trigonometric functions, use parity and
+identities.</p></li>
+<li><p>For radicals involving quadratic sums or differences, consider
+trigonometric substitution.</p></li>
+<li><p>For rational functions, divide if necessary and factor the
+denominator before partial fractions.</p></li>
+<li><p>If an exact elementary antiderivative is unavailable or data are
+sampled, use numerical integration and report error
+considerations.</p></li>
+<li><p>If a bound is infinite or the integrand is singular, first define
+the integral as a limit and establish convergence.</p></li>
+</ol>
+<p><strong>Example — Why a method decision matters.</strong> Consider
+<span class="math inline">\(\int_0^1\frac{\ln(1+x)}{1+x}\,dx\)</span>.</p>
+<p><strong>Solution.</strong> Although the integrand contains a
+logarithm, integration by parts is unnecessary. The substitution <span class="math inline">\(u=\ln(1+x)\)</span> gives <span class="math inline">\(du=dx/(1+x)\)</span>, so the answer is <span class="math inline">\(\frac12(\ln2)^2\)</span>. A method should be
+selected from the entire integrand, not a single conspicuous symbol.</p>
+<h2 id="r-computational-laboratories">R computational laboratories</h2>
+<p>All R activities are presented together. The scripts use base R and
+can be run individually. Each laboratory should be accompanied by a
+short written interpretation and an analytical justification.</p>
+<h3 class="unnumbered" id="r-laboratory-1-integration-by-parts-and-a-derivative-check">R
+Laboratory 1: Integration by parts and a derivative check</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>F &lt;- function(x) exp(2*x) * (x^2/2 - x/2 + 1/4)
+f &lt;- function(x) x^2 * exp(2*x)
+h &lt;- 1e-5
+for (x in c(0, 0.5, 1, 2)) {
+  derivative &lt;- (F(x+h)-F(x-h))/(2*h)
+  cat('x:', x, ' numerical derivative:', round(derivative,6),
+      ' integrand:', round(f(x),6), '\n')
+}</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h3 class="unnumbered" id="r-laboratory-2-trigonometric-integrals">R
+Laboratory 2: Trigonometric integrals</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>F &lt;- function(x) -cos(x)^3/3 + cos(x)^5/5
+f &lt;- function(x) sin(x)^3*cos(x)^2
+h &lt;- 1e-5
+x &lt;- seq(-2, 2, length.out=100)
+error &lt;- (F(x+h)-F(x-h))/(2*h)-f(x)
+cat('Maximum derivative discrepancy:', max(abs(error)), '\n')
+plot(x, f(x), type='l', lwd=2, main='Trigonometric integrand')</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h3 class="unnumbered" id="r-laboratory-3-a-radical-integral">R
+Laboratory 3: A radical integral</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) sqrt(9-x^2)
+F &lt;- function(x) x*sqrt(9-x^2)/2 + 9*asin(x/3)/2
+numeric &lt;- integrate(f, lower=-2, upper=2)$value
+exact &lt;- F(2)-F(-2)
+cat('Quadrature:', numeric, ' analytical:', exact, '\n')
+curve(f(x), from=-3, to=3, lwd=2,
+      xlab='x', ylab='Cross-sectional height')</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h3 class="unnumbered" id="r-laboratory-4-partial-fraction-verification">R Laboratory 4:
+Partial fraction verification</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) (5*x+1)/(x^2-x-2)
+g &lt;- function(x) (11/3)/(x-2)+(4/3)/(x+1)
+x &lt;- seq(-0.8, 1.8, length.out=200)
+cat('Largest decomposition error:', max(abs(f(x)-g(x))), '\n')
+plot(x, f(x), type='l', lwd=2,
+     main='Rational integrand away from poles')</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h3 class="unnumbered" id="r-laboratory-5-midpoint-trapezoid-and-simpson-rules">R Laboratory 5:
+Midpoint trapezoid and Simpson rules</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) exp(-x^2)
+quad &lt;- function(n) {
+  a &lt;- 0; b &lt;- 2; h &lt;- (b-a)/n
+  x &lt;- seq(a,b,length.out=n+1)
+  mid &lt;- (x[-1]+x[-length(x)])/2
+  midpoint &lt;- h*sum(f(mid))
+  trapezoid &lt;- h*(sum(f(x))-(f(a)+f(b))/2)
+  simpson &lt;- h/3*(f(a)+f(b)+4*sum(f(x[seq(2,n,2)]))+
+                       2*sum(f(x[seq(3,n-1,2)])))
+  c(midpoint=midpoint,trapezoid=trapezoid,simpson=simpson)
+}
+reference &lt;- integrate(f,0,2)$value
+for (n in c(4,8,16,32)) {
+  v &lt;- quad(n)
+  cat('n=',n,' errors=',round(abs(v-reference),8),'\n')
+}</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h3 class="unnumbered" id="r-laboratory-6-improper-integral-through-truncation">R Laboratory 6:
+Improper integral through truncation</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter08-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) 1/x^3
+for (upper in c(4, 10, 100, 1000)) {
+  value &lt;- integrate(f,2,upper)$value
+  cat('Upper limit:',upper,' integral:',round(value,8),
+      ' target:',1/8,'\n')
+}
+# Numerical evidence complements the exact p-test.</code></pre></div>
+<p><strong>Investigate.</strong> Explain what is being approximated,
+state the mathematical benchmark, and identify at least one numerical
+limitation.</p>
+<h2 id="python-computational-laboratories">Python computational
+laboratories</h2>
+<p>The Python laboratories reproduce the mathematical investigations
+after the R sequence. They use the Python standard library; no
+third-party packages are required.</p>
+<h3 class="unnumbered" id="python-laboratory-1-integration-by-parts-and-a-derivative-check">Python
+Laboratory 1: Integration by parts and a derivative check</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from math import exp
+F = lambda x: exp(2*x)*(x*x/2-x/2+1/4)
+f = lambda x: x*x*exp(2*x)
+h = 1e-5
+for x in [0, 0.5, 1, 2]:
+    d = (F(x+h)-F(x-h))/(2*h)
+    print(x, round(d,6), round(f(x),6))</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h3 class="unnumbered" id="python-laboratory-2-trigonometric-integrals">Python Laboratory 2:
+Trigonometric integrals</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from math import sin, cos
+F = lambda x: -cos(x)**3/3+cos(x)**5/5
+f = lambda x: sin(x)**3*cos(x)**2
+h = 1e-5
+xs = [-2+4*i/100 for i in range(101)]
+errors = [abs((F(x+h)-F(x-h))/(2*h)-f(x)) for x in xs]
+print('Maximum discrepancy:',max(errors))</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h3 class="unnumbered" id="python-laboratory-3-a-radical-integral">Python Laboratory 3: A
+radical integral</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from math import sqrt, asin
+f = lambda x: sqrt(9-x*x)
+F = lambda x: x*sqrt(9-x*x)/2+9*asin(x/3)/2
+n = 10000
+a,b = -2.0,2.0
+h = (b-a)/n
+midpoint = h*sum(f(a+(i+0.5)*h) for i in range(n))
+print('Midpoint:',midpoint,'Analytical:',F(b)-F(a))</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h3 class="unnumbered" id="python-laboratory-4-partial-fraction-verification">Python Laboratory
+4: Partial fraction verification</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f = lambda x: (5*x+1)/(x*x-x-2)
+g = lambda x: (11/3)/(x-2)+(4/3)/(x+1)
+xs = [-0.8+2.6*i/200 for i in range(201)]
+print('Maximum difference:',max(abs(f(x)-g(x)) for x in xs))</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h3 class="unnumbered" id="python-laboratory-5-midpoint-trapezoid-and-simpson-rules">Python
+Laboratory 5: Midpoint trapezoid and Simpson rules</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>from math import exp, sqrt, pi, erf
+f = lambda x: exp(-x*x)
+reference = sqrt(pi)*erf(2)/2
+for n in [4,8,16,32]:
+    a,b = 0.0,2.0
+    h = (b-a)/n
+    xs = [a+i*h for i in range(n+1)]
+    midpoint = h*sum(f(a+(i+0.5)*h) for i in range(n))
+    trap = h*(sum(f(x) for x in xs)-(f(a)+f(b))/2)
+    simp = h/3*(f(a)+f(b)+4*sum(f(xs[i]) for i in range(1,n,2))+
+                2*sum(f(xs[i]) for i in range(2,n,2)))
+    print(n, [round(abs(v-reference),8) for v in [midpoint,trap,simp]])</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h3 class="unnumbered" id="python-laboratory-6-improper-integral-through-truncation">Python
+Laboratory 6: Improper integral through truncation</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter08-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>for upper in [4,10,100,1000]:
+    value = 1/8-1/(2*upper**2)
+    print('Upper:',upper,'Truncated integral:',round(value,8),
+          'Limit:',1/8)
+# This is an exact truncated antiderivative, not numerical quadrature.</code></pre></div>
+<p><strong>Investigate.</strong> Compare with the corresponding R
+laboratory, explain any discrepancy, and report the analytical result
+separately from the approximation.</p>
+<h2 id="concept-checks-and-exercises">Concept checks and exercises</h2>
+<h3 class="unnumbered" id="concept-checks">Concept checks</h3>
+<ol type="1">
+<li><p>Explain why integration by parts is the product rule in reverse.
+Why can a poor choice of <span class="math inline">\(u\)</span> make the
+new integral harder?</p></li>
+<li><p>Describe how parity of sine and cosine powers affects
+substitution choice.</p></li>
+<li><p>Explain why a square root requires attention to the sign of the
+trigonometric expression after substitution.</p></li>
+<li><p>Explain the role of polynomial division before partial
+fractions.</p></li>
+<li><p>Compare midpoint, trapezoidal, and Simpson rules in terms of
+sampling and smoothness assumptions.</p></li>
+<li><p>Give an example of an integral over an infinite interval that
+converges, and one that diverges.</p></li>
+<li><p>Explain why a singularity inside an integration interval requires
+two separate one-sided limits.</p></li>
+<li><p>Explain the difference between checking an antiderivative by
+differentiation and checking a definite integral by numerical
+quadrature.</p></li>
+</ol>
+<h3 class="unnumbered" id="analytical-exercises">Analytical
+exercises</h3>
+<ol type="1">
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int xe^{3x}\,dx\)</span>. State the
+method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int x^3e^{-x}\,dx\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int x\ln(2x)\,dx\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^2 te^{-t}\,dt\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int e^{2x}\sin x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int x^2\cos x\,dx\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \arctan x\,dx\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_1^e (\ln x)^2\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \sin^5x\cos^2x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \sin^2x\cos^2x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \cos^5x\,dx\)</span>. State the
+method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \tan^4x\sec^2x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int \sec^4x\tan x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^{\pi/2}\sin^3x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int\sqrt{16-x^2}\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int dx/(x^2+9)^{3/2}\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int x^2/\sqrt{25-x^2}\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int dx/\sqrt{x^2+4}\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int\sqrt{x^2-9}/x\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^2\sqrt{4-x^2}\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int(3x+7)/(x^2+3x+2)\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int dx/[x(x+2)^2]\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int(2x+1)/(x^2+4x+8)\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int(x^3+1)/(x^2+1)\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int dx/(x^2-4)\)</span>. State the
+method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int (x+1)/(x^2(x+2))\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle
+\int_1^{\infty}x^{-5/4}\,dx\)</span>. State the method and justify
+it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^1x^{-3/4}\,dx\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^{\infty}e^{-2x}\,dx\)</span>.
+State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_1^{\infty}dx/x\)</span>. State
+the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_0^1
+dx/[\sqrt{x}(1+x)]\)</span>. State the method and justify it.</p></li>
+<li><p>Evaluate or determine convergence of <span class="math inline">\(\displaystyle \int_{-1}^1 dx/x^2\)</span>. State
+the method and justify it.</p></li>
+</ol>
+<h3 class="unnumbered" id="modeling-and-computational-exercises">Modeling and computational
+exercises</h3>
+<ol type="1">
+<li><p>A pump delivers water at rate <span class="math inline">\(q(t)=5te^{-t/2}\)</span> liters/minute for <span class="math inline">\(0\le t\le10\)</span>. Determine total volume
+analytically, verify numerically, and interpret the units.</p></li>
+<li><p>For <span class="math inline">\(f(x)=e^{-x^2}\)</span> on <span class="math inline">\([0,2]\)</span>, compute midpoint, trapezoidal, and
+Simpson approximations for <span class="math inline">\(n=4,8,16,32\)</span>. Estimate observed
+convergence rates using successive errors.</p></li>
+<li><p>Explain why a quadrature routine may struggle with <span class="math inline">\(\int_0^1 x^{-1/2}\,dx\)</span>. Compare direct
+integration with the substitution <span class="math inline">\(x=t^2\)</span>.</p></li>
+<li><p>A concentration tail is modeled by <span class="math inline">\(C(t)=40/(1+t)^p\)</span>. For which <span class="math inline">\(p\)</span> is cumulative lifetime exposure finite?
+Explain what a finite integral means in this setting.</p></li>
+<li><p>Generate 11 equally spaced samples from <span class="math inline">\(r(t)=2+\sin t\)</span> on <span class="math inline">\([0,\pi]\)</span>. Estimate total accumulation with
+the trapezoidal rule, compare with the exact integral, and explain the
+effect of sample spacing.</p></li>
+<li><p>Construct a rational function whose denominator has both a
+repeated linear factor and an irreducible quadratic. State the complete
+partial-fraction template before solving any coefficients.</p></li>
+<li><p>Compare <span class="math inline">\(\int_0^B
+x^{-3/2}\,dx\)</span> for increasing <span class="math inline">\(B\)</span> with <span class="math inline">\(\int_1^B x^{-3/2}\,dx\)</span>. Explain why
+changing the lower endpoint changes convergence.</p></li>
+<li><p>Use R and Python to investigate how many Simpson subintervals are
+needed for six-decimal-place agreement with a trusted reference for
+<span class="math inline">\(\int_0^2 e^{-x^2}dx\)</span>. Distinguish
+empirical agreement from a proved error bound.</p></li>
+</ol>
+<h2 id="chapter-project-estimating-total-exposure-from-a-measured-release">Chapter
+project: estimating total exposure from a measured release</h2>
+<h3 class="unnumbered" id="context-and-mathematical-model">Context and
+mathematical model</h3>
+<p>A hypothetical environmental sensor records a time-dependent release
+rate (mass per hour). To keep the project reproducible without external
+data, define the reference model <span class="math display">\[\boxed{r(t)=12te^{-t/2}+\frac{6}{(1+t)^2},\qquad
+t\ge0.}\]</span> The first term rises and then decays; the second is
+initially high and has a long, integrable tail. Students must explain
+why the model is nonnegative and what the area under <span class="math inline">\(r(t)\)</span> represents. The model is a teaching
+construction, not a calibrated physical release model.</p>
+<h3 class="unnumbered" id="tasks">Tasks</h3>
+<ol type="1">
+<li><p><strong>Structure and units (10 points).</strong> Sketch the two
+component rates, identify their units, and explain why the accumulated
+quantity has units of mass.</p></li>
+<li><p><strong>Exact finite-time accumulation (20 points).</strong>
+Derive <span class="math inline">\(A(T)=\int_0^T r(t)dt\)</span>. Use
+integration by parts for the first component and substitution for the
+second. Verify <span class="math inline">\(A(0)=0\)</span> and <span class="math inline">\(A'(T)=r(T)\)</span>.</p></li>
+<li><p><strong>Lifetime accumulation (15 points).</strong> Determine
+<span class="math inline">\(\lim_{T\to\infty}A(T)\)</span> using
+improper integrals. Explain why both components contribute finite mass
+despite an infinite time horizon.</p></li>
+<li><p><strong>Numerical comparison (15 points).</strong> Implement
+composite midpoint, trapezoidal, and Simpson rules on <span class="math inline">\([0,12]\)</span> for <span class="math inline">\(n=12,24,48,96\)</span>. Report absolute errors
+relative to the analytical answer and explain the pattern.</p></li>
+<li><p><strong>R implementation (10 points).</strong> Write a readable R
+script with labeled output and one figure displaying the rate and
+accumulated release. Include an independently calculated integral using
+<code>integrate()</code>.</p></li>
+<li><p><strong>Python implementation (10 points).</strong> Reproduce the
+numerical approximations using Python and compare with the R outputs.
+State the software and method used for each reference value.</p></li>
+<li><p><strong>Threshold decision (10 points).</strong> Determine the
+earliest <span class="math inline">\(T\)</span> at which 90% of the
+lifetime total has accumulated. Solve numerically, check the result
+against <span class="math inline">\(A(T)\)</span>, and explain the
+numerical stopping criterion.</p></li>
+<li><p><strong>Model critique (10 points).</strong> Discuss at least
+three limitations, such as time-invariant parameters, ignored
+measurement noise, or uncertain long-run behavior. Propose one practical
+validation study.</p></li>
+</ol>
+<h3 class="unnumbered" id="guidance-for-the-final-report">Guidance for
+the final report</h3>
+<p>Submit a concise report containing the analytical derivation, labeled
+figures, a table of numerical results, complete R and Python code in
+separate appendices, and a paragraph distinguishing exact mathematical
+results from numerical approximations. State assumptions before
+interpreting thresholds.</p>
+<h2 id="chapter-synthesis">Chapter synthesis</h2>
+<p>Integration is not one technique but a family of related ideas.
+Integration by parts reverses the product rule; trigonometric identities
+and substitutions expose hidden algebraic structure; partial fractions
+turn rational functions into basic pieces; quadrature estimates
+accumulation when exact formulas are unavailable; and improper integrals
+use limits to determine whether accumulation remains finite. The most
+important habit is to <em>justify the strategy before carrying it
+out</em> and to verify the answer afterward.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_08_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter07.html">← Integrals and Transcendental Functions</a><a href="chapter09.html">Infinite Sequences and Series →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Numerical integration</a></li><li><a href="#integration-by-parts">Integration by parts</a></li><li><a href="#trigonometric-integrals">Trigonometric integrals</a></li><li><a href="#trigonometric-substitution">Trigonometric substitution</a></li><li><a href="#partial-fractions">Partial fractions</a></li><li><a href="#numerical-integration">Numerical integration</a></li><li><a href="#improper-integrals">Improper integrals</a></li><li><a href="#a-practical-strategy-for-selecting-a-method">A practical
+strategy for selecting a method</a></li><li><a href="#r-computational-laboratories">R computational laboratories</a></li><li><a href="#python-computational-laboratories">Python computational
+laboratories</a></li><li><a href="#concept-checks-and-exercises">Concept checks and exercises</a></li><li><a href="#chapter-project-estimating-total-exposure-from-a-measured-release">Chapter
+project: estimating total exposure from a measured release</a></li><li><a href="#chapter-synthesis">Chapter synthesis</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

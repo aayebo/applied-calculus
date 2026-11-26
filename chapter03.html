@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Differentiation | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a aria-current="page" class="active" href="chapter03.html">3. Differentiation</a><a href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="differentiation">Differentiation</h1>
+<p><strong>Chapter overview.</strong> The derivative transforms the
+limit concept from Chapter 2 into a quantitative description of
+instantaneous change. Its geometric interpretation is the slope of a
+tangent line; its applied interpretation is a rate measured per unit of
+the independent variable. Differentiation also provides a way to
+construct local approximations, understand motion, and analyze coupled
+quantities. We begin with definitions and proofs, then build efficient
+differentiation rules, explore their graphs, and use paired R and Python
+calculations to check and interpret results.</p>
+<p><strong>Learning outcomes.</strong> After this chapter, students
+should be able to (1) derive a tangent slope from a difference quotient;
+(2) distinguish continuity from differentiability; (3) apply sum,
+product, quotient, power, chain, trigonometric, exponential,
+logarithmic, and inverse-function rules; (4) compute implicit and higher
+derivatives; (5) interpret velocity and acceleration; (6) formulate and
+solve related-rates problems; (7) construct and assess linear
+approximations; and (8) implement and critically evaluate symbolic and
+numerical derivatives in R and Python.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="what-a-derivative-communicates">What a
+derivative communicates</h3>
+<p>The derivative <span class="math inline">\(f\prime(a)\)</span> is a
+local rate of change. Its units are output units divided by input units.
+The tangent line <span class="math inline">\(L(x)=f(a)+f\prime(a)(x-a)\)</span> uses that local
+rate to predict nearby values, but the approximation typically becomes
+less reliable farther from <span class="math inline">\(a\)</span>. This
+distinction is essential in applied modeling.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 3." src="figures/chapter_03_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 3.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> For <span class="math inline">\(f(x)=x^2\)</span> at <span class="math inline">\(a=1\)</span>, find <span class="math inline">\(L(x)\)</span> and compare <span class="math inline">\(L(1.1)\)</span> with <span class="math inline">\(f(1.1)\)</span>. Explain the sign of the error
+using concavity.</p>
+<h2 id="interactive-investigation">Interactive investigation: Secant and tangent slopes</h2><div class="calc-widget" data-calc="3"><p>Decrease h and compare the secant slope with the derivative. Repeat for a negative a.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="tangents-and-the-derivative-at-a-point">Tangents and the
+derivative at a point</h2>
+<p>A secant line through <span class="math inline">\((a,f(a))\)</span>
+and <span class="math inline">\((a+h,f(a+h))\)</span> has slope <span class="math display">\[m_{\mathrm{sec}}=\frac{f(a+h)-f(a)}{h},\qquad
+h\ne0.\]</span> As <span class="math inline">\(h\)</span> shrinks, the
+second point approaches the first. If the secant slopes approach a
+finite number, that number is the slope of the tangent line.</p>
+<p><strong>Definition — Derivative at a point.</strong> If the following
+finite limit exists, the derivative of <span class="math inline">\(f\)</span> at <span class="math inline">\(a\)</span> is <span class="math display">\[f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}.\]</span>
+Equivalently, <span class="math inline">\(f'(a)=\lim_{x\to
+a}[f(x)-f(a)]/(x-a)\)</span>.</p>
+<p><strong>Example — A derivative from first principles.</strong> For
+<span class="math inline">\(f(x)=x^2+2x\)</span>, find <span class="math inline">\(f'(3)\)</span> and the tangent line at <span class="math inline">\(x=3\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(f(3)=15\)</span>, <span class="math display">\[\frac{f(3+h)-f(3)}h=\frac{(3+h)^2+2(3+h)-15}{h}=8+h.\]</span>
+Taking <span class="math inline">\(h\to0\)</span> gives <span class="math inline">\(f'(3)=8\)</span>. The tangent line is <span class="math inline">\(y-15=8(x-3)\)</span>, or <span class="math inline">\(y=8x-9\)</span>. The derivative has units of
+output units per input unit.</p>
+<figure>
+<img alt="Secant and tangent slopes: the derivative is the limiting slope as the second point approaches x = 3." src="figures/chapter03-diagram-01.svg"/>
+<figcaption>
+Secant and tangent slopes: the derivative is the limiting slope as the
+second point approaches <span class="math inline"><em>x</em> = 3</span>.
+</figcaption>
+</figure>
+<p><strong>Example — A nonpolynomial derivative.</strong> Use the
+definition to differentiate <span class="math inline">\(f(x)=\sqrt{x}\)</span> at <span class="math inline">\(a&gt;0\)</span>.</p>
+<p><strong>Solution.</strong> Rationalizing gives <span class="math display">\[\frac{\sqrt{a+h}-\sqrt
+a}{h}=\frac1{\sqrt{a+h}+\sqrt a}\longrightarrow\frac1{2\sqrt
+a}.\]</span> The restriction <span class="math inline">\(a&gt;0\)</span>
+is essential for a two-sided derivative on an open interval.</p>
+<p><strong>Remark.</strong> The tangent is the best local
+<em>linear</em> approximation, not necessarily a line touching the curve
+at only one point. A tangent can cross the graph.</p>
+<h3 id="from-a-numerical-pattern-to-a-mathematical-conclusion">From a
+numerical pattern to a mathematical conclusion</h3>
+<p>Suppose a table of secant slopes approaches <span class="math inline">\(8\)</span> as <span class="math inline">\(h\)</span> gets smaller. This is evidence for a
+derivative, but it is not a proof: a finite table samples only finitely
+many nonzero values of <span class="math inline">\(h\)</span>. In the
+preceding example, the algebraic identity <span class="math display">\[\frac{f(3+h)-f(3)}{h}=8+h\quad(h\ne0)\]</span>
+justifies the limit exactly. Throughout this book, we distinguish three
+complementary forms of evidence: an exact mathematical derivation, a
+visualization that builds intuition, and a numerical experiment that
+checks a prediction.</p>
+<p><strong>Example — A tangent line is a local prediction.</strong> A
+vehicle’s distance traveled is <span class="math inline">\(s(t)=t^2+2t\)</span> meters. At <span class="math inline">\(t=3\)</span> seconds, estimate the additional
+distance traveled in the next <span class="math inline">\(0.1\)</span>
+second using the tangent line, and compare with the exact change.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(s'(3)=8\)</span> m/s, the tangent estimate is
+<span class="math inline">\(8(0.1)=0.8\)</span> m. The exact change is
+<span class="math inline">\(s(3.1)-s(3)=0.81\)</span> m. The
+approximation underestimates the change by <span class="math inline">\(0.01\)</span> m because the slope increases with
+time.</p>
+<h2 id="the-derivative-as-a-function-differentiability">The derivative
+as a function; differentiability</h2>
+<p>Repeating the limit calculation at every eligible input defines the
+derivative function <span class="math inline">\(f'(x)\)</span>. For
+<span class="math inline">\(f(x)=x^2\)</span>, <span class="math display">\[f'(x)=\lim_{h\to0}\frac{(x+h)^2-x^2}{h}=\lim_{h\to0}(2x+h)=2x.\]</span>
+Thus <span class="math inline">\(f'(x)\)</span> is negative to the
+left of zero, zero at zero, and positive to the right: the derivative
+graph encodes the slope behavior of the original function.</p>
+<p><strong>Theorem — Differentiability implies continuity.</strong> If
+<span class="math inline">\(f\)</span> is differentiable at <span class="math inline">\(a\)</span>, then <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(a\)</span>.</p>
+<p><strong>Proof.</strong> For <span class="math inline">\(x\ne
+a\)</span>, write <span class="math inline">\(f(x)-f(a)=\frac{f(x)-f(a)}{x-a}(x-a)\)</span>. As
+<span class="math inline">\(x\to a\)</span>, the first factor tends to
+<span class="math inline">\(f'(a)\)</span> and the second to zero.
+Hence <span class="math inline">\(f(x)\to f(a)\)</span>.</p>
+<p>The converse fails: continuity alone does not guarantee a
+derivative.</p>
+<p><strong>Example — A corner.</strong> Show that <span class="math inline">\(f(x)=|x|\)</span> is continuous but not
+differentiable at zero.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(|x|\to0=f(0)\)</span>, continuity holds. But <span class="math display">\[\frac{|h|-0}{h}=\begin{cases}1,&amp;h&gt;0,\\-1,&amp;h&lt;0,\end{cases}\]</span>
+so the one-sided derivative limits disagree. The derivative does not
+exist at zero.</p>
+<figure>
+<img alt="The graph of |x| has a corner at the origin; its left and right slopes differ. Dashed segments show f′(x) away from zero." src="figures/chapter03-diagram-02.svg"/>
+<figcaption>
+The graph of <span class="math inline">|<em>x</em>|</span> has a corner
+at the origin; its left and right slopes differ. Dashed segments show
+<span class="math inline"><em>f</em>′(<em>x</em>)</span> away from zero.
+</figcaption>
+</figure>
+<h3 id="other-reasons-a-derivative-can-fail">Other reasons a derivative
+can fail</h3>
+<p>A derivative may fail at a jump or hole (because differentiability
+implies continuity), a corner (unequal one-sided slopes), a cusp (slopes
+diverge with opposite signs), or a vertical tangent (unbounded slope).
+For example, <span class="math inline">\(f(x)=x^{1/3}\)</span> is
+continuous at zero but has a vertical tangent there: its difference
+quotient <span class="math inline">\(h^{-2/3}\)</span> grows without
+bound.</p>
+<h3 id="higher-derivatives-and-notation">Higher derivatives and
+notation</h3>
+<p>The second derivative <span class="math inline">\(f''=(f')'\)</span> measures the
+rate of change of slope. For a position <span class="math inline">\(s(t)\)</span>, velocity is <span class="math inline">\(v=s'\)</span> and acceleration is <span class="math inline">\(a=s''\)</span>. Leibniz notation <span class="math inline">\(dy/dx\)</span>, <span class="math inline">\(d^2y/dx^2\)</span> and prime notation are
+complementary; units matter when interpreting rates.</p>
+<h2 id="differentiation-rules">Differentiation rules</h2>
+<p>The derivative definition proves basic rules, which save repeated
+limit calculations.</p>
+<p><strong>Theorem — Derivative of a constant.</strong> If <span class="math inline">\(f(x)=c\)</span> for a constant <span class="math inline">\(c\)</span>, then <span class="math inline">\(f'(x)=0\)</span> at every interior point of
+its domain.</p>
+<p><strong>Proof.</strong> The difference quotient is <span class="math inline">\((c-c)/h=0\)</span> for every <span class="math inline">\(h\ne0\)</span>, and hence its limit is zero.</p>
+<p><strong>Geometric interpretation.</strong> A constant function is a
+horizontal line. Because its output does not change, every secant slope
+and every tangent slope is zero.</p>
+<p><strong>Theorem — Constant-multiple and sum/difference
+rules.</strong> If <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are differentiable at <span class="math inline">\(x\)</span> and <span class="math inline">\(c\)</span> is constant, then <span class="math display">\[\frac{d}{dx}[cu(x)]=cu'(x),\qquad
+\frac{d}{dx}[u(x)\pm v(x)]=u'(x)\pm v'(x).\]</span></p>
+<p><strong>Proof.</strong> Write the difference quotient for each
+expression. Constants factor out of limits, and the limit of a sum is
+the sum of the limits when both limits exist.</p>
+<p><strong>Example — Separating the rules.</strong> Differentiate <span class="math inline">\(5x^2-3\sin x+7\)</span> once the power and sine
+rules have been established.</p>
+<p><strong>Solution.</strong> Differentiate term by term, carrying the
+coefficients: <span class="math inline">\(10x-3\cos x+0\)</span>. The
+constant term contributes no change.</p>
+<p><strong>Theorem — Power rule.</strong> For every positive integer
+<span class="math inline">\(n\)</span>, <span class="math display">\[\frac{d}{dx}x^n=nx^{n-1}.\]</span> The same
+formula holds for negative integer powers wherever <span class="math inline">\(x\ne0\)</span>. Later we extend the formula to
+real exponents on domains where the powers are defined and
+differentiable.</p>
+<p><strong>Why the hypotheses matter.</strong> For <span class="math inline">\(x^{-2}\)</span>, the rule gives <span class="math inline">\(-2x^{-3}\)</span> only for <span class="math inline">\(x\ne0\)</span>; the function itself is undefined
+at zero. For noninteger powers, the real domain may be more
+restricted.</p>
+<p><strong>Proof — Proof of the positive integer power rule.</strong>
+For <span class="math inline">\(n\in\mathbb N\)</span>, the binomial
+expansion gives <span class="math inline">\((x+h)^n=x^n+nx^{n-1}h+\binom
+n2x^{n-2}h^2+\cdots+h^n\)</span>. Divide the difference by <span class="math inline">\(h\)</span> and let <span class="math inline">\(h\to0\)</span>. Only <span class="math inline">\(nx^{n-1}\)</span> remains.</p>
+<p><strong>Example — Polynomial differentiation.</strong> Find the first
+and second derivatives of <span class="math inline">\(p(x)=4x^5-3x^3+7x-9\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(p'(x)=20x^4-9x^2+7\)</span> and <span class="math inline">\(p''(x)=80x^3-18x\)</span>. Each term is
+differentiated separately.</p>
+<p><strong>Theorem — Product rule.</strong> If <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are differentiable at <span class="math inline">\(x\)</span>, then <span class="math display">\[\frac{d}{dx}[u(x)v(x)]=u'(x)v(x)+u(x)v'(x).\]</span></p>
+<p><strong>Reasoning.</strong> When two quantities change together, the
+change in their product includes a contribution from each factor.
+Differentiating both factors and multiplying the derivatives would miss
+these contributions.</p>
+<p><strong>Proof — Product rule.</strong> Insert and subtract <span class="math inline">\(u(x+h)v(x)\)</span> in the numerator of the
+product’s difference quotient. Rearrangement yields <span class="math display">\[\frac{u(x+h)v(x+h)-u(x)v(x)}h=u(x+h)\frac{v(x+h)-v(x)}h+v(x)\frac{u(x+h)-u(x)}h.\]</span>
+Differentiability implies continuity, so the limit is <span class="math inline">\(uv'+vu'\)</span>.</p>
+<p><strong>Theorem — Quotient rule.</strong> If <span class="math inline">\(u\)</span> and <span class="math inline">\(v\)</span> are differentiable at <span class="math inline">\(x\)</span> and <span class="math inline">\(v(x)\ne0\)</span>, then <span class="math display">\[\frac{d}{dx}\left[\frac{u(x)}{v(x)}\right]
+=\frac{v(x)u'(x)-u(x)v'(x)}{[v(x)]^2}.\]</span></p>
+<p><strong>Proof.</strong> Apply the product rule to <span class="math inline">\(u(x)[v(x)]^{-1}\)</span> and the derivative of a
+reciprocal, or form a common denominator in the quotient’s difference
+quotient. The restriction <span class="math inline">\(v(x)\ne0\)</span>
+is necessary because the original quotient is undefined otherwise.</p>
+<p><strong>Memory aid.</strong> Denominator times derivative of
+numerator, minus numerator times derivative of denominator, all divided
+by denominator squared. Check the sign with <span class="math inline">\(1/x\)</span>, whose derivative is negative for
+<span class="math inline">\(x\ne0\)</span>.</p>
+<p><strong>Example — Product rule in context.</strong> A revenue model
+is <span class="math inline">\(R(q)=q(120-2q)\)</span> dollars. Find the
+marginal revenue at <span class="math inline">\(q=20\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(R'(q)=1(120-2q)+q(-2)=120-4q\)</span>, so
+<span class="math inline">\(R'(20)=40\)</span> dollars per
+additional unit, in the local marginal sense.</p>
+<p><strong>Example — Quotient rule.</strong> Differentiate <span class="math inline">\(f(x)=(x^2+1)/(x-1)\)</span>, <span class="math inline">\(x\ne1\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=[2x(x-1)-(x^2+1)]/(x-1)^2=(x^2-2x-1)/(x-1)^2\)</span>.</p>
+<p><strong>Remark.</strong> Common mistake: <span class="math inline">\((uv)'\ne u'v'\)</span> and <span class="math inline">\((u/v)'\ne u'/v'\)</span>. A simple
+test with <span class="math inline">\(u=v=x\)</span> disproves both
+shortcuts.</p>
+<h3 id="choosing-the-correct-differentiation-rule">Choosing the correct
+differentiation rule</h3>
+<p>Before differentiating, identify the structure of the expression. A
+sum such as <span class="math inline">\(x^3+\sin x\)</span> is
+differentiated term by term; a product such as <span class="math inline">\(x^3\sin x\)</span> requires the product rule; a
+quotient such as <span class="math inline">\(\sin x/x\)</span> requires
+the quotient rule; and a composition such as <span class="math inline">\(\sin(x^3)\)</span> requires the chain rule. The
+outermost operation determines the first rule to apply.</p>
+<p><strong>Example — Four similar-looking expressions.</strong>
+Differentiate <span class="math inline">\(x^2+e^x\)</span>, <span class="math inline">\(x^2e^x\)</span>, <span class="math inline">\(x^2/e^x\)</span>, and <span class="math inline">\(e^{x^2}\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math display">\[\begin{aligned}
+\frac{d}{dx}(x^2+e^x)&amp;=2x+e^x,\\
+\frac{d}{dx}(x^2e^x)&amp;=2xe^x+x^2e^x,\\
+\frac{d}{dx}(x^2e^{-x})&amp;=e^{-x}(2x-x^2),\\
+\frac{d}{dx}e^{x^2}&amp;=2xe^{x^2}.
+\end{aligned}\]</span> The third expression was rewritten before
+differentiation to avoid unnecessary algebra.</p>
+<h2 id="motion-and-other-rates-of-change">Motion and other rates of
+change</h2>
+<p>Suppose position <span class="math inline">\(s(t)\)</span> is
+measured in meters and time <span class="math inline">\(t\)</span> in
+seconds. Average velocity over <span class="math inline">\([t,t+h]\)</span> is <span class="math inline">\([s(t+h)-s(t)]/h\)</span>; instantaneous velocity
+is its limit <span class="math inline">\(s'(t)\)</span>, measured in
+m/s. Speed is <span class="math inline">\(|v(t)|\)</span>, not <span class="math inline">\(v(t)\)</span>, because velocity includes
+direction.</p>
+<p><strong>Example — Position, velocity, acceleration.</strong> Let
+<span class="math inline">\(s(t)=12t-2t^2\)</span> for <span class="math inline">\(0\le t\le6\)</span>. Find velocity and
+acceleration, the instant when the particle changes direction, and
+displacement on <span class="math inline">\([0,6]\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(v(t)=12-4t\)</span> m/s and <span class="math inline">\(a(t)=-4\)</span> m/s<span class="math inline">\(^2\)</span>. The velocity changes from positive to
+negative at <span class="math inline">\(t=3\)</span> s. Displacement is
+<span class="math inline">\(s(6)-s(0)=0\)</span> m, although total
+distance is <span class="math inline">\([s(3)-s(0)]+[s(3)-s(6)]=18+18=36\)</span> m.</p>
+<figure>
+<img alt="Position, velocity, and acceleration share a time axis but have different physical units; numerical heights should not be compared as if units matched." src="figures/chapter03-diagram-03.svg"/>
+<figcaption>
+Position, velocity, and acceleration share a time axis but have
+different physical units; numerical heights should not be compared as if
+units matched.
+</figcaption>
+</figure>
+<h3 id="units-and-model-validity">Units and model validity</h3>
+<p>If <span class="math inline">\(C(t)\)</span> is a concentration in
+mg/L, then <span class="math inline">\(C'(t)\)</span> is mg/(L hour)
+when <span class="math inline">\(t\)</span> is in hours. A negative
+derivative describes a declining concentration; it does not imply a
+negative concentration. Model derivatives should be interpreted only
+over the domain where the model is meaningful.</p>
+<p><strong>Example — Cooling rate.</strong> A simplified temperature
+model is <span class="math inline">\(T(t)=22+58e^{-0.18t}\)</span>, with
+<span class="math inline">\(t\)</span> in minutes. Find the rate of
+change at <span class="math inline">\(t=5\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(T'(t)=-10.44e^{-0.18t}\)</span> degrees
+Celsius per minute, so <span class="math inline">\(T'(5)\approx-4.245\)</span> <span class="math inline">\(^\circ\)</span>C/min. The temperature is falling
+at that instant.</p>
+<h2 id="trigonometric-derivatives">Trigonometric derivatives</h2>
+<p>Angles must be measured in radians for the familiar derivative
+formulas. Using the fundamental trigonometric limits from Chapter 2 and
+the addition identities, <span class="math display">\[\frac{d}{dx}\sin
+x=\cos x,\qquad \frac{d}{dx}\cos x=-\sin x.\]</span> From these and the
+quotient rule, <span class="math display">\[(\tan x)'=\sec^2x,\quad
+(\cot x)'=-\csc^2x,\quad (\sec x)'=\sec x\tan x,\quad (\csc
+x)'=-\csc x\cot x.\]</span></p>
+<p><strong>Example — A vibrating component.</strong> The displacement of
+a vibrating sensor is <span class="math inline">\(s(t)=0.04\cos(6\pi
+t)\)</span> meters. Determine velocity and acceleration.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(v(t)=-0.24\pi\sin(6\pi t)\)</span> m/s and <span class="math inline">\(a(t)=-1.44\pi^2\cos(6\pi t)\)</span> m/s<span class="math inline">\(^2\)</span>. The angular frequency is <span class="math inline">\(6\pi\)</span> radians/s, so the period is <span class="math inline">\(1/3\)</span> s.</p>
+<figure>
+<img alt="The cosine graph records the slope of the sine graph at each input." src="figures/chapter03-diagram-04.svg"/>
+<figcaption>
+The cosine graph records the slope of the sine graph at each input.
+</figcaption>
+</figure>
+<h2 id="the-chain-rule">The chain rule</h2>
+<p>When a function is composed of an outer function and an inner
+function, both layers contribute to the rate of change.</p>
+<p><strong>Theorem — Chain rule.</strong> If <span class="math inline">\(u=g(x)\)</span> is differentiable at <span class="math inline">\(x\)</span> and <span class="math inline">\(f\)</span> is differentiable at <span class="math inline">\(u=g(x)\)</span>, then <span class="math display">\[\frac{d}{dx}f(g(x))=f'(g(x))g'(x).\]</span></p>
+<p><strong>Example — Nested powers.</strong> Differentiate <span class="math inline">\(y=(3x^2-2x+5)^7\)</span>.</p>
+<p><strong>Solution.</strong> Let <span class="math inline">\(u=3x^2-2x+5\)</span>. Then <span class="math inline">\(dy/du=7u^6\)</span> and <span class="math inline">\(du/dx=6x-2\)</span>, so <span class="math inline">\(dy/dx=7(3x^2-2x+5)^6(6x-2)\)</span>.</p>
+<p><strong>Example — A trigonometric composition.</strong> Differentiate
+<span class="math inline">\(y=\sin(x^2+1)\)</span>.</p>
+<p><strong>Solution.</strong> The outer derivative is cosine; multiply
+by the inner derivative <span class="math inline">\(2x\)</span>: <span class="math inline">\(y'=2x\cos(x^2+1)\)</span>.</p>
+<p><strong>Example — Nested exponential decay.</strong> If <span class="math inline">\(C(t)=12\exp[-0.3(t+1)^2]\)</span>, compute <span class="math inline">\(C'(t)\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(C'(t)=12e^{-0.3(t+1)^2}[-0.6(t+1)]=-7.2(t+1)e^{-0.3(t+1)^2}\)</span>.</p>
+<p><strong>Remark.</strong> A useful diagnostic is to identify the inner
+function in words before writing its derivative. The derivative of <span class="math inline">\(\sin(5x)\)</span> is <span class="math inline">\(5\cos(5x)\)</span>, not <span class="math inline">\(\cos(5x)\)</span>.</p>
+<h2 id="implicit-differentiation">Implicit differentiation</h2>
+<p>Some curves are defined by relations <span class="math inline">\(F(x,y)=0\)</span> rather than explicit formulas
+<span class="math inline">\(y=f(x)\)</span>. If <span class="math inline">\(y\)</span> depends on <span class="math inline">\(x\)</span>, differentiate both sides with respect
+to <span class="math inline">\(x\)</span>, remembering that
+differentiating a term involving <span class="math inline">\(y\)</span>
+requires the chain rule.</p>
+<p><strong>Example — Circle tangent.</strong> Find the slope of the
+tangent to <span class="math inline">\(x^2+y^2=25\)</span> at <span class="math inline">\((3,4)\)</span>.</p>
+<p><strong>Solution.</strong> Differentiate: <span class="math inline">\(2x+2y(dy/dx)=0\)</span>, hence <span class="math inline">\(dy/dx=-x/y\)</span> when <span class="math inline">\(y\ne0\)</span>. At <span class="math inline">\((3,4)\)</span>, the slope is <span class="math inline">\(-3/4\)</span> and the tangent line is <span class="math inline">\(y-4=-\tfrac34(x-3)\)</span>.</p>
+<p><strong>Example — A mixed-product relation.</strong> For <span class="math inline">\(x^2+xy+y^2=7\)</span>, find <span class="math inline">\(dy/dx\)</span> wherever the denominator is
+nonzero.</p>
+<p><strong>Solution.</strong> Differentiate to get <span class="math inline">\(2x+(y+xy')+2yy'=0\)</span>. Collect <span class="math inline">\(y'\)</span> terms: <span class="math inline">\((x+2y)y'=-(2x+y)\)</span>, so <span class="math inline">\(y'=-(2x+y)/(x+2y)\)</span>.</p>
+<figure>
+<img alt="The circle is not globally a function of x, but implicit differentiation gives the slope of its tangent where y ≠ 0." src="figures/chapter03-diagram-05.svg"/>
+<figcaption>
+The circle is not globally a function of <span class="math inline"><em>x</em></span>, but implicit differentiation
+gives the slope of its tangent where <span class="math inline"><em>y</em> ≠ 0</span>.
+</figcaption>
+</figure>
+<h2 id="derivatives-of-inverse-exponential-and-logarithmic-functions">Derivatives
+of inverse, exponential, and logarithmic functions</h2>
+<p>For an invertible differentiable function <span class="math inline">\(f\)</span> with <span class="math inline">\(f'(x)\ne0\)</span>, the inverse derivative
+follows by differentiating <span class="math inline">\(f(f^{-1}(y))=y\)</span>: <span class="math display">\[(f^{-1})'(y)=\frac1{f'(f^{-1}(y))}.\]</span>
+The logarithm and exponential functions satisfy <span class="math display">\[\frac{d}{dx}e^x=e^x,\quad \frac{d}{dx}\ln
+x=\frac1x\ (x&gt;0),\quad \frac{d}{dx}a^x=a^x\ln a\ (a&gt;0),\]</span>
+<span class="math display">\[\frac{d}{dx}\log_a x=\frac1{x\ln a},\qquad
+\frac{d}{dx}x^r=rx^{r-1}\quad(x&gt;0,\ r\in\mathbb R).\]</span></p>
+<p><strong>Example — Logarithmic chain rule.</strong> Differentiate
+<span class="math inline">\(f(x)=\ln(1+x^2)\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(1+x^2&gt;0\)</span> for all real <span class="math inline">\(x\)</span>, <span class="math inline">\(f'(x)=2x/(1+x^2)\)</span> on <span class="math inline">\(\mathbb R\)</span>.</p>
+<p><strong>Example — Logarithmic differentiation.</strong> Differentiate
+<span class="math inline">\(y=x^x\)</span> for <span class="math inline">\(x&gt;0\)</span>.</p>
+<p><strong>Solution.</strong> Taking logarithms, <span class="math inline">\(\ln y=x\ln x\)</span>. Differentiate: <span class="math inline">\(y'/y=\ln x+1\)</span>. Thus <span class="math inline">\(y'=x^x(\ln x+1)\)</span>.</p>
+<p><strong>Example — Inverse derivative without an explicit
+inverse.</strong> Let <span class="math inline">\(f(x)=x^3+x+1\)</span>.
+Find <span class="math inline">\((f^{-1})'(3)\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(f(1)=3\)</span> and <span class="math inline">\(f'(x)=3x^2+1&gt;0\)</span>, the inverse
+exists. Then <span class="math inline">\((f^{-1})'(3)=1/f'(1)=1/4\)</span>.</p>
+<h2 id="inverse-trigonometric-functions">Inverse trigonometric
+functions</h2>
+<p>The inverse sine and tangent derivatives are <span class="math display">\[\frac{d}{dx}\arcsin
+x=\frac1{\sqrt{1-x^2}}\quad(|x|&lt;1),\qquad \frac{d}{dx}\arctan
+x=\frac1{1+x^2}.\]</span> Also <span class="math inline">\((\arccos
+x)'=-1/\sqrt{1-x^2}\)</span> on <span class="math inline">\((-1,1)\)</span>. These formulas follow from
+implicit differentiation and careful attention to the principal
+ranges.</p>
+<p><strong>Example — Inverse tangent and a scaled input.</strong>
+Differentiate <span class="math inline">\(f(x)=\arctan(2x-1)\)</span>.</p>
+<p><strong>Solution.</strong> Apply the chain rule: <span class="math inline">\(f'(x)=2/[1+(2x-1)^2]\)</span>.</p>
+<p><strong>Example — Inverse sine composition.</strong> Differentiate
+<span class="math inline">\(g(x)=\arcsin(x/3)\)</span> for <span class="math inline">\(-3&lt;x&lt;3\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(g'(x)=(1/3)/\sqrt{1-x^2/9}=1/\sqrt{9-x^2}\)</span>.
+At <span class="math inline">\(x=\pm3\)</span> the derivative is not
+finite.</p>
+<h2 id="related-rates-changing-quantities-linked-by-an-equation">Related
+rates: changing quantities linked by an equation</h2>
+<p>A related-rates problem connects two or more quantities through
+geometry or a physical law. Write the relationship before
+differentiating, use consistent units, and substitute numerical values
+only after deriving the rate equation.</p>
+<p><strong>Example — Inflating a spherical balloon.</strong> The radius
+<span class="math inline">\(r\)</span> of a spherical balloon increases
+at <span class="math inline">\(0.2\)</span> cm/s. How fast does its
+volume increase when <span class="math inline">\(r=5\)</span> cm?</p>
+<p><strong>Solution.</strong> From <span class="math inline">\(V=\tfrac43\pi r^3\)</span>, differentiate with
+respect to time: <span class="math inline">\(dV/dt=4\pi
+r^2(dr/dt)\)</span>. At <span class="math inline">\(r=5\)</span>, <span class="math inline">\(dV/dt=4\pi(25)(0.2)=20\pi\approx62.83\)</span>
+cm<span class="math inline">\(^3\)</span>/s.</p>
+<p><strong>Example — A sliding ladder.</strong> A 10-m ladder rests
+against a wall. Its foot moves away from the wall at <span class="math inline">\(0.4\)</span> m/s. Find the vertical rate when the
+foot is 6 m from the wall.</p>
+<p><strong>Solution.</strong> Let <span class="math inline">\(x\)</span>
+be the horizontal distance and <span class="math inline">\(y\)</span>
+the height. Since <span class="math inline">\(x^2+y^2=100\)</span>,
+<span class="math inline">\(2x x'+2y y'=0\)</span>. At <span class="math inline">\(x=6\)</span>, <span class="math inline">\(y=8\)</span>, so <span class="math inline">\(y'=-(6/8)(0.4)=-0.3\)</span> m/s. The top
+slides downward.</p>
+<figure>
+<img alt="A constant ladder length links the horizontal and vertical rates; the signs encode opposite directions." src="figures/chapter03-diagram-06.svg"/>
+<figcaption>
+A constant ladder length links the horizontal and vertical rates; the
+signs encode opposite directions.
+</figcaption>
+</figure>
+<h3 id="a-reliable-modeling-workflow">A reliable modeling workflow</h3>
+<p>Identify the changing variables and their units. Draw a labeled
+diagram when geometry is involved. State the governing equation.
+Differentiate with respect to time, using the chain rule. Substitute
+values at the requested instant, solve, and interpret the sign and
+units. Check whether the physical assumptions remain reasonable.</p>
+<h3 id="why-related-rates-require-a-time-derivative">Why related rates
+require a time derivative</h3>
+<p>An equation such as <span class="math inline">\(x^2+y^2=100\)</span>
+describes a geometric constraint. When <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary with time, differentiating with
+respect to <span class="math inline">\(t\)</span> gives <span class="math inline">\(2x\,dx/dt+2y\,dy/dt=0\)</span>. The factors <span class="math inline">\(dx/dt\)</span> and <span class="math inline">\(dy/dt\)</span> appear because <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are themselves functions of time. They
+are not optional symbols: omitting them would turn a rate equation into
+an incorrect static derivative.</p>
+<p><strong>Example — Expanding circular oil slick.</strong> A circular
+slick has area <span class="math inline">\(A=\pi r^2\)</span>. If its
+area is growing at <span class="math inline">\(12\pi\)</span> square
+meters per minute, how quickly is the radius increasing when <span class="math inline">\(r=6\)</span> meters?</p>
+<p><strong>Solution.</strong> Differentiate with respect to time: <span class="math inline">\(dA/dt=2\pi r\,dr/dt\)</span>. Substituting <span class="math inline">\(12\pi=2\pi(6)\,dr/dt\)</span> gives <span class="math inline">\(dr/dt=1\)</span> m/min. The area and radius have
+different units, and so do their rates.</p>
+<h2 id="linearization-and-differentials">Linearization and
+differentials</h2>
+<p>Differentiability means that near <span class="math inline">\(a\)</span>, a function is well approximated by its
+tangent line.</p>
+<p><strong>Definition — Linearization.</strong> The linearization of
+<span class="math inline">\(f\)</span> at <span class="math inline">\(a\)</span> is <span class="math display">\[L(x)=f(a)+f'(a)(x-a).\]</span> The
+differential <span class="math inline">\(dy=f'(x)\,dx\)</span>
+approximates the actual change <span class="math inline">\(\Delta
+y=f(x+\Delta x)-f(x)\)</span> when <span class="math inline">\(dx=\Delta
+x\)</span> is small.</p>
+<p><strong>Example — Estimating a square root.</strong> Use a
+linearization at <span class="math inline">\(a=16\)</span> to estimate
+<span class="math inline">\(\sqrt{16.4}\)</span>.</p>
+<p><strong>Solution.</strong> With <span class="math inline">\(f(x)=\sqrt{x}\)</span>, <span class="math inline">\(f(16)=4\)</span> and <span class="math inline">\(f'(16)=1/8\)</span>. Hence <span class="math inline">\(L(x)=4+(x-16)/8\)</span> and <span class="math inline">\(\sqrt{16.4}\approx L(16.4)=4.05\)</span>. The true
+value is about <span class="math inline">\(4.04969\)</span>, so the
+error is about <span class="math inline">\(0.00031\)</span>.</p>
+<p><strong>Example — Error propagation.</strong> The radius of a circle
+is measured as <span class="math inline">\(r=10\)</span> cm with
+possible error <span class="math inline">\(dr=\pm0.05\)</span> cm.
+Estimate the resulting area error.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(A=\pi
+r^2\)</span>, <span class="math inline">\(dA=2\pi r\,dr\)</span>. The
+estimated absolute area error is at most <span class="math inline">\(2\pi(10)(0.05)=\pi\)</span> cm<span class="math inline">\(^2\)</span>, about <span class="math inline">\(3.14\)</span> cm<span class="math inline">\(^2\)</span>. The estimate ignores the smaller
+quadratic correction <span class="math inline">\(\pi(dr)^2\)</span>.</p>
+<figure>
+<img alt="A tangent line provides a close approximation near the point of tangency; its accuracy decreases farther away." src="figures/chapter03-diagram-07.svg"/>
+<figcaption>
+A tangent line provides a close approximation near the point of
+tangency; its accuracy decreases farther away.
+</figcaption>
+</figure>
+<h3 id="what-linearization-does-not-promise">What linearization does not
+promise</h3>
+<p>A tangent approximation is local, not globally accurate. When <span class="math inline">\(f''\)</span> exists and is bounded in a
+neighborhood, Taylor’s theorem (developed later) provides a way to
+quantify the approximation error. Numerical agreement at one input is
+not proof of uniform accuracy over a wide interval.</p>
+<h2 id="computational-laboratories-a-mathematical-first-approach">Computational
+laboratories: a mathematical-first approach</h2>
+<p>In each laboratory, complete the analytic calculation before running
+software. The R laboratories appear together first, followed by the
+corresponding Python laboratories. This makes it possible to teach one
+language at a time without splitting attention across two code panels.
+The laboratory numbers match across languages so that students can
+compare methods after finishing the first set.</p>
+<h3 class="unnumbered" id="preparing-your-computational-workspace">Preparing your computational
+workspace</h3>
+<p>In R, use a fresh script and run each laboratory independently. In
+Python, use a Jupyter notebook or a script with NumPy, Matplotlib, and
+(for symbolic work) SymPy installed. Numerical differentiation is a
+check on a mathematical argument, not a substitute for it. Include axis
+labels, units, and an interpretation of every computed quantity.</p>
+<h2 id="r-laboratories">R laboratories</h2>
+<h3 id="r-laboratory-1-secant-slopes-converge-to-a-tangent">R Laboratory
+1: secant slopes converge to a tangent</h3>
+<p>For <span class="math inline">\(f(x)=x^2+2x\)</span> at <span class="math inline">\(a=3\)</span>, calculate <span class="math inline">\([f(a+h)-f(a)]/h\)</span> for decreasing <span class="math inline">\(h\)</span>. Compare the values with the exact
+derivative <span class="math inline">\(8\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^2 + 2*x
+a &lt;- 3
+h &lt;- 10^(-seq(1, 6))
+secant &lt;- (f(a+h)-f(a))/h
+print(data.frame(h, secant,
+                 error=abs(secant-8)))</code></pre></div>
+<p><strong>Reflect.</strong> The exact secant slope is <span class="math inline">\(8+h\)</span>. Explain why this predicts the
+numerical error for moderate <span class="math inline">\(h\)</span>, and
+why extremely small <span class="math inline">\(h\)</span> may
+eventually make floating-point subtraction unreliable.</p>
+<h5 id="explain-your-result.">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h3 id="r-laboratory-2-symbolic-and-numerical-differentiation">R
+Laboratory 2: symbolic and numerical differentiation</h3>
+<p>Base R’s <code>D()</code> differentiates expressions symbolically.
+Python’s SymPy performs symbolic differentiation using
+<code>diff()</code>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- expression(x^3 - 4*x^2 + 2*x + 1)
+df &lt;- D(f, "x")
+print(df)
+print(eval(df, list(x=2)))</code></pre></div>
+<p><strong>Expected result.</strong> Both produce <span class="math inline">\(f'(x)=3x^2-8x+2\)</span> and <span class="math inline">\(f'(2)=-2\)</span>. Verify this independently
+by hand.</p>
+<h5 id="explain-your-result.-1">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h3 id="r-laboratory-3-comparing-forward-and-central-differences">R
+Laboratory 3: comparing forward and central differences</h3>
+<p>A forward difference uses <span class="math inline">\([f(x+h)-f(x)]/h\)</span>; a central difference
+uses <span class="math inline">\([f(x+h)-f(x-h)]/(2h)\)</span>. For
+smooth functions, the central formula typically has truncation error of
+order <span class="math inline">\(h^2\)</span> rather than order <span class="math inline">\(h\)</span>, until rounding dominates.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- sin
+x &lt;- 1
+h &lt;- 10^(-seq(1, 7))
+forward &lt;- (f(x+h)-f(x))/h
+central &lt;- (f(x+h)-f(x-h))/(2*h)
+print(data.frame(h,
+  err_forward=abs(forward-cos(x)),
+  err_central=abs(central-cos(x))))</code></pre></div>
+<p><strong>Investigate.</strong> Graph absolute error against <span class="math inline">\(h\)</span> on log–log axes. Describe when the
+central difference is better and why using an arbitrarily tiny <span class="math inline">\(h\)</span> is not necessarily wise.</p>
+<h5 id="explain-your-result.-2">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h3 id="r-laboratory-4-position-velocity-and-acceleration">R Laboratory
+4: position, velocity, and acceleration</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>t &lt;- seq(0, 6, length.out=301)
+s &lt;- 12*t - 2*t^2
+v &lt;- 12 - 4*t
+a &lt;- rep(-4, length(t))
+plot(t, s, type="l", col="blue",
+     xlab="time (s)", ylab="value")
+lines(t, v, col="red", lty=2)
+lines(t, a, col="darkgreen", lty=3)
+legend("topright", c("s", "v", "a"),
+       col=c("blue","red","darkgreen"),
+       lty=1:3)</code></pre></div>
+<p><strong>Interpret.</strong> Identify when the object reverses
+direction. Explain why displacement and distance traveled are different.
+Explain why a single shared vertical axis is only a visual convenience
+when quantities have different units.</p>
+<h5 id="explain-your-result.-3">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h3 id="r-laboratory-5-differentiating-a-cooling-model">R Laboratory 5:
+differentiating a cooling model</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>T &lt;- function(t) 22+58*exp(-0.18*t)
+dT &lt;- function(t) -10.44*exp(-0.18*t)
+cat("T(5) =", round(T(5), 3), "\n")
+cat("T'(5) =", round(dT(5), 3), "\n")
+curve(T(x), 0, 30, col="blue",
+      xlab="time (min)", ylab="Temp (C)")</code></pre></div>
+<p><strong>Extend.</strong> Determine when the instantaneous cooling
+rate first becomes slower than <span class="math inline">\(1\)</span>
+<span class="math inline">\(^\circ\)</span>C/min in magnitude. Check
+your answer algebraically and computationally.</p>
+<h5 id="explain-your-result.-4">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h3 id="r-laboratory-6-local-linearization-and-error">R Laboratory 6:
+local linearization and error</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter03-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>x &lt;- seq(12, 20, length.out=201)
+f &lt;- sqrt(x)
+L &lt;- 4 + (x-16)/8
+plot(x, f, type="l", col="blue")
+lines(x, L, col="red", lty=2)
+cat("Approximation:", 4.05, "\n")
+cat("Absolute error:",
+    abs(sqrt(16.4)-4.05), "\n")</code></pre></div>
+<p><strong>Extend.</strong> Find the largest interval centered at <span class="math inline">\(16\)</span> (numerically, to two decimal places)
+on which the absolute approximation error stays below <span class="math inline">\(0.02\)</span>; justify how you searched for
+it.</p>
+<h5 id="explain-your-result.-5">Explain your result.</h5>
+<p>State what the output means mathematically, what units (if any)
+apply, and one limitation of the numerical or graphical method.</p>
+<h2 id="python-laboratories">Python laboratories</h2>
+<p>The six investigations below repeat the mathematical questions from
+the R section using Python. Before running each listing, predict the
+main result from the preceding derivation. Afterwards, compare with your
+R output and investigate any differences caused by precision or display
+formatting.</p>
+<h3 id="python-laboratory-1-secant-slopes-converge-to-a-tangent">Python
+Laboratory 1: secant slopes converge to a tangent</h3>
+<p>For <span class="math inline">\(f(x)=x^2+2x\)</span> at <span class="math inline">\(a=3\)</span>, calculate <span class="math inline">\([f(a+h)-f(a)]/h\)</span> for decreasing <span class="math inline">\(h\)</span>. Compare the values with the exact
+derivative <span class="math inline">\(8\)</span>.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+f = lambda x: x**2 + 2*x
+a = 3
+for h in 10.0**(-np.arange(1, 7)):
+    secant = (f(a+h)-f(a))/h
+    print(h, secant, abs(secant-8))</code></pre></div>
+<p><strong>Reflect.</strong> The exact secant slope is <span class="math inline">\(8+h\)</span>. Explain why this predicts the
+numerical error for moderate <span class="math inline">\(h\)</span>, and
+why extremely small <span class="math inline">\(h\)</span> may
+eventually make floating-point subtraction unreliable.</p>
+<h5 id="cross-language-comparison.">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h3 id="python-laboratory-2-symbolic-and-numerical-differentiation">Python
+Laboratory 2: symbolic and numerical differentiation</h3>
+<p>Base R’s <code>D()</code> differentiates expressions symbolically.
+Python’s SymPy performs symbolic differentiation using
+<code>diff()</code>.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import sympy as sp
+x = sp.symbols('x')
+f = x**3 - 4*x**2 + 2*x + 1
+df = sp.diff(f, x)
+print(df)
+print(df.subs(x, 2))</code></pre></div>
+<p><strong>Expected result.</strong> Both produce <span class="math inline">\(f'(x)=3x^2-8x+2\)</span> and <span class="math inline">\(f'(2)=-2\)</span>. Verify this independently
+by hand.</p>
+<h5 id="cross-language-comparison.-1">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h3 id="python-laboratory-3-comparing-forward-and-central-differences">Python
+Laboratory 3: comparing forward and central differences</h3>
+<p>A forward difference uses <span class="math inline">\([f(x+h)-f(x)]/h\)</span>; a central difference
+uses <span class="math inline">\([f(x+h)-f(x-h)]/(2h)\)</span>. For
+smooth functions, the central formula typically has truncation error of
+order <span class="math inline">\(h^2\)</span> rather than order <span class="math inline">\(h\)</span>, until rounding dominates.</p>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+x = 1.0
+for h in 10.0**(-np.arange(1, 8)):
+    fw = (np.sin(x+h)-np.sin(x))/h
+    ct = (np.sin(x+h)-np.sin(x-h))/(2*h)
+    print(h, abs(fw-np.cos(x)),
+             abs(ct-np.cos(x)))</code></pre></div>
+<p><strong>Investigate.</strong> Graph absolute error against <span class="math inline">\(h\)</span> on log–log axes. Describe when the
+central difference is better and why using an arbitrarily tiny <span class="math inline">\(h\)</span> is not necessarily wise.</p>
+<h5 id="cross-language-comparison.-2">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h3 id="python-laboratory-4-position-velocity-and-acceleration">Python
+Laboratory 4: position, velocity, and acceleration</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+t = np.linspace(0, 6, 301)
+s = 12*t - 2*t**2
+v = 12 - 4*t
+a = np.full_like(t, -4.0)
+for values, label in [(s,"s"),(v,"v"),(a,"a")]:
+    plt.plot(t, values, label=label)
+plt.xlabel("time (s)")
+plt.ylabel("value (different units)")
+plt.legend(); plt.show()</code></pre></div>
+<p><strong>Interpret.</strong> Identify when the object reverses
+direction. Explain why displacement and distance traveled are different.
+Explain why a single shared vertical axis is only a visual convenience
+when quantities have different units.</p>
+<h5 id="cross-language-comparison.-3">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h3 id="python-laboratory-5-differentiating-a-cooling-model">Python
+Laboratory 5: differentiating a cooling model</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+T = lambda t: 22+58*np.exp(-0.18*t)
+dT = lambda t: -10.44*np.exp(-0.18*t)
+print(round(T(5), 3), round(dT(5), 3))
+t = np.linspace(0, 30, 301)
+plt.plot(t, T(t))
+plt.xlabel("time (min)")
+plt.ylabel("Temperature (C)")
+plt.show()</code></pre></div>
+<p><strong>Extend.</strong> Determine when the instantaneous cooling
+rate first becomes slower than <span class="math inline">\(1\)</span>
+<span class="math inline">\(^\circ\)</span>C/min in magnitude. Check
+your answer algebraically and computationally.</p>
+<h5 id="cross-language-comparison.-4">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h3 id="python-laboratory-6-local-linearization-and-error">Python
+Laboratory 6: local linearization and error</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter03-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(12, 20, 201)
+f = np.sqrt(x)
+L = 4 + (x-16)/8
+plt.plot(x, f, label="sqrt(x)")
+plt.plot(x, L, "--", label="linearization")
+plt.legend(); plt.show()
+print(abs(np.sqrt(16.4)-4.05))</code></pre></div>
+<p><strong>Extend.</strong> Find the largest interval centered at <span class="math inline">\(16\)</span> (numerically, to two decimal places)
+on which the absolute approximation error stays below <span class="math inline">\(0.02\)</span>; justify how you searched for
+it.</p>
+<h5 id="cross-language-comparison.-5">Cross-language comparison.</h5>
+<p>Compare the Python output with the corresponding R laboratory.
+Explain which conclusions depend on mathematics and which depend on
+implementation choices.</p>
+<h2 id="applied-case-studies">Applied case studies</h2>
+<h3 id="case-study-a-medication-concentration">Case study A: medication
+concentration</h3>
+<p>Consider a hypothetical one-compartment decay model <span class="math inline">\(C(t)=18e^{-0.25t}\)</span> mg/L, <span class="math inline">\(t\ge0\)</span> hours. The instantaneous change is
+<span class="math inline">\(C'(t)=-4.5e^{-0.25t}\)</span> mg/(L h).
+At <span class="math inline">\(t=4\)</span>, <span class="math inline">\(C(4)=18e^{-1}\approx6.62\)</span> mg/L and <span class="math inline">\(C'(4)=-4.5e^{-1}\approx-1.66\)</span>
+mg/(L h). The model is illustrative, not a dosing recommendation.
+Compare the instantaneous rate with the average change over <span class="math inline">\([4,5]\)</span>, and explain why they differ.</p>
+<h3 id="case-study-b-demand-and-marginal-revenue">Case study B: demand
+and marginal revenue</h3>
+<p>Suppose demand follows <span class="math inline">\(p(q)=100-0.5q\)</span> dollars per unit for <span class="math inline">\(0\le q\le200\)</span>. Revenue is <span class="math inline">\(R(q)=q(100-0.5q)\)</span>, so <span class="math inline">\(R'(q)=100-q\)</span>. At <span class="math inline">\(q=60\)</span>, an additional unit increases
+revenue by approximately 40 dollars; at <span class="math inline">\(q=140\)</span>, the marginal revenue is <span class="math inline">\(-40\)</span>, indicating that an increase in sales
+volume requires a price reduction large enough to lower total revenue
+locally. This interpretation depends on the model’s assumed demand
+relationship.</p>
+<h3 id="case-study-c-thermal-cooling-and-local-forecasts">Case study C:
+thermal cooling and local forecasts</h3>
+<p>With <span class="math inline">\(T(t)=22+58e^{-0.18t}\)</span>, a
+first-order forecast from <span class="math inline">\(t=5\)</span> is
+<span class="math inline">\(T(5+\Delta t)\approx T(5)+T'(5)\Delta
+t\)</span>. For <span class="math inline">\(\Delta t=0.5\)</span> min,
+compare the forecast with the exact model and discuss why the error
+increases as <span class="math inline">\(\Delta t\)</span> grows. This
+exercise connects differentiation to local forecasting and model
+uncertainty.</p>
+<h2 id="chapter-summary-and-common-errors">Chapter summary and common
+errors</h2>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Essential mathematical idea</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Derivative</td>
+<td style="text-align: left;"><span class="math inline">\(f'(a)=\lim_{h\to0}[f(a+h)-f(a)]/h\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Differentiability</td>
+<td style="text-align: left;">Implies continuity, but not
+conversely</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Product rule</td>
+<td style="text-align: left;"><span class="math inline">\((uv)'=u'v+uv'\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Quotient rule</td>
+<td style="text-align: left;"><span class="math inline">\((u/v)'=(u'v-uv')/v^2\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chain rule</td>
+<td style="text-align: left;"><span class="math inline">\([f(g(x))]'=f'(g(x))g'(x)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Motion</td>
+<td style="text-align: left;"><span class="math inline">\(v=s'\)</span>, <span class="math inline">\(a=s''\)</span>, speed <span class="math inline">\(=|v|\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Implicit curves</td>
+<td style="text-align: left;">Differentiate <span class="math inline">\(y\)</span> as a function of <span class="math inline">\(x\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Linearization</td>
+<td style="text-align: left;"><span class="math inline">\(L(x)=f(a)+f'(a)(x-a)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Typical pitfalls include confusing a secant with a tangent,
+forgetting units, applying product or quotient rules incorrectly,
+omitting the inner derivative in a composition, treating a corner as
+differentiable, substituting numbers too early in related-rates
+problems, and trusting tiny finite-difference step sizes without
+examining roundoff.</p>
+<h2 id="exercises">Exercises</h2>
+<p><strong>Instructions.</strong> Show mathematical reasoning before
+using software. Unless a problem explicitly asks for numerical
+approximation, give exact results. For computational tasks, provide
+labeled output and a sentence interpreting the result.</p>
+<h3 class="unnumbered" id="a.-definitions-and-tangent-lines">A.
+Definitions and tangent lines</h3>
+<ol type="1">
+<li><p>Use the limit definition to compute <span class="math inline">\(f'(2)\)</span> for <span class="math inline">\(f(x)=x^2-3x\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(f'(x)\)</span> from first
+principles for <span class="math inline">\(f(x)=5x-7\)</span>.</p></li>
+<li><p>Find the tangent line to <span class="math inline">\(y=x^3\)</span> at <span class="math inline">\(x=2\)</span>.</p></li>
+<li><p>Find the tangent line to <span class="math inline">\(y=1/x\)</span> at <span class="math inline">\(x=2\)</span> using the derivative
+definition.</p></li>
+<li><p>Determine whether <span class="math inline">\(f(x)=|x-3|\)</span>
+is differentiable at <span class="math inline">\(x=3\)</span>; explain
+with one-sided difference quotients.</p></li>
+<li><p>Investigate differentiability of <span class="math inline">\(f(x)=x^{2/3}\)</span> at zero. Distinguish a cusp
+from a removable discontinuity.</p></li>
+<li><p>Explain why a function cannot be differentiable at a point where
+it has a jump discontinuity.</p></li>
+<li><p>Sketch a continuous function with a corner and another with a
+vertical tangent. State how their difference quotients behave.</p></li>
+</ol>
+<h3 class="unnumbered" id="b.-rules-and-compositions">B. Rules and
+compositions</h3>
+<ol type="1">
+<li><p>Differentiate <span class="math inline">\(f(x)=7x^6-4x^3+8\)</span> and compute <span class="math inline">\(f''(x)\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=(x^2+3)(2x^3-1)\)</span> using the product
+rule.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=(3x+1)/(x^2+2)\)</span> and state its
+domain.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=(4x^2+1)^5\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=\cos(3x^2)\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=e^{-0.4x^2}\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=\ln(2+x^2)\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=x^2\ln x\)</span>
+for <span class="math inline">\(x&gt;0\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=x^x\)</span> and
+find the tangent slope at <span class="math inline">\(x=1\)</span>.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=\arcsin(x/2)\)</span>, and specify where the
+derivative exists.</p></li>
+<li><p>Differentiate <span class="math inline">\(f(x)=\arctan(5x)\)</span>.</p></li>
+<li><p>If <span class="math inline">\(g(x)=x^3+2x+2\)</span>, calculate
+<span class="math inline">\((g^{-1})'(5)\)</span> without explicitly
+solving for the inverse.</p></li>
+</ol>
+<h3 class="unnumbered" id="c.-motion-geometry-and-approximation">C.
+Motion, geometry, and approximation</h3>
+<ol type="1">
+<li><p>For <span class="math inline">\(s(t)=t^3-6t^2+9t\)</span>, find
+velocity and acceleration. Determine when the particle is stationary on
+<span class="math inline">\(0\le t\le4\)</span>.</p></li>
+<li><p>For <span class="math inline">\(s(t)=8t-t^2\)</span>, calculate
+displacement and total distance traveled over <span class="math inline">\([0,8]\)</span>.</p></li>
+<li><p>A circle satisfies <span class="math inline">\(x^2+y^2=36\)</span>. Find <span class="math inline">\(dy/dx\)</span> and the tangent slope at <span class="math inline">\((\sqrt{11},5)\)</span>.</p></li>
+<li><p>For <span class="math inline">\(x^2+xy+y^2=3\)</span>, find <span class="math inline">\(dy/dx\)</span> at <span class="math inline">\((1,1)\)</span>.</p></li>
+<li><p>A spherical balloon’s radius grows at <span class="math inline">\(0.1\)</span> cm/s. Find <span class="math inline">\(dV/dt\)</span> when <span class="math inline">\(r=4\)</span> cm.</p></li>
+<li><p>A 13-ft ladder has its foot 5 ft from a wall and moving away at 2
+ft/s. Find the vertical speed of the top.</p></li>
+<li><p>Linearize <span class="math inline">\(f(x)=\sqrt{x}\)</span> at
+<span class="math inline">\(a=25\)</span> and estimate <span class="math inline">\(\sqrt{25.6}\)</span>.</p></li>
+<li><p>Use differentials to estimate the change in the volume of a
+sphere when its radius increases from 8 to 8.02 cm.</p></li>
+<li><p>A cooling model is <span class="math inline">\(T(t)=20+70e^{-0.12t}\)</span>. Find <span class="math inline">\(T'(10)\)</span> and interpret its
+units.</p></li>
+<li><p>A population model is <span class="math inline">\(P(t)=1500e^{0.03t}\)</span>. Find its
+instantaneous growth rate at <span class="math inline">\(t=10\)</span>
+and explain the model’s assumptions.</p></li>
+</ol>
+<h3 class="unnumbered" id="d.-computational-investigations-and-reasoning">D. Computational
+investigations and reasoning</h3>
+<ol type="1">
+<li><p>In R and Python, compute forward-difference approximations to
+<span class="math inline">\((\sin x)'\)</span> at <span class="math inline">\(x=1\)</span> for <span class="math inline">\(h=10^{-1},\ldots,10^{-8}\)</span>. Discuss the
+error pattern.</p></li>
+<li><p>Repeat Exercise 31 with the central-difference formula and
+compare errors on a log–log plot.</p></li>
+<li><p>Use R’s <code>D()</code> and Python’s SymPy to differentiate
+<span class="math inline">\(f(x)=x^3e^{-x}\)</span>; verify the result
+by hand.</p></li>
+<li><p>Plot <span class="math inline">\(f(x)=|x|\)</span> and
+finite-difference slopes near zero. Explain why software cannot
+establish differentiability at the corner.</p></li>
+<li><p>Plot <span class="math inline">\(s(t)=12t-2t^2\)</span> and <span class="math inline">\(v(t)=12-4t\)</span>. Explain the relationship
+between the graph’s rising/falling behavior and velocity signs.</p></li>
+<li><p>Investigate the error <span class="math inline">\(\sqrt{x}-[4+(x-16)/8]\)</span> over <span class="math inline">\(12\le x\le20\)</span>. Identify where the
+approximation is most accurate.</p></li>
+<li><p>Use R and Python to compare a cooling model’s exact 1-minute
+temperature change at <span class="math inline">\(t=5\)</span> with the
+derivative-based approximation.</p></li>
+<li><p>Construct a real-world quantity <span class="math inline">\(Q(t)\)</span> with known units, calculate <span class="math inline">\(Q'(t)\)</span>, and explain the practical
+meaning of a negative derivative.</p></li>
+</ol>
+<h2 id="chapter-project-cooling-change-and-short-term-prediction">Chapter
+project: cooling, change, and short-term prediction</h2>
+<p><strong>Project question.</strong> How well can an instantaneous
+cooling rate predict a measured temperature a short time later, and when
+does the approximation become unreliable?</p>
+<p>A hypothetical laboratory sample is modeled by <span class="math display">\[T(t)=21+64e^{-0.16t},\qquad 0\le t\le30,\]</span>
+where <span class="math inline">\(T\)</span> is measured in degrees
+Celsius and <span class="math inline">\(t\)</span> in minutes. The
+ambient temperature is assumed constant at <span class="math inline">\(21^\circ\)</span>C. This is a synthetic teaching
+model, not observed laboratory data.</p>
+<h3 class="unnumbered" id="part-i.-mathematical-development-30-points">Part I. Mathematical
+development (30 points)</h3>
+<ol type="1">
+<li><p>Explain why the model decreases and approaches <span class="math inline">\(21^\circ\)</span>C but never reaches it at a
+finite time.</p></li>
+<li><p>Differentiate <span class="math inline">\(T(t)\)</span> and
+derive <span class="math inline">\(T''(t)\)</span>. Interpret
+the signs and units.</p></li>
+<li><p>Find <span class="math inline">\(T(5)\)</span> and <span class="math inline">\(T'(5)\)</span>, then write the tangent-line
+approximation <span class="math inline">\(L_5(t)\)</span>.</p></li>
+<li><p>Determine algebraically when the cooling rate first has magnitude
+less than <span class="math inline">\(1^\circ\)</span>C/min.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-ii.-paired-rpython-analysis-30-points">Part II. Paired R/Python
+analysis (30 points)</h3>
+<ol type="1">
+<li><p>Implement the temperature, first derivative, and tangent
+approximation in both languages.</p></li>
+<li><p>Graph <span class="math inline">\(T(t)\)</span> and <span class="math inline">\(L_5(t)\)</span> for <span class="math inline">\(3\le t\le10\)</span>, clearly labeling the point
+of tangency.</p></li>
+<li><p>Build a table of exact and approximated temperatures at <span class="math inline">\(t=5.25,5.5,6,7,9\)</span>; calculate absolute and
+percentage errors.</p></li>
+<li><p>Use a numerical central difference to estimate <span class="math inline">\(T'(5)\)</span> for several step sizes and
+compare it with the analytical value.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iii.-model-interpretation-and-limitations-25-points">Part III.
+Model interpretation and limitations (25 points)</h3>
+<ol type="1">
+<li><p>Identify a time interval on which the tangent approximation is
+accurate to within <span class="math inline">\(0.5^\circ\)</span>C.
+Explain the numerical procedure.</p></li>
+<li><p>Discuss how uncertainty in the decay constant <span class="math inline">\(0.16\)</span> would affect your rate
+estimates.</p></li>
+<li><p>Explain why a constant ambient temperature and a single
+exponential rate may be unrealistic in some experiments.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-iv.-communication-and-reproducibility-15-points">Part IV.
+Communication and reproducibility (15 points)</h3>
+<p>Submit a 3–5 page report with derivations, at least two original
+labeled figures, a concise results table, both complete programs, and a
+conclusion that distinguishes mathematical results from modeling
+assumptions. Both programs should reproduce the same numerical findings
+to an appropriate tolerance.</p>
+<div class="center">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Assessment category</th>
+<th style="text-align: right;">Points</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Mathematical correctness and
+explanation</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Paired R/Python implementation and
+figures</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Interpretation, uncertainty, and
+limitations</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Presentation and reproducibility</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total</td>
+<td style="text-align: right;">100</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 class="unnumbered" id="looking-ahead">Looking ahead</h2>
+<p>Differentiation supplies local information: slope, instantaneous
+change, and linear approximation. In Chapter 4, we use these tools to
+analyze the global shape of graphs, optimize quantities subject to
+constraints, and solve practical decision problems.</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_03_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter02.html">← Limits and Continuity</a><a href="chapter04.html">Applications of Derivatives →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Secant and tangent slopes</a></li><li><a href="#tangents-and-the-derivative-at-a-point">Tangents and the
+derivative at a point</a></li><li><a href="#the-derivative-as-a-function-differentiability">The derivative
+as a function; differentiability</a></li><li><a href="#differentiation-rules">Differentiation rules</a></li><li><a href="#motion-and-other-rates-of-change">Motion and other rates of
+change</a></li><li><a href="#trigonometric-derivatives">Trigonometric derivatives</a></li><li><a href="#the-chain-rule">The chain rule</a></li><li><a href="#implicit-differentiation">Implicit differentiation</a></li><li><a href="#derivatives-of-inverse-exponential-and-logarithmic-functions">Derivatives
+of inverse, exponential, and logarithmic functions</a></li><li><a href="#inverse-trigonometric-functions">Inverse trigonometric
+functions</a></li><li><a href="#related-rates-changing-quantities-linked-by-an-equation">Related
+rates: changing quantities linked by an equation</a></li><li><a href="#linearization-and-differentials">Linearization and
+differentials</a></li><li><a href="#computational-laboratories-a-mathematical-first-approach">Computational
+laboratories: a mathematical-first approach</a></li><li><a href="#r-laboratories">R laboratories</a></li><li><a href="#python-laboratories">Python laboratories</a></li><li><a href="#applied-case-studies">Applied case studies</a></li><li><a href="#chapter-summary-and-common-errors">Chapter summary and common
+errors</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#chapter-project-cooling-change-and-short-term-prediction">Chapter
+project: cooling, change, and short-term prediction</a></li><li><a href="#looking-ahead">Looking ahead</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Applications of Derivatives | Applied Calculus Using R and Python</title><link href="site.css" rel="stylesheet"/><script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script></head><body><a class="skip" href="#main">Skip to content</a><nav aria-label="Book navigation" class="site-nav"><a class="brand" href="index.html">Applied Calculus Using R and Python</a><p class="subtitle">Volume II · Abraham Ayebo</p><label for="book-search">Search book</label><input id="book-search" placeholder="Search chapters" type="search"/><div aria-live="polite" class="search-results" id="search-results"></div><div class="nav-label">Contents</div><a href="index.html">Welcome</a><a href="chapter01.html">1. Functions, Graphs, and Mathematical Models</a><a href="chapter02.html">2. Limits and Continuity</a><a href="chapter03.html">3. Differentiation</a><a aria-current="page" class="active" href="chapter04.html">4. Applications of Derivatives</a><a href="chapter05.html">5. Integration</a><a href="chapter06.html">6. Applications of Definite Integrals</a><a href="chapter07.html">7. Integrals and Transcendental Functions</a><a href="chapter08.html">8. Techniques of Integration</a><a href="chapter09.html">9. Infinite Sequences and Series</a><a href="chapter10.html">10. Parametric Equations and Polar Coordinates</a><a href="appendix-a.html">Appendix A. Introduction to R and RStudio</a><a href="appendix-b.html">Appendix B. Introduction to Python and Jupyter</a><a href="resources.html">Computational resources</a><a href="about.html">About this book</a><div class="nav-label">Series</div><a href="https://aayebo.github.io/applied-precalculus/">Volume I · Applied Precalculus</a></nav><header class="topbar"><button aria-expanded="false" class="menu">Contents</button><span>Applied Mathematics · Volume II</span><span class="spacer"></span><a href="resources.html">Code &amp; resources</a></header><div class="page-grid"><main id="main"><h1 id="applications-of-derivatives">Applications of Derivatives</h1>
+<p><strong>Chapter overview.</strong> The derivative is more than a
+procedure for finding slopes. Its sign predicts increase and decrease;
+its second derivative reveals bending; its zeros identify candidates for
+extrema; and its local linearization yields algorithms for solving
+equations. This chapter builds a connected story from mathematical
+reasoning to modeling and computation. Every software experiment is
+preceded by a mathematical prediction, and every numerical result is
+interpreted rather than merely reported. <strong>Learning
+goals.</strong> Students will distinguish local and absolute extrema;
+prove and apply the extreme value and mean value theorems; analyze
+monotonicity and concavity; sketch curves from derivative information;
+evaluate appropriate indeterminate limits; formulate constrained
+optimization models; implement and diagnose Newton’s method; and connect
+antiderivatives with families of solutions to differential equations.
+<strong>Prerequisites.</strong> Limits, continuity, derivatives,
+chain/product/quotient rules, and basic logarithmic and exponential
+functions from Chapters 1–3.</p>
+<h3 class="unnumbered" id="visual-concept-investigation">Visual concept
+investigation</h3>
+<h3 class="unnumbered" id="critical-points-are-candidates-not-conclusions">Critical points are
+candidates, not conclusions</h3>
+<p>The condition <span class="math inline">\(f\prime(c)=0\)</span>
+identifies a horizontal tangent, not necessarily an extremum. A function
+may have a stationary inflection point. To justify an optimum, combine
+domain information with the sign of the derivative, endpoint checks, or
+a suitable theorem.</p>
+<figure>
+<img alt="Original conceptual illustration for Chapter 4." src="figures/chapter_04_concept_1.png"/>
+<figcaption aria-hidden="true">Original conceptual illustration for
+Chapter 4.</figcaption>
+</figure>
+<p><strong>Guided investigation.</strong> Compare <span class="math inline">\(f(x)=x^3\)</span> and <span class="math inline">\(g(x)=x^2\)</span> at <span class="math inline">\(x=0\)</span>. Both have zero derivative there. Why
+does only one have a local minimum?</p>
+<h2 id="interactive-investigation">Interactive investigation: Box optimization</h2><div class="calc-widget" data-calc="4"><p>Find the cut size that maximizes the volume of a box made from a 30 by 20 cm sheet.</p><noscript>Enable JavaScript to use this investigation.</noscript></div><h2 id="extreme-values-of-functions">Extreme values of functions</h2>
+<p>A temperature curve has a highest daily reading; a production process
+may have a least-cost operating point. Both are examples of <em>extreme
+values</em>. It matters whether the comparison is made against all
+permissible inputs or only nearby inputs.</p>
+<p><strong>Definition — Absolute and local extrema.</strong> A function
+<span class="math inline">\(f\)</span> has an <em>absolute maximum</em>
+at <span class="math inline">\(c\)</span> in its domain <span class="math inline">\(D\)</span> if <span class="math inline">\(f(c)\ge
+f(x)\)</span> for every <span class="math inline">\(x\in D\)</span>. It
+has an <em>absolute minimum</em> if <span class="math inline">\(f(c)\le
+f(x)\)</span> for every <span class="math inline">\(x\in D\)</span>. A
+<em>local maximum</em> at <span class="math inline">\(c\)</span> means
+<span class="math inline">\(f(c)\ge f(x)\)</span> for every domain point
+<span class="math inline">\(x\)</span> sufficiently close to <span class="math inline">\(c\)</span>; a local minimum reverses the
+inequality.</p>
+<p><strong>Theorem — Extreme value theorem.</strong> If <span class="math inline">\(f\)</span> is continuous on a closed bounded
+interval <span class="math inline">\([a,b]\)</span>, then <span class="math inline">\(f\)</span> attains both an absolute maximum and an
+absolute minimum on that interval.</p>
+<p>The hypotheses are sufficient, not necessary. For example, <span class="math inline">\(f(x)=x\)</span> on <span class="math inline">\((0,1)\)</span> has neither endpoint value
+available, so it does not attain its supremum or infimum. By contrast,
+<span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\(\mathbb R\)</span> attains a minimum despite the
+unbounded domain.</p>
+<p><strong>Definition — Critical number.</strong> A number <span class="math inline">\(c\)</span> in the domain of <span class="math inline">\(f\)</span> is a critical number if <span class="math inline">\(f'(c)=0\)</span> or <span class="math inline">\(f'(c)\)</span> does not exist.</p>
+<p><strong>Theorem — Fermat’s theorem.</strong> If <span class="math inline">\(f\)</span> has a local extremum at an interior
+point <span class="math inline">\(c\)</span> and <span class="math inline">\(f'(c)\)</span> exists, then <span class="math inline">\(f'(c)=0\)</span>.</p>
+<p><strong>Proof.</strong> At a local maximum, for small <span class="math inline">\(h&gt;0\)</span> the quotient <span class="math inline">\([f(c+h)-f(c)]/h\le0\)</span>; for small <span class="math inline">\(h&lt;0\)</span> it is <span class="math inline">\(\ge0\)</span>. If the two-sided limit exists, it
+must be both nonpositive and nonnegative, hence zero. A local minimum
+follows by reversing signs.</p>
+<p>The converse is false: <span class="math inline">\(f(x)=x^3\)</span>
+has <span class="math inline">\(f'(0)=0\)</span> but no extremum at
+zero. Also, a local extremum may occur at a nondifferentiable point, as
+for <span class="math inline">\(|x|\)</span> at zero.</p>
+<p><strong>Example — Closed-interval method.</strong> Determine the
+absolute extrema of <span class="math inline">\(f(x)=x^3-3x+1\)</span>
+on <span class="math inline">\([-2,2]\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=3x^2-3=3(x-1)(x+1)\)</span>. The
+interior critical numbers are <span class="math inline">\(-1\)</span>
+and <span class="math inline">\(1\)</span>. Evaluate at the candidates
+and endpoints: <span class="math display">\[\begin{array}{c|rrrr}x&amp;-2&amp;-1&amp;1&amp;2\\\hline
+f(x)&amp;-1&amp;3&amp;-1&amp;3\end{array}\]</span> The absolute maximum
+value is <span class="math inline">\(3\)</span>, attained at <span class="math inline">\(x=-1,2\)</span>; the absolute minimum is <span class="math inline">\(-1\)</span>, attained at <span class="math inline">\(x=-2,1\)</span>. Listing <em>all</em> locations is
+important.</p>
+<figure>
+<img alt="Endpoint and interior candidates for absolute extrema. The same extreme value can occur at multiple points." src="figures/chapter04-diagram-01.svg"/>
+<figcaption>
+Endpoint and interior candidates for absolute extrema. The same extreme
+value can occur at multiple points.
+</figcaption>
+</figure>
+<p><strong>Remark.</strong> A practical checklist: verify continuity on
+<span class="math inline">\([a,b]\)</span>; compute <span class="math inline">\(f'\)</span>; identify all interior critical
+numbers, including points where <span class="math inline">\(f'\)</span> is undefined; evaluate the
+function at every candidate and both endpoints; compare function
+<em>values</em>, not derivative values.</p>
+<p><strong>Example — When the theorem does not apply.</strong> Consider
+<span class="math inline">\(g(x)=1/x\)</span> on <span class="math inline">\((0,1]\)</span>. Does it have absolute extrema?</p>
+<p><strong>Solution.</strong> <span class="math inline">\(g(1)=1\)</span> is an absolute minimum. As <span class="math inline">\(x\to0^+\)</span>, <span class="math inline">\(g(x)\to\infty\)</span>, so no absolute maximum
+exists. The missing endpoint prevents a blanket use of the extreme value
+theorem.</p>
+<h2 id="the-mean-value-theorem">The mean value theorem</h2>
+<p>The mean value theorem connects a change across an interval to an
+instantaneous rate somewhere inside it. If a cyclist travels 24 km in 2
+hours, their average speed is 12 km/h; under differentiability
+assumptions, their instantaneous speed equals 12 km/h at least once.</p>
+<p><strong>Theorem — Rolle’s theorem.</strong> If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span>, differentiable on <span class="math inline">\((a,b)\)</span>, and <span class="math inline">\(f(a)=f(b)\)</span>, then there is some <span class="math inline">\(c\in(a,b)\)</span> for which <span class="math inline">\(f'(c)=0\)</span>.</p>
+<p><strong>Proof.</strong> The extreme value theorem guarantees a
+maximum and minimum. If <span class="math inline">\(f\)</span> is
+constant, every interior derivative is zero. Otherwise, at least one
+extreme value occurs at an interior point because the endpoint values
+agree. Fermat’s theorem then gives <span class="math inline">\(f'(c)=0\)</span>.</p>
+<p><strong>Theorem — Mean value theorem.</strong> If <span class="math inline">\(f\)</span> is continuous on <span class="math inline">\([a,b]\)</span> and differentiable on <span class="math inline">\((a,b)\)</span>, then for at least one <span class="math inline">\(c\in(a,b)\)</span>, <span class="math display">\[f'(c)=\frac{f(b)-f(a)}{b-a}.\]</span></p>
+<p><strong>Proof.</strong> Define <span class="math inline">\(\ell(x)=f(a)+[f(b)-f(a)](x-a)/(b-a)\)</span>, the
+secant line, and let <span class="math inline">\(h(x)=f(x)-\ell(x)\)</span>. Then <span class="math inline">\(h(a)=h(b)=0\)</span>. Rolle’s theorem yields <span class="math inline">\(h'(c)=0\)</span>, which rearranges to the
+stated formula.</p>
+<p><strong>Example — Locating the guaranteed slope.</strong> Let <span class="math inline">\(f(x)=x^2\)</span> on <span class="math inline">\([1,3]\)</span>. Find the point guaranteed by the
+theorem.</p>
+<p><strong>Solution.</strong> The secant slope is <span class="math inline">\((9-1)/(3-1)=4\)</span>. Since <span class="math inline">\(f'(x)=2x\)</span>, solve <span class="math inline">\(2c=4\)</span> to obtain <span class="math inline">\(c=2\)</span>, inside <span class="math inline">\((1,3)\)</span>.</p>
+<figure>
+<img alt="Mean value theorem: the secant line (red) and a tangent line (dashed) have the same slope, although they are distinct lines." src="figures/chapter04-diagram-02.svg"/>
+<figcaption>
+Mean value theorem: the secant line (red) and a tangent line (dashed)
+have the same slope, although they are distinct lines.
+</figcaption>
+</figure>
+<p><strong>Theorem — Zero derivative implies constant.</strong> If <span class="math inline">\(f'(x)=0\)</span> for all <span class="math inline">\(x\)</span> in an interval, then <span class="math inline">\(f\)</span> is constant on that interval.</p>
+<p><strong>Proof.</strong> For any <span class="math inline">\(a&lt;b\)</span> in the interval, the mean value
+theorem gives <span class="math inline">\(f(b)-f(a)=f'(c)(b-a)=0\)</span>.</p>
+<p><strong>Example — Bounding an unknown change.</strong> Suppose <span class="math inline">\(1\le f'(t)\le3\)</span> for <span class="math inline">\(0\le t\le5\)</span>. Bound <span class="math inline">\(f(5)-f(0)\)</span>.</p>
+<p><strong>Solution.</strong> By the mean value theorem, <span class="math inline">\(f(5)-f(0)=5f'(c)\)</span> for some <span class="math inline">\(c\in(0,5)\)</span>, so <span class="math inline">\(5\le f(5)-f(0)\le15\)</span>.</p>
+<p><strong>Remark.</strong> The theorem asserts <em>existence</em>, not
+uniqueness. Some functions have multiple points where the tangent slope
+equals the secant slope. Discontinuity or a corner can invalidate the
+hypotheses.</p>
+<h2 id="monotonicity-and-the-first-derivative-test">Monotonicity and the
+first derivative test</h2>
+<p><strong>Theorem — Derivative sign and monotonicity.</strong> If <span class="math inline">\(f'(x)&gt;0\)</span> throughout an interval,
+<span class="math inline">\(f\)</span> is strictly increasing there. If
+<span class="math inline">\(f'(x)&lt;0\)</span>, <span class="math inline">\(f\)</span> is strictly decreasing there.</p>
+<p><strong>Proof.</strong> For <span class="math inline">\(a&lt;b\)</span> in the interval, the mean value
+theorem gives <span class="math inline">\(f(b)-f(a)=f'(c)(b-a)\)</span>. Its sign agrees
+with the sign of <span class="math inline">\(f'(c)\)</span>.</p>
+<p><strong>Theorem — First derivative test.</strong> Suppose <span class="math inline">\(c\)</span> is a critical number and <span class="math inline">\(f\)</span> is continuous at <span class="math inline">\(c\)</span>. If <span class="math inline">\(f'\)</span> changes from positive to negative
+at <span class="math inline">\(c\)</span>, then <span class="math inline">\(f\)</span> has a local maximum there. If <span class="math inline">\(f'\)</span> changes from negative to positive,
+then <span class="math inline">\(f\)</span> has a local minimum. If the
+sign does not change, the test does not establish an extremum.</p>
+<p><strong>Example — Sign chart.</strong> Analyze <span class="math inline">\(f(x)=x^3-6x^2+9x+2\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=3x^2-12x+9=3(x-1)(x-3)\)</span>. Its
+signs are positive for <span class="math inline">\(x&lt;1\)</span>,
+negative for <span class="math inline">\(1&lt;x&lt;3\)</span>, and
+positive for <span class="math inline">\(x&gt;3\)</span>. Therefore
+<span class="math inline">\(f\)</span> increases on <span class="math inline">\((-\infty,1)\)</span>, decreases on <span class="math inline">\((1,3)\)</span>, and increases on <span class="math inline">\((3,\infty)\)</span>. The local maximum is <span class="math inline">\(f(1)=6\)</span> and the local minimum is <span class="math inline">\(f(3)=2\)</span>.</p>
+<figure>
+<img alt="The derivative changes sign at x = 1 and x = 3, producing a local maximum and minimum." src="figures/chapter04-diagram-03.svg"/>
+<figcaption>
+The derivative changes sign at <span class="math inline"><em>x</em> = 1</span> and <span class="math inline"><em>x</em> = 3</span>, producing a local maximum and
+minimum.
+</figcaption>
+</figure>
+<p><strong>Example — A stationary point that is not an
+extremum.</strong> Investigate <span class="math inline">\(f(x)=x^3\)</span> at zero.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=3x^2\ge0\)</span> on both sides of zero,
+so the function is increasing through the stationary point. There is no
+sign change and no local extreme value.</p>
+<p><strong>Interpretation checkpoint.</strong> The sign of <span class="math inline">\(f'\)</span> describes whether the output rises
+or falls as input increases. The magnitude <span class="math inline">\(|f'|\)</span> measures how rapidly; these are
+distinct questions. A function can be increasing while its rate of
+increase is slowing.</p>
+<h2 id="concavity-inflection-points-and-curve-sketching">Concavity,
+inflection points, and curve sketching</h2>
+<p>A graph can be rising while bending downward, or falling while
+bending upward. The second derivative captures this change in slope.</p>
+<p><strong>Definition — Concavity.</strong> A differentiable function is
+concave upward on an interval when its derivative is increasing there,
+and concave downward when its derivative is decreasing. Where <span class="math inline">\(f''\)</span> exists, <span class="math inline">\(f''&gt;0\)</span> implies concave upward
+and <span class="math inline">\(f''&lt;0\)</span> implies
+concave downward.</p>
+<p><strong>Definition — Inflection point.</strong> An inflection point
+is a point on a continuous curve where its concavity changes. A zero of
+<span class="math inline">\(f''\)</span> is only a
+<em>candidate</em>; it is not sufficient by itself.</p>
+<p><strong>Theorem — Second derivative test.</strong> If <span class="math inline">\(f'(c)=0\)</span> and <span class="math inline">\(f''(c)&gt;0\)</span>, then <span class="math inline">\(f\)</span> has a strict local minimum at <span class="math inline">\(c\)</span>. If <span class="math inline">\(f''(c)&lt;0\)</span>, then <span class="math inline">\(f\)</span> has a strict local maximum. If <span class="math inline">\(f''(c)=0\)</span>, the test is
+inconclusive.</p>
+<p><strong>Example — Full curve analysis.</strong> Study <span class="math inline">\(f(x)=x^3-3x\)</span>.</p>
+<p><strong>Solution.</strong> <span class="math inline">\(f'(x)=3(x^2-1)\)</span> vanishes at <span class="math inline">\(x=\pm1\)</span>. The derivative is positive
+outside <span class="math inline">\([-1,1]\)</span> and negative
+between, so the graph has a local maximum at <span class="math inline">\((-1,2)\)</span> and a local minimum at <span class="math inline">\((1,-2)\)</span>. Next, <span class="math inline">\(f''(x)=6x\)</span> changes from negative
+to positive at zero, giving an inflection point <span class="math inline">\((0,0)\)</span>. The function is concave downward
+for <span class="math inline">\(x&lt;0\)</span> and upward for <span class="math inline">\(x&gt;0\)</span>.</p>
+<figure>
+<img alt="Critical points (circles) and an inflection point (square) play different roles in curve analysis." src="figures/chapter04-diagram-04.svg"/>
+<figcaption>
+Critical points (circles) and an inflection point (square) play
+different roles in curve analysis.
+</figcaption>
+</figure>
+<p><strong>Example — Why <span class="math inline">\(f''(c)=0\)</span> is
+inconclusive.</strong> Compare <span class="math inline">\(f(x)=x^4\)</span> and <span class="math inline">\(g(x)=x^3\)</span> at zero.</p>
+<p><strong>Solution.</strong> Both have zero first and second
+derivatives at zero. Yet <span class="math inline">\(x^4\)</span> has a
+strict local minimum and no concavity change, whereas <span class="math inline">\(x^3\)</span> has an inflection point and no
+extremum. Sign analysis resolves both cases.</p>
+<h3 id="a-reliable-curve-sketching-workflow">A reliable curve-sketching
+workflow</h3>
+<p>Start with the domain, intercepts, and symmetry. Identify
+discontinuities and asymptotes; locate critical numbers and intervals of
+monotonicity using <span class="math inline">\(f'\)</span>; locate
+possible inflection points and intervals of concavity using <span class="math inline">\(f''\)</span>; compute selected values and
+check end behavior. A graphing program can help verify the result, but
+it should not replace the sign analysis.</p>
+<h2 id="indeterminate-forms-and-lhopitals-rule">Indeterminate forms and
+l’Hopital’s rule</h2>
+<p>Expressions of the form <span class="math inline">\(0/0\)</span> or
+<span class="math inline">\(\infty/\infty\)</span> do not determine a
+limit by themselves. Different functions producing the same formal
+expression can have entirely different limits.</p>
+<p><strong>Theorem — L’Hopital’s rule, basic form.</strong> Suppose
+<span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> are differentiable on a punctured
+interval about <span class="math inline">\(a\)</span>, <span class="math inline">\(g'(x)\ne0\)</span> there, and <span class="math inline">\(f(x),g(x)\to0\)</span> as <span class="math inline">\(x\to a\)</span> (or both diverge in magnitude). If
+<span class="math inline">\(\lim_{x\to a}f'(x)/g'(x)=L\)</span>
+exists as a finite or infinite limit, then <span class="math inline">\(\lim_{x\to a}f(x)/g(x)=L\)</span>. Corresponding
+one-sided and infinite-endpoint versions hold under appropriate
+hypotheses.</p>
+<p><strong>Remark.</strong> Before differentiating, confirm an
+indeterminate quotient of type <span class="math inline">\(0/0\)</span>
+or <span class="math inline">\(\infty/\infty\)</span>. The rule
+differentiates the numerator and denominator <em>separately</em>; it
+does not apply the quotient rule to the whole fraction. If the
+derivative quotient still has an eligible indeterminate form, the rule
+may be repeated.</p>
+<p><strong>Example — A removable singularity.</strong> Evaluate <span class="math inline">\(\lim_{x\to0}(e^x-1)/x\)</span>.</p>
+<p><strong>Solution.</strong> Direct substitution yields <span class="math inline">\(0/0\)</span>. Differentiating numerator and
+denominator gives <span class="math inline">\(\lim_{x\to0}e^x/1=1\)</span>. Independently, this
+is the derivative of <span class="math inline">\(e^x\)</span> at
+zero.</p>
+<p><strong>Example — Repeated application.</strong> Find <span class="math inline">\(\lim_{x\to0}(1-\cos x)/x^2\)</span>.</p>
+<p><strong>Solution.</strong> The first application gives <span class="math inline">\(\lim_{x\to0}\sin x/(2x)\)</span>, still <span class="math inline">\(0/0\)</span>. A second gives <span class="math inline">\(\lim_{x\to0}\cos x/2=1/2\)</span>.</p>
+<p><strong>Example — Transforming a product.</strong> Find <span class="math inline">\(\lim_{x\to0^+}x\ln x\)</span>.</p>
+<p><strong>Solution.</strong> The product has the form <span class="math inline">\(0\cdot(-\infty)\)</span>, not an eligible
+quotient. Rewrite as <span class="math inline">\((\ln x)/(1/x)\)</span>,
+a <span class="math inline">\(-\infty/\infty\)</span> quotient.
+L’Hopital’s rule gives <span class="math inline">\(\lim_{x\to0^+}(1/x)/(-1/x^2)=\lim_{x\to0^+}(-x)=0\)</span>.</p>
+<p><strong>Example — When algebra is better.</strong> Evaluate <span class="math inline">\(\lim_{x\to2}(x^2-4)/(x-2)\)</span>.</p>
+<p><strong>Solution.</strong> Factoring produces <span class="math inline">\(x+2\)</span> for <span class="math inline">\(x\ne2\)</span>, hence the limit is <span class="math inline">\(4\)</span>. L’Hopital’s rule also works, but
+algebra reveals the removable discontinuity directly.</p>
+<p><strong>Common errors.</strong> Applying the rule to <span class="math inline">\(1/0\)</span>; ignoring a one-sided domain
+restriction; claiming that <span class="math inline">\(f'/g'\)</span> has a limit without
+checking; treating <span class="math inline">\(\infty-\infty\)</span> as
+a quotient without transforming it; and using numerical cancellation
+near zero as if it were an exact limit.</p>
+<h2 id="applied-optimization">Applied optimization</h2>
+<p>Optimization begins with a decision variable and an objective, not
+with differentiation. The derivative enters only after the model,
+feasible domain, and units are clear.</p>
+<h3 id="a-modeling-protocol">A modeling protocol</h3>
+<ol type="1">
+<li><p>State the decision and identify the quantity to maximize or
+minimize.</p></li>
+<li><p>Draw and label a diagram or define the relevant
+quantities.</p></li>
+<li><p>Express the objective in terms of one independent variable using
+constraints.</p></li>
+<li><p>Determine the physically feasible domain.</p></li>
+<li><p>Find all interior critical points and relevant
+endpoints.</p></li>
+<li><p>Compare objective values and interpret the result with units and
+model limitations.</p></li>
+</ol>
+<p><strong>Example — Maximum area with fixed perimeter.</strong> A
+rectangular garden has 80 meters of fencing. Find its dimensions for
+maximum area.</p>
+<p><strong>Solution.</strong> Let the sides be <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> meters. The constraint <span class="math inline">\(2x+2y=80\)</span> gives <span class="math inline">\(y=40-x\)</span> and <span class="math inline">\(0&lt;x&lt;40\)</span>. The area is <span class="math inline">\(A(x)=x(40-x)=40x-x^2\)</span>. Then <span class="math inline">\(A'(x)=40-2x=0\)</span> at <span class="math inline">\(x=20\)</span>. Since <span class="math inline">\(A''(x)=-2&lt;0\)</span>, the area is
+maximized when both dimensions are 20 m, giving <span class="math inline">\(400\ \mathrm{m}^2\)</span>. At the limiting
+degenerate endpoints, area approaches zero.</p>
+<figure>
+<img alt="The feasible area function has its maximum at the symmetric design x = 20 m." src="figures/chapter04-diagram-05.svg"/>
+<figcaption>
+The feasible area function has its maximum at the symmetric design <span class="math inline"><em>x</em> = 20</span> m.
+</figcaption>
+</figure>
+<p><strong>Example — An open-top box.</strong> A <span class="math inline">\(30\)</span> cm by <span class="math inline">\(20\)</span> cm sheet has squares of side <span class="math inline">\(x\)</span> cut from each corner, then is folded
+into a box. Maximize its volume.</p>
+<p><strong>Solution.</strong> The height is <span class="math inline">\(x\)</span> and the base is <span class="math inline">\((30-2x)\times(20-2x)\)</span>, so <span class="math display">\[V(x)=x(30-2x)(20-2x)=600x-100x^2+4x^3,\quad0&lt;x&lt;10.\]</span>
+The derivative is <span class="math inline">\(V'(x)=600-200x+12x^2=4(3x^2-50x+150)\)</span>.
+Solving gives <span class="math inline">\(x=(25\pm5\sqrt7)/3\)</span>.
+Only <span class="math inline">\(x=(25-5\sqrt7)/3\approx3.924\)</span>
+cm is feasible; the other root exceeds 10. The derivative changes from
+positive to negative at this feasible critical point, giving the
+maximum. The endpoints approach zero volume.</p>
+<p><strong>Example — Revenue and marginal reasoning.</strong> Suppose
+demand is modeled by <span class="math inline">\(p(q)=120-2q\)</span>
+dollars per unit, for <span class="math inline">\(0\le q\le60\)</span>.
+Determine the revenue-maximizing quantity.</p>
+<p><strong>Solution.</strong> Revenue is <span class="math inline">\(R(q)=qp(q)=120q-2q^2\)</span>, so <span class="math inline">\(R'(q)=120-4q=0\)</span> at <span class="math inline">\(q=30\)</span>. Since <span class="math inline">\(R''=-4&lt;0\)</span>, this maximizes
+revenue. The price is <span class="math inline">\(p(30)=60\)</span>
+dollars and revenue is <span class="math inline">\(1800\)</span>
+dollars. The model assumes demand follows the given line and ignores
+production costs; maximum revenue need not maximize profit.</p>
+<p><strong>Example — Least material for a cylindrical
+container.</strong> A closed cylinder must hold volume <span class="math inline">\(V_0&gt;0\)</span>. Find the radius and height that
+minimize its surface area.</p>
+<p><strong>Solution.</strong> With <span class="math inline">\(\pi
+r^2h=V_0\)</span>, eliminate <span class="math inline">\(h=V_0/(\pi
+r^2)\)</span> and obtain <span class="math inline">\(S(r)=2\pi
+r^2+2V_0/r\)</span> for <span class="math inline">\(r&gt;0\)</span>.
+Thus <span class="math inline">\(S'(r)=4\pi r-2V_0/r^2\)</span>.
+Setting this to zero gives <span class="math inline">\(r^3=V_0/(2\pi)\)</span> and <span class="math inline">\(h=2r\)</span>. Since <span class="math inline">\(S''(r)=4\pi+4V_0/r^3&gt;0\)</span>, this
+is a strict minimum; <span class="math inline">\(S\to\infty\)</span> as
+<span class="math inline">\(r\to0^+\)</span> or <span class="math inline">\(r\to\infty\)</span>, so it is global.</p>
+<h2 id="newtons-method">Newton’s method</h2>
+<p>To solve <span class="math inline">\(f(x)=0\)</span>, Newton’s method
+replaces the curve near a current guess <span class="math inline">\(x_n\)</span> by its tangent line. The tangent’s
+<span class="math inline">\(x\)</span>-intercept becomes the next
+guess.</p>
+<p><strong>Theorem — Newton iteration.</strong> When <span class="math inline">\(f\)</span> is differentiable and <span class="math inline">\(f'(x_n)\ne0\)</span>, the tangent-line update
+is <span class="math display">\[x_{n+1}=x_n-\frac{f(x_n)}{f'(x_n)}.\]</span></p>
+<p><strong>Proof.</strong> The tangent line at <span class="math inline">\((x_n,f(x_n))\)</span> is <span class="math inline">\(y=f(x_n)+f'(x_n)(x-x_n)\)</span>. Set <span class="math inline">\(y=0\)</span> and solve for <span class="math inline">\(x\)</span>.</p>
+<p><strong>Example — Square root of two.</strong> Use Newton’s method on
+<span class="math inline">\(f(x)=x^2-2\)</span> with <span class="math inline">\(x_0=1\)</span>.</p>
+<p><strong>Solution.</strong> The update simplifies to <span class="math inline">\(x_{n+1}=(x_n+2/x_n)/2\)</span>. Then <span class="math inline">\(x_1=1.5\)</span>, <span class="math inline">\(x_2=1.4166667\)</span>, <span class="math inline">\(x_3\approx1.4142157\)</span>, and <span class="math inline">\(x_4\approx1.4142135624\)</span>. The true positive
+root is <span class="math inline">\(\sqrt2\approx1.4142135624\)</span>.
+The rapidly shrinking error illustrates local quadratic convergence.</p>
+<figure>
+<img alt="Newton’s method uses tangent intercepts to move from an initial guess toward a root." src="figures/chapter04-diagram-06.svg"/>
+<figcaption>
+Newton’s method uses tangent intercepts to move from an initial guess
+toward a root.
+</figcaption>
+</figure>
+<p><strong>Example — A dangerous starting value.</strong> Apply Newton’s
+method to <span class="math inline">\(f(x)=x^3-2x+2\)</span> starting at
+<span class="math inline">\(x_0=0\)</span>.</p>
+<p><strong>Solution.</strong> Since <span class="math inline">\(f(0)=2\)</span> and <span class="math inline">\(f'(0)=-2\)</span>, the first update is <span class="math inline">\(x_1=1\)</span>. At <span class="math inline">\(x_1=1\)</span>, <span class="math inline">\(f(1)=1\)</span> and <span class="math inline">\(f'(1)=1\)</span>, so <span class="math inline">\(x_2=0\)</span>. The iteration cycles <span class="math inline">\(0,1,0,1,\ldots\)</span> and does not converge. A
+small residual, a well-chosen starting value, and iteration safeguards
+matter.</p>
+<h3 id="numerical-safeguards">Numerical safeguards</h3>
+<p>Never divide by a derivative that is zero or extremely small. Stop
+only after checking both step size and residual <span class="math inline">\(|f(x_n)|\)</span>; a small step alone can be
+misleading. Set a maximum iteration count and report failure rather than
+silently claiming convergence. For guaranteed bracketing when a sign
+change is available, bisection from Chapter 2 is often more robust,
+though usually slower.</p>
+<h2 id="antiderivatives-and-the-bridge-to-integration">Antiderivatives
+and the bridge to integration</h2>
+<p>Differentiation asks for the rate of change of a known function. An
+<em>antiderivative</em> reverses this question: which function could
+have produced a given rate?</p>
+<p><strong>Definition — Antiderivative.</strong> A function <span class="math inline">\(F\)</span> is an antiderivative of <span class="math inline">\(f\)</span> on an interval <span class="math inline">\(I\)</span> if <span class="math inline">\(F'(x)=f(x)\)</span> for every <span class="math inline">\(x\in I\)</span>.</p>
+<p><strong>Theorem — Antiderivatives differ by a constant.</strong> If
+<span class="math inline">\(F\)</span> and <span class="math inline">\(G\)</span> are antiderivatives of <span class="math inline">\(f\)</span> on the same interval, then <span class="math inline">\(F(x)-G(x)=C\)</span> for some constant <span class="math inline">\(C\)</span>.</p>
+<p><strong>Proof.</strong> The derivative of <span class="math inline">\(F-G\)</span> is zero throughout the interval. The
+zero-derivative corollary of the mean value theorem implies <span class="math inline">\(F-G\)</span> is constant.</p>
+<p><strong>Example — A family of antiderivatives.</strong> Find all
+antiderivatives of <span class="math inline">\(f(x)=6x^2-4x+3\)</span>.</p>
+<p><strong>Solution.</strong> Since the derivative of <span class="math inline">\(2x^3-2x^2+3x\)</span> is <span class="math inline">\(6x^2-4x+3\)</span>, the complete family is <span class="math inline">\(F(x)=2x^3-2x^2+3x+C\)</span>. Verify by
+differentiating.</p>
+<p><strong>Example — Recovering position from velocity.</strong> A
+particle has velocity <span class="math inline">\(v(t)=3t^2-4t+1\)</span> meters per second and
+position <span class="math inline">\(s(0)=5\)</span> meters. Determine
+<span class="math inline">\(s(t)\)</span>.</p>
+<p><strong>Solution.</strong> An antiderivative is <span class="math inline">\(s(t)=t^3-2t^2+t+C\)</span>. The initial condition
+gives <span class="math inline">\(C=5\)</span>, hence <span class="math inline">\(s(t)=t^3-2t^2+t+5\)</span>. Differentiate to check
+that <span class="math inline">\(s'(t)=v(t)\)</span>.</p>
+<p><strong>Remark.</strong> The constant <span class="math inline">\(C\)</span> represents information lost under
+differentiation. Initial conditions restore that information. The next
+chapters turn antiderivatives into a systematic theory of integration
+and accumulated change.</p>
+<h2 id="r-computational-laboratories">R computational laboratories</h2>
+<p>Each laboratory begins with a mathematical claim and uses R to test,
+visualize, or extend it. Code is provided as a single-language sequence
+rather than a side-by-side comparison. Base R is sufficient for these
+activities.</p>
+<h3 id="r-lab-1-extreme-values-and-derivative-sign">R Lab 1: Extreme
+values and derivative sign</h3>
+<p><strong>Prediction.</strong> The function <span class="math inline">\(x^3-3x+1\)</span> has absolute maximum <span class="math inline">\(3\)</span> and minimum <span class="math inline">\(-1\)</span> on <span class="math inline">\([-2,2]\)</span>.</p>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-01.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^3 - 3*x + 1
+fp &lt;- function(x) 3*x^2 - 3
+x &lt;- seq(-2, 2, length.out = 401)
+plot(x, f(x), type = "l", lwd = 2,
+     xlab = "x", ylab = "f(x)", main = "Extrema")
+points(c(-2,-1,1,2), f(c(-2,-1,1,2)), pch = 19)
+candidates &lt;- c(-2,-1,1,2)
+data.frame(x=candidates, value=f(candidates),
+           derivative=fp(candidates))</code></pre></div>
+<p><strong>Interpret.</strong> Compare the exact candidate values.
+Explain why a dense numerical grid alone cannot prove a global
+maximum.</p>
+<h3 id="r-lab-2-mean-value-theorem">R Lab 2: Mean value theorem</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-02.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^2
+slope &lt;- (f(3)-f(1))/(3-1)
+c_value &lt;- slope/2
+curve(f(x), from=0.5, to=3.5, lwd=2,
+      xlab="x", ylab="f(x)")
+abline(a=-3, b=slope, col="red", lwd=2)
+abline(a=-4, b=slope, col="blue", lty=2)
+cat("Secant slope:", slope, " MVT point:", c_value, "\n")</code></pre></div>
+<p><strong>Interpret.</strong> Explain why the two lines have equal
+slopes but different intercepts.</p>
+<h3 id="r-lab-3-concavity-and-inflection">R Lab 3: Concavity and
+inflection</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-03.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>f &lt;- function(x) x^3 - 3*x
+fp &lt;- function(x) 3*x^2 - 3
+fpp &lt;- function(x) 6*x
+x &lt;- seq(-2,2,length.out=500)
+par(mfrow=c(3,1), mar=c(3,4,2,1))
+plot(x,f(x),type="l",main="Function")
+plot(x,fp(x),type="l",main="First derivative"); abline(h=0,lty=2)
+plot(x,fpp(x),type="l",main="Second derivative"); abline(h=0,lty=2)
+par(mfrow=c(1,1))</code></pre></div>
+<p><strong>Interpret.</strong> Match sign intervals of <span class="math inline">\(f'\)</span> and <span class="math inline">\(f''\)</span> to the graph’s shape.</p>
+<h3 id="r-lab-4-numerical-cancellation-in-limits">R Lab 4: Numerical
+cancellation in limits</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-04.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>h &lt;- 10^(-seq(1,15,by=2))
+naive &lt;- (exp(h)-1)/h
+stable &lt;- expm1(h)/h
+print(data.frame(h=h, naive=naive, stable=stable))</code></pre></div>
+<p><strong>Interpret.</strong> Compare errors relative to the exact
+limit <span class="math inline">\(1\)</span> and explain why
+<code>expm1</code> helps for small <span class="math inline">\(h\)</span>.</p>
+<h3 id="r-lab-5-optimization-by-modeling">R Lab 5: Optimization by
+modeling</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-05.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>volume &lt;- function(x) x*(30-2*x)*(20-2*x)
+answer &lt;- optimize(volume, interval=c(0,10), maximum=TRUE)
+print(answer)
+curve(volume(x), from=0, to=10, lwd=2,
+      xlab="Cut size (cm)", ylab="Volume (cm^3)")
+abline(v=answer$maximum, col="red", lty=2)</code></pre></div>
+<p><strong>Interpret.</strong> Compare the numerical optimum to <span class="math inline">\((25-5\sqrt7)/3\)</span> and explain why the larger
+algebraic root is inadmissible.</p>
+<h3 id="r-lab-6-newton-iteration-with-diagnostics">R Lab 6: Newton
+iteration with diagnostics</h3>
+<div class="code-shell"><div class="code-bar">R<a download="" href="code/chapter04-06.R">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>newton &lt;- function(f, df, x0, tol=1e-10, maxit=30) {
+  x &lt;- x0
+  for (k in seq_len(maxit)) {
+    fx &lt;- f(x); dfx &lt;- df(x)
+    if (!is.finite(fx) || !is.finite(dfx) || abs(dfx)&lt;1e-12)
+      stop("Nonfinite value or derivative too small")
+    next_x &lt;- x - fx/dfx
+    cat("iter",k,"x =",format(next_x,digits=12),
+        "residual =",format(abs(f(next_x)),digits=4),"\n")
+    if (abs(next_x-x)&lt;tol &amp;&amp; abs(f(next_x))&lt;tol)
+      return(next_x)
+    x &lt;- next_x
+  }
+  warning("Maximum iterations reached without convergence")
+  x
+}
+newton(function(x) x*x-2, function(x) 2*x, 1)</code></pre></div>
+<p><strong>Interpret.</strong> Try the cycling example <span class="math inline">\(f(x)=x^3-2x+2\)</span> with <span class="math inline">\(x_0=0\)</span> and explain the failure.</p>
+<h2 id="python-computational-laboratories">Python computational
+laboratories</h2>
+<p>These Python implementations revisit the same mathematical questions
+after the complete R sequence. The code uses NumPy and Matplotlib for
+arrays and graphs; SymPy is introduced when symbolic verification is
+useful.</p>
+<h3 id="python-lab-1-extreme-values-and-derivative-sign">Python Lab 1:
+Extreme values and derivative sign</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-07.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+f = lambda x: x**3 - 3*x + 1
+fp = lambda x: 3*x**2 - 3
+x = np.linspace(-2,2,401)
+plt.plot(x,f(x),label="f(x)")
+candidates = np.array([-2,-1,1,2])
+plt.scatter(candidates,f(candidates),color="red")
+plt.xlabel("x"); plt.ylabel("f(x)"); plt.legend(); plt.show()
+for c in candidates:
+    print(f"x={c:.0f}, f(x)={f(c):.0f}, f'(x)={fp(c):.0f}")</code></pre></div>
+<h3 id="python-lab-2-mean-value-theorem">Python Lab 2: Mean value
+theorem</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-08.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(0.5,3.5,300)
+secant_slope = (3**2-1**2)/(3-1)
+c = secant_slope/2
+plt.plot(x,x*x,label="f(x)=x^2")
+plt.plot(x,4*x-3,label="secant")
+plt.plot(x,4*x-4,"--",label="parallel tangent")
+plt.legend(); plt.show()
+print("MVT point:",c)</code></pre></div>
+<h3 id="python-lab-3-concavity-and-inflection">Python Lab 3: Concavity
+and inflection</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-09.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x = np.linspace(-2,2,400)
+fig, ax = plt.subplots(3,1,figsize=(7,8))
+for a,y,label in zip(ax,[x**3-3*x,3*x*x-3,6*x],
+                     ["f","f prime","f double prime"]):
+    a.plot(x,y); a.axhline(0,color="gray",linestyle="--")
+    a.set_title(label)
+plt.tight_layout(); plt.show()</code></pre></div>
+<h3 id="python-lab-4-stable-numerical-limits">Python Lab 4: Stable
+numerical limits</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-10.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+h = 10.0**(-np.arange(1,16,2))
+naive = (np.exp(h)-1)/h
+stable = np.expm1(h)/h
+for hi,a,b in zip(h,naive,stable):
+    print(f"h={hi:.1e} naive={a:.12f} stable={b:.12f}")</code></pre></div>
+<h3 id="python-lab-5-box-optimization">Python Lab 5: Box
+optimization</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-11.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import numpy as np
+import matplotlib.pyplot as plt
+x_star = (25-5*np.sqrt(7))/3
+V = lambda x: x*(30-2*x)*(20-2*x)
+x = np.linspace(0,10,300)
+plt.plot(x,V(x)); plt.axvline(x_star,color="red",linestyle="--")
+plt.xlabel("Cut size (cm)"); plt.ylabel("Volume (cm^3)")
+plt.show()
+print("Optimal cut:",x_star,"Maximum volume:",V(x_star))</code></pre></div>
+<h3 id="python-lab-6-newton-iteration-with-diagnostics">Python Lab 6:
+Newton iteration with diagnostics</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-12.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>def newton(f,df,x0,tol=1e-10,maxit=30):
+    x = float(x0)
+    for k in range(1,maxit+1):
+        fx, dfx = f(x), df(x)
+        if abs(dfx)&lt;1e-12:
+            raise ArithmeticError("Derivative too small")
+        nxt = x-fx/dfx
+        print(f"iter {k}: x={nxt:.12f}, residual={abs(f(nxt)):.3e}")
+        if abs(nxt-x)&lt;tol and abs(f(nxt))&lt;tol:
+            return nxt
+        x = nxt
+    raise RuntimeError("Newton iteration did not converge")
+root = newton(lambda x:x*x-2,lambda x:2*x,1)
+print("Root:",root)</code></pre></div>
+<h3 id="python-lab-7-symbolic-differentiation-check">Python Lab 7:
+Symbolic differentiation check</h3>
+<div class="code-shell"><div class="code-bar">Python<a download="" href="code/chapter04-13.py">Download</a><button class="copy" type="button">Copy code</button></div><pre><code>import sympy as sp
+x = sp.symbols('x', positive=True)
+S = 2*sp.pi*x**2 + 2*1000/x
+print('Derivative:',sp.diff(S,x))
+print('Second derivative:',sp.diff(S,x,2))
+print('Stationary radius:',sp.solve(sp.diff(S,x),x))</code></pre></div>
+<p><strong>Cross-language reflection.</strong> Explain which parts of
+the mathematics are independent of the programming language. Compare R’s
+<code>optimize</code> routine to an analytic derivative test, and
+distinguish a symbolic result from a numerical approximation.</p>
+<h2 id="real-world-applications-and-modeling-discussions">Real-world
+applications and modeling discussions</h2>
+<h3 id="health-sciences-concentration-thresholds">Health sciences:
+concentration thresholds</h3>
+<p>Suppose a medication concentration is modeled by <span class="math inline">\(C(t)=18e^{-0.25t}\)</span> mg/L for <span class="math inline">\(t\ge0\)</span> hours. Its derivative <span class="math inline">\(C'(t)=-4.5e^{-0.25t}\)</span> mg/(L h) is
+negative, so the concentration decreases. Its second derivative <span class="math inline">\(C''(t)=1.125e^{-0.25t}&gt;0\)</span> shows
+the decrease is slowing. If a clinical threshold is <span class="math inline">\(5\)</span> mg/L, the crossing time solves <span class="math inline">\(18e^{-0.25t}=5\)</span>, hence <span class="math inline">\(t=4\ln(18/5)\approx5.12\)</span> hours. This is a
+mathematical illustration, not a clinical dosing recommendation. Actual
+pharmacokinetic models may require multiple compartments and
+patient-specific parameters.</p>
+<h3 id="environmental-science-an-optimal-sampling-window">Environmental
+science: an optimal sampling window</h3>
+<p>A simplified sensor response may rise after an event and then decay:
+<span class="math inline">\(S(t)=Ate^{-kt}\)</span> for <span class="math inline">\(t\ge0\)</span> and constants <span class="math inline">\(A,k&gt;0\)</span>. Differentiating gives <span class="math inline">\(S'(t)=Ae^{-kt}(1-kt)\)</span>, so the response
+is maximized at <span class="math inline">\(t=1/k\)</span>. The peak
+depends on the time scale <span class="math inline">\(1/k\)</span> but
+not on the amplitude <span class="math inline">\(A\)</span>. The model
+assumes a single rise-decay pulse and neglects background variation.</p>
+<h3 id="economics-maximizing-profit-rather-than-revenue">Economics:
+maximizing profit rather than revenue</h3>
+<p>Suppose demand is <span class="math inline">\(p(q)=100-q\)</span>,
+production cost is <span class="math inline">\(C(q)=200+20q\)</span>,
+and <span class="math inline">\(0\le q\le100\)</span>. Revenue is <span class="math inline">\(R(q)=100q-q^2\)</span>, whereas profit is <span class="math inline">\(P(q)=R(q)-C(q)=80q-q^2-200\)</span>. The profit
+derivative <span class="math inline">\(P'(q)=80-2q\)</span> vanishes
+at <span class="math inline">\(q=40\)</span>; <span class="math inline">\(P''(q)=-2\)</span> confirms a maximum.
+Revenue alone is maximized at <span class="math inline">\(q=50\)</span>.
+This difference illustrates why choosing the right objective is a
+modeling decision, not a calculus trick.</p>
+<h3 id="engineering-reliability-of-numerical-roots">Engineering:
+reliability of numerical roots</h3>
+<p>A nonlinear calibration equation may have a steep slope in one region
+and an almost flat slope elsewhere. Newton’s method is efficient near a
+simple root but sensitive to initial guesses. Before using it
+operationally, plot the function, check units, bracket a root if
+possible, and compare the residual to a scientifically meaningful
+tolerance. A root computed to ten decimal places may still be
+meaningless if the input measurements are accurate to only two
+significant figures.</p>
+<h2 id="exercises">Exercises</h2>
+<p><strong>Instructions.</strong> Show mathematical reasoning before
+software output. Include units for applied problems; identify domains
+and hypotheses when invoking a theorem. For computational
+investigations, attach code, figures, and a brief interpretation.</p>
+<h3 id="conceptual-reasoning">Conceptual reasoning</h3>
+<ol type="1">
+<li><p>Distinguish an absolute maximum from a local maximum; construct a
+graph illustrating each.</p></li>
+<li><p>Explain why the extreme value theorem requires both a closed
+bounded interval and continuity in its stated form.</p></li>
+<li><p>Give an example of a critical number that is not an extremum, and
+justify it.</p></li>
+<li><p>Explain why the mean value theorem does not assert that the point
+<span class="math inline">\(c\)</span> is unique.</p></li>
+<li><p>Describe a function that increases while being concave
+downward.</p></li>
+<li><p>Explain why <span class="math inline">\(f''(c)=0\)</span>
+alone does not guarantee an inflection point.</p></li>
+<li><p>Why must a quotient be indeterminate before applying l’Hopital’s
+rule?</p></li>
+<li><p>Explain why a small Newton step does not always imply a small
+equation residual.</p></li>
+<li><p>Explain the role of <span class="math inline">\(C\)</span> in an
+antiderivative family.</p></li>
+<li><p>Give a realistic reason an optimization model may not predict an
+actual optimum.</p></li>
+</ol>
+<h3 id="extrema-and-the-mean-value-theorem">Extrema and the mean value
+theorem</h3>
+<ol type="1">
+<li><p>Find absolute extrema of <span class="math inline">\(f(x)=x^2-4x+1\)</span> on <span class="math inline">\([-1,5]\)</span>.</p></li>
+<li><p>Find absolute extrema of <span class="math inline">\(f(x)=x^3-6x^2+9x\)</span> on <span class="math inline">\([0,5]\)</span>.</p></li>
+<li><p>Find all critical numbers of <span class="math inline">\(f(x)=x^{2/3}(x-3)\)</span>.</p></li>
+<li><p>For <span class="math inline">\(f(x)=\sin x\)</span> on <span class="math inline">\([0,\pi]\)</span>, identify a point satisfying the
+mean value theorem.</p></li>
+<li><p>Find every <span class="math inline">\(c\)</span> satisfying the
+mean value theorem for <span class="math inline">\(f(x)=x^3\)</span> on
+<span class="math inline">\([-1,2]\)</span>.</p></li>
+<li><p>Check whether Rolle’s theorem applies to <span class="math inline">\(f(x)=|x|\)</span> on <span class="math inline">\([-1,1]\)</span>.</p></li>
+<li><p>If <span class="math inline">\(2\le f'(x)\le5\)</span> for
+<span class="math inline">\(1\le x\le4\)</span>, bound <span class="math inline">\(f(4)-f(1)\)</span>.</p></li>
+<li><p>Prove that <span class="math inline">\(f(x)=x^5+x\)</span> has at
+most one real zero.</p></li>
+<li><p>Explain why <span class="math inline">\(f(x)=1/x\)</span> on
+<span class="math inline">\([-1,1]\)</span> does not satisfy the mean
+value theorem hypotheses.</p></li>
+<li><p>Show that if <span class="math inline">\(f'(x)=g'(x)\)</span> on an interval, then
+<span class="math inline">\(f-g\)</span> is constant there.</p></li>
+</ol>
+<h3 id="shape-and-limits">Shape and limits</h3>
+<ol type="1">
+<li><p>Analyze monotonicity and local extrema of <span class="math inline">\(f(x)=x^3-3x^2-9x\)</span>.</p></li>
+<li><p>Analyze concavity and inflection points of <span class="math inline">\(f(x)=x^4-4x^3\)</span>.</p></li>
+<li><p>Find intervals of increase and decrease for <span class="math inline">\(f(x)=x/(x^2+1)\)</span>.</p></li>
+<li><p>Sketch <span class="math inline">\(f(x)=x^3-3x\)</span> using
+derivative sign charts rather than a plotting device.</p></li>
+<li><p>Determine whether <span class="math inline">\(x=0\)</span> is an
+inflection point for <span class="math inline">\(f(x)=x^4\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to0}(e^{2x}-1)/x\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to0}(\sin
+x-x)/x^3\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to\infty}(\ln
+x)/x\)</span>.</p></li>
+<li><p>Evaluate <span class="math inline">\(\lim_{x\to0^+}x^2\ln
+x\)</span>.</p></li>
+<li><p>Explain why <span class="math inline">\(\lim_{x\to0}1/x\)</span>
+cannot be handled as a <span class="math inline">\(0/0\)</span>
+limit.</p></li>
+</ol>
+<h3 id="optimization-and-numerical-methods">Optimization and numerical
+methods</h3>
+<ol type="1">
+<li><p>Find the rectangle of greatest area with perimeter <span class="math inline">\(120\)</span> m.</p></li>
+<li><p>Find the positive number minimizing <span class="math inline">\(x+16/x\)</span>.</p></li>
+<li><p>A <span class="math inline">\(24\)</span> by <span class="math inline">\(18\)</span> cm sheet is folded into an open box;
+set up and solve the maximum-volume problem.</p></li>
+<li><p>For <span class="math inline">\(p(q)=80-0.5q\)</span> and <span class="math inline">\(C(q)=200+10q\)</span>, find the profit-maximizing
+feasible quantity.</p></li>
+<li><p>Minimize the surface area of a closed cylinder with volume <span class="math inline">\(500\ \mathrm{cm}^3\)</span>.</p></li>
+<li><p>Derive the Newton update for solving <span class="math inline">\(x^3-5=0\)</span>.</p></li>
+<li><p>Carry out three Newton iterations for <span class="math inline">\(x^2-3=0\)</span> starting at <span class="math inline">\(x_0=2\)</span>.</p></li>
+<li><p>Show that Newton’s method cycles between <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span> for <span class="math inline">\(x^3-2x+2\)</span> starting at <span class="math inline">\(0\)</span>.</p></li>
+<li><p>Find all antiderivatives of <span class="math inline">\(4x^3-6x+2\)</span>.</p></li>
+<li><p>Given <span class="math inline">\(v(t)=2t+3\)</span> and <span class="math inline">\(s(0)=10\)</span>, find <span class="math inline">\(s(t)\)</span>.</p></li>
+</ol>
+<h3 id="r-and-python-investigations">R and Python investigations</h3>
+<ol type="1">
+<li><p>In R, compare exact and grid-based extrema for a polynomial on a
+closed interval.</p></li>
+<li><p>In Python, plot <span class="math inline">\(f,f',\)</span>
+and <span class="math inline">\(f''\)</span> for a cubic and
+annotate critical points.</p></li>
+<li><p>In both languages, estimate <span class="math inline">\(\lim_{h\to0}(e^h-1)/h\)</span> and describe
+roundoff error.</p></li>
+<li><p>Use R to numerically optimize an open-top box and compare with an
+analytic solution.</p></li>
+<li><p>Use Python to compare Newton’s method from three starting
+values.</p></li>
+<li><p>Change the tolerance in the Newton code and report iteration
+counts.</p></li>
+<li><p>Construct a sign chart for a quartic and check its conclusions
+graphically.</p></li>
+<li><p>Compare maximum revenue and maximum profit for a linear-demand
+model.</p></li>
+<li><p>Investigate a concentration decay model with a threshold of your
+choosing.</p></li>
+<li><p>Write a short explanation distinguishing exact algebraic roots
+from computed approximations.</p></li>
+</ol>
+<h2 id="concluding-chapter-project-designing-a-response-system">Concluding
+chapter project: Designing a response system</h2>
+<p><strong>Scenario.</strong> A laboratory sensor measures a
+pulse-shaped response after a controlled release. The response is
+approximated by <span class="math display">\[S(t)=Ate^{-kt}+B,\qquad
+t\ge0,\]</span> where <span class="math inline">\(A&gt;0\)</span> is an
+amplitude parameter, <span class="math inline">\(k&gt;0\)</span> is a
+decay-rate parameter, and <span class="math inline">\(B\ge0\)</span> is
+a baseline. For an initial investigation, take <span class="math inline">\(A=12\)</span>, <span class="math inline">\(k=0.4\)</span> h<span class="math inline">\(^{-1}\)</span>, and <span class="math inline">\(B=2\)</span> response units. Treat this as a
+simulated teaching model rather than measured field data.</p>
+<h3 class="unnumbered" id="part-i-mathematical-model-25-points">Part I:
+Mathematical model (25 points)</h3>
+<ol type="1">
+<li><p>Interpret the units of all parameters and explain why the domain
+is <span class="math inline">\(t\ge0\)</span>.</p></li>
+<li><p>Derive <span class="math inline">\(S'(t)\)</span> and <span class="math inline">\(S''(t)\)</span> using the product and
+chain rules.</p></li>
+<li><p>Determine analytically the time and magnitude of the peak
+response.</p></li>
+<li><p>Identify intervals of increase, decrease, concavity, and any
+inflection point.</p></li>
+</ol>
+<h3 class="unnumbered" id="part-ii-r-investigation-20-points">Part II: R
+investigation (20 points)</h3>
+<p>Construct a labeled graph of <span class="math inline">\(S(t)\)</span> on <span class="math inline">\(0\le
+t\le15\)</span> with the peak marked. Numerically maximize the function
+using <code>optimize</code>; compare the numerical peak with your
+analytic result. Implement Newton’s method to solve <span class="math inline">\(S(t)=5\)</span> for a <em>post-peak</em>
+threshold-crossing time. Explain how you selected the starting value and
+how you checked the residual.</p>
+<h3 class="unnumbered" id="part-iii-python-investigation-20-points">Part
+III: Python investigation (20 points)</h3>
+<p>Reproduce the plot and peak calculation in Python, implement the same
+Newton iteration, and compare outputs to R. Use SymPy to differentiate
+the model and verify the analytic expressions. Present a concise
+comparison table with units.</p>
+<h3 class="unnumbered" id="part-iv-sensitivity-and-assumptions-20-points">Part IV: Sensitivity
+and assumptions (20 points)</h3>
+<p>Repeat the analysis with <span class="math inline">\(k=0.3\)</span>
+and <span class="math inline">\(k=0.6\)</span> h<span class="math inline">\(^{-1}\)</span> while holding <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> fixed. Explain how the peak time, peak
+magnitude, and post-peak threshold-crossing time change. Discuss why an
+exponential pulse might be unsuitable for repeated releases, delayed
+measurement, or variable background levels.</p>
+<h3 class="unnumbered" id="part-v-communication-15-points">Part V:
+Communication (15 points)</h3>
+<p>Prepare a four-page technical report (excluding code appendix)
+containing a clearly stated question, mathematical derivations, two
+original figures, a table comparing R and Python results, and a
+limitations paragraph. Distinguish analytic conclusions from numerical
+evidence. <strong>Rubric.</strong> Mathematical derivations and
+interpretation: 25; reproducible R analysis: 20; reproducible Python
+analysis: 20; sensitivity and assumptions: 20; clarity and presentation:
+15. Total: 100 points.</p>
+<h2 id="chapter-synthesis-and-self-assessment">Chapter synthesis and
+self-assessment</h2>
+<p>The derivative unifies seemingly different questions: locating the
+highest value, proving a function rises, understanding how a graph
+bends, estimating an indeterminate limit, finding an efficient design,
+and computing a nonlinear root. In each case, begin with the mathematics
+and assumptions. Use visualizations to reason, code to investigate, and
+interpretation to reconnect the result to the original problem.
+<strong>Before moving on, can you:</strong> explain when an extreme
+value is guaranteed; distinguish critical numbers from actual extrema;
+justify the mean value theorem’s hypotheses; use sign charts for <span class="math inline">\(f'\)</span> and <span class="math inline">\(f''\)</span>; recognize when l’Hopital’s
+rule is appropriate; formulate an objective and feasible domain; detect
+Newton nonconvergence; and verify an antiderivative by
+differentiation?</p>
+<h2 class="unnumbered" id="graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</h2>
+<figure>
+<img alt="A second perspective on a central idea in this chapter." src="figures/chapter_04_concept_2.png"/>
+<figcaption aria-hidden="true">A second perspective on a central idea in
+this chapter.</figcaption>
+</figure>
+<p><strong>Reflection.</strong> State what the graph demonstrates, what
+it does not establish, and how you would verify the corresponding claim
+analytically. Identify the relevant units or mathematical assumptions
+before using a computer-generated result.</p>
+<footer><a href="chapter03.html">← Differentiation</a><a href="chapter05.html">Integration →</a></footer></main><aside class="chapter-toc"><strong>On this page</strong><ul><li><a href="#interactive-investigation">Interactive investigation: Box optimization</a></li><li><a href="#extreme-values-of-functions">Extreme values of functions</a></li><li><a href="#the-mean-value-theorem">The mean value theorem</a></li><li><a href="#monotonicity-and-the-first-derivative-test">Monotonicity and the
+first derivative test</a></li><li><a href="#concavity-inflection-points-and-curve-sketching">Concavity,
+inflection points, and curve sketching</a></li><li><a href="#indeterminate-forms-and-lhopitals-rule">Indeterminate forms and
+l’Hopital’s rule</a></li><li><a href="#applied-optimization">Applied optimization</a></li><li><a href="#newtons-method">Newton’s method</a></li><li><a href="#antiderivatives-and-the-bridge-to-integration">Antiderivatives
+and the bridge to integration</a></li><li><a href="#r-computational-laboratories">R computational laboratories</a></li><li><a href="#python-computational-laboratories">Python computational
+laboratories</a></li><li><a href="#real-world-applications-and-modeling-discussions">Real-world
+applications and modeling discussions</a></li><li><a href="#exercises">Exercises</a></li><li><a href="#concluding-chapter-project-designing-a-response-system">Concluding
+chapter project: Designing a response system</a></li><li><a href="#chapter-synthesis-and-self-assessment">Chapter synthesis and
+self-assessment</a></li><li><a href="#graphical-synthesis-and-reflective-practice">Graphical synthesis and
+reflective practice</a></li></ul></aside></div><script src="search-index.js"></script><script src="site.js"></script><script src="investigations.js"></script></body></html>
