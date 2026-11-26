@@ -1,0 +1,5 @@
+f <- function(x) (x^2 - 4) / (x - 2)
+h <- c(0.1, 0.01, 0.001, 0.0001)
+left  <- f(2 - h)
+right <- f(2 + h)
+data.frame(h, left, right)

@@ -1,0 +1,6 @@
+values <- c(4, 7, 10, 13)
+mean(values)
+sum(values)
+min(values)
+max(values)
+round(mean(values), 2)

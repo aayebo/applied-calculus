@@ -1,0 +1,7 @@
+t <- seq(0, 48, length.out = 1000)
+T <- 18 + 6*sin(pi*(t - 9)/12)
+plot(t, T, type = "l", xlab = "Hours", ylab = "Temperature (C)")
+x <- seq(0, 1, length.out = 1001)
+plot(x, sin(20*pi*x), type = "l", xlab = "x", ylab = "sin(20*pi*x)")
+coarse <- seq(0, 1, by = 0.1)
+points(coarse, sin(20*pi*coarse), pch = 19, col = "red")

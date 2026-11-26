@@ -1,0 +1,12 @@
+a = 2
+slope = derivative_centered(cubic, a)
+x = np.linspace(1.4, 2.6, 250)
+tangent = cubic(a) + slope*(x-a)
+plt.plot(x, cubic(x), label="f(x)")
+plt.plot(x, tangent, "--", label="Tangent line")
+plt.scatter([a], [cubic(a)])
+plt.xlabel("x")
+plt.ylabel("y")
+plt.legend()
+plt.grid(alpha=0.25)
+plt.show()

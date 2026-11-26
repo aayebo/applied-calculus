@@ -1,0 +1,7 @@
+x = np.linspace(0, 2*np.pi, 400)
+plt.plot(x, np.sin(x))
+plt.xlabel("x (radians)")
+plt.ylabel("sin(x)")
+plt.title("Sine function")
+plt.savefig("sine_curve.png", dpi=200, bbox_inches="tight")
+plt.show()
