@@ -1,0 +1,8 @@
+t <- seq(0,2*pi,length.out=400)
+x <- 3*cos(t); y <- 2*sin(t)
+plot(x,y,type="l",asp=1,xlab="x",ylab="y")
+t0 <- pi/3; slope <- -2*cos(t0)/(3*sin(t0))
+x0 <- 3*cos(t0); y0 <- 2*sin(t0)
+xx <- seq(x0-.8,x0+.8,length.out=100)
+lines(xx,y0+slope*(xx-x0),col="red",lwd=2)
+cat("Tangent slope:",slope,"\n")
